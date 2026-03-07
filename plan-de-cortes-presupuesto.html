@@ -1,0 +1,2219 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan de Cortes y Presupuesto — Mesa Artista Dos Islas</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0d1b2a;
+        --ink: #e8eff7;
+        --accent: #4a9ecd;
+        --yellow: #f4c842;
+        --green: #6ec9a0;
+        --red: #e07070;
+        --grid: rgba(74, 158, 205, 0.07);
+        --dim: rgba(232, 239, 247, 0.38);
+        --c-isla-a: rgba(74, 158, 205, 0.13);
+        --c-isla-b: rgba(110, 201, 160, 0.13);
+        --c-tablero: rgba(244, 200, 66, 0.1);
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+        min-height: 100vh;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+          linear-gradient(rgba(74, 158, 205, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(74, 158, 205, 0.025) 1px, transparent 1px);
+        background-size:
+          100px 100px,
+          100px 100px,
+          20px 20px,
+          20px 20px;
+      }
+      .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 44px 36px 72px;
+      }
+
+      /* ── HEADER ── */
+      .header {
+        border: 1px solid var(--accent);
+        border-bottom: 3px solid var(--accent);
+        padding: 18px 26px 14px;
+        margin-bottom: 28px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: end;
+        background: rgba(26, 58, 92, 0.3);
+      }
+      .title-block h1 {
+        font-family: "Bebas Neue";
+        font-size: 3.4rem;
+        letter-spacing: 0.06em;
+        line-height: 1;
+      }
+      .title-block h2 {
+        font-family: "Crimson Pro";
+        font-style: italic;
+        font-weight: 300;
+        font-size: 1.25rem;
+        color: var(--accent);
+        margin-top: 8px;
+        line-height: 1.4;
+      }
+      .meta {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.8rem;
+        text-align: right;
+        line-height: 2.2;
+        color: var(--dim);
+      }
+      .meta span {
+        color: var(--ink);
+      }
+
+      /* ── SECTION LABELS ── */
+      .section-label {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+        border-left: 3px solid var(--accent);
+        padding-left: 12px;
+        margin: 36px 0 16px;
+      }
+
+      /* ── SUMMARY CARDS ── */
+      .summary-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+      .sum-card {
+        border: 1px solid rgba(74, 158, 205, 0.35);
+        padding: 18px 20px;
+        background: rgba(13, 27, 42, 0.55);
+      }
+      .sum-card .mat {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--dim);
+      }
+      .sum-card .sheets {
+        font-family: "Bebas Neue";
+        font-size: 3rem;
+        line-height: 1;
+        color: var(--accent);
+      }
+      .sum-card .unit {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--dim);
+      }
+      .sum-card .area {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.72rem;
+        color: var(--yellow);
+        margin-top: 6px;
+      }
+      .sum-card.islaa .sheets {
+        color: #4a9ecd;
+      }
+      .sum-card.islab .sheets {
+        color: #6ec9a0;
+      }
+      .sum-card.tab .sheets {
+        color: #f4c842;
+      }
+      .sum-card.list .sheets {
+        font-size: 2rem;
+        color: #e07070;
+      }
+
+      /* ── TABLES ── */
+      .tbl-wrap {
+        overflow-x: auto;
+        margin-bottom: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.83rem;
+      }
+      thead tr {
+        background: rgba(74, 158, 205, 0.15);
+      }
+      thead th {
+        padding: 9px 12px;
+        text-align: left;
+        letter-spacing: 0.08em;
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--accent);
+        border-bottom: 1px solid rgba(74, 158, 205, 0.4);
+        white-space: nowrap;
+      }
+      tbody tr {
+        border-bottom: 1px solid rgba(74, 158, 205, 0.08);
+        transition: background 0.1s;
+      }
+      tbody tr:hover {
+        background: rgba(74, 158, 205, 0.06);
+      }
+      tbody td {
+        padding: 8px 12px;
+        color: var(--dim);
+        vertical-align: middle;
+      }
+      tbody td:first-child {
+        font-family: "Share Tech Mono", monospace;
+        color: rgba(74, 158, 205, 0.7);
+        font-size: 0.75rem;
+        white-space: nowrap;
+      }
+      tbody td.dim {
+        font-family: "Share Tech Mono", monospace;
+        color: var(--ink);
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+      }
+      tbody td.qty {
+        color: var(--yellow);
+        text-align: center;
+        font-family: "Share Tech Mono", monospace;
+      }
+      tbody td.area-col {
+        font-family: "Share Tech Mono", monospace;
+        color: rgba(110, 201, 160, 0.8);
+        text-align: right;
+      }
+      tbody td.desc-col {
+        color: rgba(232, 239, 247, 0.7);
+        font-size: 0.85rem;
+      }
+
+      /* Section rows */
+      tr.section-row td {
+        padding: 6px 12px;
+        font-family: "IBM Plex Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        color: rgba(232, 239, 247, 0.5);
+        background: rgba(74, 158, 205, 0.04);
+        border-top: 1px solid rgba(74, 158, 205, 0.2);
+      }
+      tr.section-row.grp-a td {
+        color: #4a9ecd;
+        background: rgba(74, 158, 205, 0.05);
+      }
+      tr.section-row.grp-b td {
+        color: #6ec9a0;
+        background: rgba(110, 201, 160, 0.05);
+      }
+      tr.section-row.grp-t td {
+        color: #f4c842;
+        background: rgba(244, 200, 66, 0.04);
+      }
+      tr.total-row td {
+        color: var(--ink);
+        font-weight: bold;
+        background: rgba(74, 158, 205, 0.08);
+        border-top: 2px solid rgba(74, 158, 205, 0.4);
+      }
+
+      /* Color tags */
+      .tag-a {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+      .tag-b {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+      .tag-t {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--yellow);
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+
+      /* ── SHEET OPTIMIZER ── */
+      .optimizer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      .sheet-box {
+        border: 1px solid rgba(74, 158, 205, 0.3);
+        padding: 18px 20px;
+        background: rgba(13, 27, 42, 0.5);
+      }
+      .sheet-box h4 {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        color: var(--yellow);
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(244, 200, 66, 0.2);
+        padding-bottom: 8px;
+      }
+      .sheet-bar {
+        height: 10px;
+        background: rgba(74, 158, 205, 0.1);
+        border: 1px solid rgba(74, 158, 205, 0.2);
+        margin: 6px 0;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .sheet-bar-fill {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 2px;
+        transition: width 0.4s;
+      }
+      .sheet-bar-fill.green {
+        background: var(--green);
+      }
+      .sheet-bar-fill.yellow {
+        background: var(--yellow);
+      }
+      .sheet-stat {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.75rem;
+        color: var(--dim);
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .sheet-stat span {
+        color: var(--ink);
+      }
+      .sheet-count {
+        font-family: "Bebas Neue";
+        font-size: 2.4rem;
+        color: var(--accent);
+        line-height: 1;
+        margin-top: 8px;
+      }
+      .sheet-count span {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 400;
+        color: var(--dim);
+      }
+
+      /* ── BUDGET CALCULATOR ── */
+      .budget-note {
+        border: 1px solid rgba(244, 200, 66, 0.3);
+        background: rgba(244, 200, 66, 0.05);
+        padding: 14px 20px;
+        font-size: 0.875rem;
+        color: rgba(244, 200, 66, 0.8);
+        margin-bottom: 16px;
+        line-height: 1.7;
+      }
+      .budget-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      .budget-table thead th {
+        background: rgba(74, 158, 205, 0.12);
+        padding: 9px 12px;
+        text-align: left;
+        font-family: "IBM Plex Sans", sans-serif;
+        font-weight: 600;
+        color: var(--accent);
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        border-bottom: 1px solid rgba(74, 158, 205, 0.3);
+      }
+      .budget-table tbody tr {
+        border-bottom: 1px solid rgba(74, 158, 205, 0.07);
+      }
+      .budget-table tbody tr:hover {
+        background: rgba(74, 158, 205, 0.04);
+      }
+      .budget-table tbody td {
+        padding: 8px 12px;
+        color: var(--dim);
+        vertical-align: middle;
+      }
+      .budget-table .cat-row td {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        color: rgba(74, 158, 205, 0.7);
+        background: rgba(74, 158, 205, 0.05);
+        padding: 7px 12px;
+        border-top: 1px solid rgba(74, 158, 205, 0.18);
+      }
+      .budget-table .subtotal-row td {
+        font-family: "Share Tech Mono", monospace;
+        color: rgba(232, 239, 247, 0.6);
+        font-size: 0.78rem;
+        text-align: right;
+        padding: 6px 12px;
+        background: rgba(74, 158, 205, 0.06);
+      }
+      .budget-table .total-row td {
+        color: var(--ink);
+        font-size: 0.9rem;
+        font-family: "Bebas Neue";
+        letter-spacing: 0.1em;
+        background: rgba(74, 158, 205, 0.12);
+        border-top: 2px solid rgba(74, 158, 205, 0.5);
+        padding: 12px 12px;
+      }
+
+      input.price-input {
+        background: rgba(74, 158, 205, 0.08);
+        border: 1px solid rgba(74, 158, 205, 0.3);
+        color: var(--yellow);
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        width: 140px;
+        text-align: right;
+        outline: none;
+        transition: border 0.2s;
+      }
+      input.price-input:focus {
+        border-color: var(--yellow);
+        background: rgba(244, 200, 66, 0.06);
+      }
+      input.price-input:hover {
+        border-color: rgba(74, 158, 205, 0.6);
+      }
+
+      .subtotal-cell {
+        font-family: "Share Tech Mono", monospace;
+        color: var(--green);
+        font-size: 0.82rem;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .total-ars {
+        font-size: 1.8rem;
+        color: var(--yellow);
+        font-family: "Bebas Neue";
+        letter-spacing: 0.05em;
+      }
+      .total-usd {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.9rem;
+        color: var(--green);
+        letter-spacing: 0.05em;
+      }
+      .usd-note {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 0.78rem;
+        color: var(--dim);
+      }
+
+      /* ── HARDWARE TABLE ── */
+      .hardware-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .hw-card {
+        border: 1px solid rgba(74, 158, 205, 0.25);
+        padding: 18px 20px;
+        background: rgba(13, 27, 42, 0.45);
+      }
+      .hw-card h4 {
+        font-family: "IBM Plex Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        color: var(--yellow);
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(244, 200, 66, 0.2);
+        padding-bottom: 8px;
+      }
+      .hw-card table {
+        font-size: 0.85rem;
+        width: 100%;
+      }
+      .hw-card td {
+        padding: 6px 8px;
+        color: var(--dim);
+        border-bottom: 1px solid rgba(74, 158, 205, 0.06);
+      }
+      .hw-card td:first-child {
+        font-family: "Share Tech Mono", monospace;
+        color: var(--accent);
+        width: 40px;
+        text-align: center;
+        font-size: 0.85rem;
+      }
+      .hw-card td:last-child {
+        font-family: "Share Tech Mono", monospace;
+        color: rgba(232, 239, 247, 0.5);
+        font-size: 0.75rem;
+      }
+
+      /* ── NOTES ── */
+      .notes-box {
+        border: 1px solid rgba(110, 201, 160, 0.3);
+        background: rgba(110, 201, 160, 0.04);
+        padding: 18px 22px;
+        font-size: 0.9rem;
+        color: rgba(110, 201, 160, 0.85);
+        line-height: 1.75;
+        margin-top: 10px;
+      }
+      .notes-box strong {
+        color: var(--green);
+      }
+
+      .footer {
+        margin-top: 44px;
+        border-top: 1px solid rgba(74, 158, 205, 0.2);
+        padding-top: 14px;
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.75rem;
+        color: var(--dim);
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      @media (max-width: 900px) {
+        .summary-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .optimizer-grid {
+          grid-template-columns: 1fr;
+        }
+        .hardware-grid {
+          grid-template-columns: 1fr;
+        }
+        .title-block h1 {
+          font-size: 1.8rem;
+        }
+      }
+
+      /* ── NAVBAR ── */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(10, 20, 34, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(74, 158, 205, 0.25);
+        padding: 0 28px;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+      }
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+      .navbar-brand-icon {
+        width: 30px;
+        height: 30px;
+        border: 1.5px solid var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(45deg);
+        transition: background 0.2s;
+      }
+      .navbar-brand:hover .navbar-brand-icon {
+        background: rgba(74, 158, 205, 0.15);
+      }
+      .navbar-brand-icon svg {
+        transform: rotate(-45deg);
+      }
+      .navbar-brand-text {
+        font-family: "Bebas Neue";
+        font-size: 1.15rem;
+        letter-spacing: 0.1em;
+        color: var(--ink);
+        line-height: 1;
+      }
+      .navbar-brand-sub {
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.6rem;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+      }
+      .navbar-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+      }
+      .navbar-links a {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        text-decoration: none;
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.78rem;
+        color: var(--dim);
+        padding: 6px 14px;
+        border: 1px solid transparent;
+        letter-spacing: 0.04em;
+        transition:
+          color 0.18s,
+          border-color 0.18s,
+          background 0.18s;
+        white-space: nowrap;
+      }
+      .navbar-links a:hover {
+        color: var(--ink);
+        border-color: rgba(74, 158, 205, 0.3);
+        background: rgba(74, 158, 205, 0.07);
+      }
+      .navbar-links a.active {
+        color: var(--accent);
+        border-color: rgba(74, 158, 205, 0.4);
+        background: rgba(74, 158, 205, 0.1);
+      }
+      .navbar-links a .nav-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+        flex-shrink: 0;
+        opacity: 0.6;
+      }
+      .navbar-burger {
+        display: none;
+        background: none;
+        border: 1px solid rgba(74, 158, 205, 0.4);
+        color: var(--ink);
+        cursor: pointer;
+        padding: 6px 9px;
+        transition:
+          background 0.18s,
+          border-color 0.18s;
+      }
+      .navbar-burger:hover {
+        background: rgba(74, 158, 205, 0.1);
+        border-color: var(--accent);
+      }
+      .navbar-mobile-menu {
+        display: none;
+        position: absolute;
+        top: 54px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 20, 34, 0.97);
+        border-bottom: 1px solid rgba(74, 158, 205, 0.25);
+        padding: 8px 0;
+        z-index: 99;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      }
+      .navbar-mobile-menu.open {
+        display: block;
+      }
+      .navbar-mobile-menu a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-family: "Share Tech Mono", monospace;
+        font-size: 0.82rem;
+        color: var(--dim);
+        padding: 13px 28px;
+        border-left: 3px solid transparent;
+        transition:
+          color 0.18s,
+          border-color 0.18s,
+          background 0.18s;
+      }
+      .navbar-mobile-menu a:hover {
+        color: var(--ink);
+        background: rgba(74, 158, 205, 0.07);
+        border-left-color: rgba(74, 158, 205, 0.5);
+      }
+      .navbar-mobile-menu a.active {
+        color: var(--accent);
+        border-left-color: var(--accent);
+        background: rgba(74, 158, 205, 0.08);
+      }
+      .navbar-wrapper {
+        position: relative;
+      }
+      @media (max-width: 900px) {
+        .navbar-links {
+          display: none;
+        }
+        .navbar-burger {
+          display: block;
+        }
+        .navbar {
+          padding: 0 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── NAVBAR ── -->
+    <div class="navbar-wrapper">
+      <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+          <div class="navbar-brand-icon">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="1"
+                y="1"
+                width="12"
+                height="12"
+                stroke="#4A9ECD"
+                stroke-width="1.5"
+                fill="none"
+              />
+              <line
+                x1="1"
+                y1="7"
+                x2="13"
+                y2="7"
+                stroke="#4A9ECD"
+                stroke-width="1"
+              />
+              <line
+                x1="7"
+                y1="1"
+                x2="7"
+                y2="13"
+                stroke="#4A9ECD"
+                stroke-width="1"
+              />
+            </svg>
+          </div>
+          <div>
+            <div class="navbar-brand-text">Mesa de Artista</div>
+            <div class="navbar-brand-sub">Sistema Dos Islas · Rev. B</div>
+          </div>
+        </a>
+
+        <ul class="navbar-links">
+          <li>
+            <a href="index.html">
+              <span class="nav-dot"></span>Plano Técnico
+            </a>
+          </li>
+          <li>
+            <a href="plan-de-cortes-presupuesto.html" class="active">
+              <span class="nav-dot"></span>Cortes y Presupuesto
+            </a>
+          </li>
+        </ul>
+
+        <button
+          class="navbar-burger"
+          id="burgerBtn"
+          aria-label="Menú"
+          onclick="toggleMenu()"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line
+              x1="2"
+              y1="4"
+              x2="16"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <line
+              x1="2"
+              y1="9"
+              x2="16"
+              y2="9"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <line
+              x1="2"
+              y1="14"
+              x2="16"
+              y2="14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </nav>
+
+      <div class="navbar-mobile-menu" id="mobileMenu">
+        <a href="index.html">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect
+              x="1"
+              y="1"
+              width="12"
+              height="12"
+              stroke="currentColor"
+              stroke-width="1.2"
+              fill="none"
+            />
+            <line
+              x1="1"
+              y1="7"
+              x2="13"
+              y2="7"
+              stroke="currentColor"
+              stroke-width="0.8"
+            />
+          </svg>
+          Plano Técnico
+        </a>
+        <a href="plan-de-cortes-presupuesto.html" class="active">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <line
+              x1="2"
+              y1="3"
+              x2="12"
+              y2="3"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="2"
+              y1="7"
+              x2="12"
+              y2="7"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="2"
+              y1="11"
+              x2="8"
+              y2="11"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+          </svg>
+          Cortes y Presupuesto
+        </a>
+      </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+      }
+      document.addEventListener("click", function (e) {
+        const wrapper = document.querySelector(".navbar-wrapper");
+        if (!wrapper.contains(e.target)) {
+          document.getElementById("mobileMenu").classList.remove("open");
+        }
+      });
+    </script>
+
+    <div class="page">
+      <!-- HEADER -->
+      <div class="header">
+        <div class="title-block">
+          <h1>Plan de Cortes y Presupuesto</h1>
+          <h2>Mesa de Artista — Sistema Dos Islas · Ciudad de Buenos Aires</h2>
+        </div>
+        <div class="meta">
+          PLANCHAS: <span>1830 × 2750 mm</span><br />
+          DESPERDICIO: <span>20%</span><br />
+          REVISIÓN: <span>B · Marzo 2026</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════
+     RESUMEN EJECUTIVO
+════════════════════════════ -->
+      <div class="section-label">RESUMEN DE MATERIALES</div>
+      <div class="summary-row">
+        <div class="sum-card islaa">
+          <div class="mat">MDF / Melamina Blanca · 18mm</div>
+          <div class="sheets">3</div>
+          <div class="unit">planchas 1830×2750mm</div>
+          <div class="area">10.19 m² útil · 15.10 m² plancha</div>
+        </div>
+        <div class="sum-card islab">
+          <div class="mat">MDF / HDF · 6mm</div>
+          <div class="sheets">3</div>
+          <div class="unit">planchas 1830×2750mm</div>
+          <div class="area">9.17 m² útil · 15.10 m² plancha</div>
+        </div>
+        <div class="sum-card tab">
+          <div class="mat">MDF grueso · 25mm (tablero)</div>
+          <div class="sheets">2</div>
+          <div class="unit">planchas 1830×2750mm</div>
+          <div class="area">5.28 m² · una pieza por plancha</div>
+        </div>
+        <div class="sum-card list">
+          <div class="mat">Listón madera maciza 50×40mm</div>
+          <div class="sheets">7.3</div>
+          <div class="unit">metros lineales</div>
+          <div class="area">Soporte estructural del tablero</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════
+     LISTA DE CORTES — 18mm
+════════════════════════════ -->
+      <div class="section-label">
+        LISTA DE CORTES — 18mm MELAMINA / MDF BLANCO
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>CÓD.</th>
+              <th>DESCRIPCIÓN DE LA PIEZA</th>
+              <th>ANCHO (mm)</th>
+              <th>ALTO (mm)</th>
+              <th>CANT.</th>
+              <th>ÁREA UNIT. (m²)</th>
+              <th>ÁREA TOTAL (m²)</th>
+              <th>ISLA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ISLA A CARCASA -->
+            <tr class="section-row grp-a">
+              <td colspan="8">
+                <span class="tag-a"></span>ISLA A — FLAT FILE CABINET · CARCASA
+              </td>
+            </tr>
+            <tr>
+              <td>IA-01</td>
+              <td class="desc-col">Panel lateral (testero corto)</td>
+              <td class="dim">900</td>
+              <td class="dim">625</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.5625</td>
+              <td class="area-col">1.1250</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IA-02</td>
+              <td class="desc-col">Panel tapa (superior)</td>
+              <td class="dim">1204</td>
+              <td class="dim">900</td>
+              <td class="qty">×1</td>
+              <td class="area-col">1.0836</td>
+              <td class="area-col">1.0836</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IA-03</td>
+              <td class="desc-col">Panel base (inferior)</td>
+              <td class="dim">1204</td>
+              <td class="dim">900</td>
+              <td class="qty">×1</td>
+              <td class="area-col">1.0836</td>
+              <td class="area-col">1.0836</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IA-04</td>
+              <td class="desc-col">Plinto frontal (zócalo bajo cajones)</td>
+              <td class="dim">1240</td>
+              <td class="dim">80</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.0992</td>
+              <td class="area-col">0.0992</td>
+              <td>A</td>
+            </tr>
+
+            <!-- ISLA A CAJONES FFC -->
+            <tr class="section-row grp-a">
+              <td colspan="8">
+                <span class="tag-a"></span>ISLA A — 6 CAJONES FLAT FILE (×6
+                juegos)
+              </td>
+            </tr>
+            <tr>
+              <td>IC-01</td>
+              <td class="desc-col">
+                Lateral de caja de cajón FFC — ¡12 piezas iguales!
+              </td>
+              <td class="dim">842</td>
+              <td class="dim">80</td>
+              <td class="qty">×12</td>
+              <td class="area-col">0.0674</td>
+              <td class="area-col">0.8083</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IC-02</td>
+              <td class="desc-col">Frente de caja de cajón FFC</td>
+              <td class="dim">1168</td>
+              <td class="dim">80</td>
+              <td class="qty">×6</td>
+              <td class="area-col">0.0934</td>
+              <td class="area-col">0.5606</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IC-03</td>
+              <td class="desc-col">Trasero de caja de cajón FFC</td>
+              <td class="dim">1168</td>
+              <td class="dim">80</td>
+              <td class="qty">×6</td>
+              <td class="area-col">0.0934</td>
+              <td class="area-col">0.5606</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IC-04</td>
+              <td class="desc-col">
+                Frente decorativo visible — cajón FFC (con solape 1mm
+                arriba/abajo)
+              </td>
+              <td class="dim">1240</td>
+              <td class="dim">100</td>
+              <td class="qty">×6</td>
+              <td class="area-col">0.1240</td>
+              <td class="area-col">0.7440</td>
+              <td>A</td>
+            </tr>
+
+            <!-- ISLA B CARCASA -->
+            <tr class="section-row grp-b">
+              <td colspan="8">
+                <span class="tag-b"></span>ISLA B — HERRAMIENTAS · CARCASA
+              </td>
+            </tr>
+            <tr>
+              <td>IB-01</td>
+              <td class="desc-col">
+                Panel lateral (testero corto) — <em>igual que IA-01</em>
+              </td>
+              <td class="dim">900</td>
+              <td class="dim">625</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.5625</td>
+              <td class="area-col">1.1250</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IB-02</td>
+              <td class="desc-col">Panel tapa Isla B</td>
+              <td class="dim">564</td>
+              <td class="dim">900</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.5076</td>
+              <td class="area-col">0.5076</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IB-03</td>
+              <td class="desc-col">Panel base Isla B</td>
+              <td class="dim">564</td>
+              <td class="dim">900</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.5076</td>
+              <td class="area-col">0.5076</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IB-04</td>
+              <td class="desc-col">Plinto frontal Isla B</td>
+              <td class="dim">600</td>
+              <td class="dim">80</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.0480</td>
+              <td class="area-col">0.0480</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IB-05</td>
+              <td class="desc-col">
+                Estante intermedio Isla B (divide zona cajones / estante
+                abierto)
+              </td>
+              <td class="dim">564</td>
+              <td class="dim">900</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.5076</td>
+              <td class="area-col">0.5076</td>
+              <td>B</td>
+            </tr>
+
+            <!-- ISLA B CAJONES GRANDES -->
+            <tr class="section-row grp-b">
+              <td colspan="8">
+                <span class="tag-b"></span>ISLA B — 2 CAJONES GRANDES (apertura
+                120mm)
+              </td>
+            </tr>
+            <tr>
+              <td>IBC-01</td>
+              <td class="desc-col">Lateral caja cajón grande B</td>
+              <td class="dim">842</td>
+              <td class="dim">120</td>
+              <td class="qty">×4</td>
+              <td class="area-col">0.1010</td>
+              <td class="area-col">0.4042</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-02</td>
+              <td class="desc-col">Frente de caja cajón grande B</td>
+              <td class="dim">528</td>
+              <td class="dim">120</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.0634</td>
+              <td class="area-col">0.1267</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-03</td>
+              <td class="desc-col">Trasero de caja cajón grande B</td>
+              <td class="dim">528</td>
+              <td class="dim">120</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.0634</td>
+              <td class="area-col">0.1267</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-04</td>
+              <td class="desc-col">Frente decorativo cajón grande B</td>
+              <td class="dim">600</td>
+              <td class="dim">130</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.0780</td>
+              <td class="area-col">0.1560</td>
+              <td>B</td>
+            </tr>
+
+            <!-- ISLA B CAJONES MEDIANOS -->
+            <tr class="section-row grp-b">
+              <td colspan="8">
+                <span class="tag-b"></span>ISLA B — 3 CAJONES MEDIANOS (apertura
+                60mm)
+              </td>
+            </tr>
+            <tr>
+              <td>IBC-05</td>
+              <td class="desc-col">Lateral caja cajón mediano B</td>
+              <td class="dim">842</td>
+              <td class="dim">60</td>
+              <td class="qty">×6</td>
+              <td class="area-col">0.0505</td>
+              <td class="area-col">0.3031</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-06</td>
+              <td class="desc-col">Frente de caja cajón mediano B</td>
+              <td class="dim">528</td>
+              <td class="dim">60</td>
+              <td class="qty">×3</td>
+              <td class="area-col">0.0317</td>
+              <td class="area-col">0.0950</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-07</td>
+              <td class="desc-col">Trasero de caja cajón mediano B</td>
+              <td class="dim">528</td>
+              <td class="dim">60</td>
+              <td class="qty">×3</td>
+              <td class="area-col">0.0317</td>
+              <td class="area-col">0.0950</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-08</td>
+              <td class="desc-col">Frente decorativo cajón mediano B</td>
+              <td class="dim">600</td>
+              <td class="dim">68</td>
+              <td class="qty">×3</td>
+              <td class="area-col">0.0408</td>
+              <td class="area-col">0.1224</td>
+              <td>B</td>
+            </tr>
+
+            <!-- TOTAL 18mm -->
+            <tr class="total-row">
+              <td colspan="4">TOTAL 18mm (piezas individuales: 79 unidades)</td>
+              <td class="qty">79</td>
+              <td></td>
+              <td
+                class="area-col"
+                style="color: var(--yellow); font-size: 0.8rem"
+              >
+                10.1900 m²
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════
+     LISTA DE CORTES — 6mm
+════════════════════════════ -->
+      <div class="section-label">
+        LISTA DE CORTES — 6mm MDF / HDF (fondos y paneles traseros)
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>CÓD.</th>
+              <th>DESCRIPCIÓN DE LA PIEZA</th>
+              <th>ANCHO (mm)</th>
+              <th>ALTO (mm)</th>
+              <th>CANT.</th>
+              <th>ÁREA UNIT. (m²)</th>
+              <th>ÁREA TOTAL (m²)</th>
+              <th>ISLA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-row grp-a">
+              <td colspan="8">
+                <span class="tag-a"></span>ISLA A — TRASERO Y FONDOS DE CAJONES
+              </td>
+            </tr>
+            <tr>
+              <td>IA-05</td>
+              <td class="desc-col">Panel trasero carcasa Isla A</td>
+              <td class="dim">1204</td>
+              <td class="dim">589</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.7092</td>
+              <td class="area-col">0.7092</td>
+              <td>A</td>
+            </tr>
+            <tr>
+              <td>IC-05</td>
+              <td class="desc-col">
+                Fondo cajón FFC — ¡la pieza más grande del mueble!
+              </td>
+              <td class="dim">1168</td>
+              <td class="dim">842</td>
+              <td class="qty">×6</td>
+              <td class="area-col">0.9834</td>
+              <td class="area-col">5.9007</td>
+              <td>A</td>
+            </tr>
+            <tr class="section-row grp-b">
+              <td colspan="8">
+                <span class="tag-b"></span>ISLA B — TRASERO Y FONDOS DE CAJONES
+              </td>
+            </tr>
+            <tr>
+              <td>IB-06</td>
+              <td class="desc-col">Panel trasero carcasa Isla B</td>
+              <td class="dim">564</td>
+              <td class="dim">589</td>
+              <td class="qty">×1</td>
+              <td class="area-col">0.3322</td>
+              <td class="area-col">0.3322</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-09</td>
+              <td class="desc-col">Fondo cajón grande B</td>
+              <td class="dim">528</td>
+              <td class="dim">842</td>
+              <td class="qty">×2</td>
+              <td class="area-col">0.4446</td>
+              <td class="area-col">0.8892</td>
+              <td>B</td>
+            </tr>
+            <tr>
+              <td>IBC-10</td>
+              <td class="desc-col">Fondo cajón mediano B</td>
+              <td class="dim">528</td>
+              <td class="dim">842</td>
+              <td class="qty">×3</td>
+              <td class="area-col">0.4446</td>
+              <td class="area-col">1.3337</td>
+              <td>B</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4">TOTAL 6mm (piezas individuales: 13 unidades)</td>
+              <td class="qty">13</td>
+              <td></td>
+              <td
+                class="area-col"
+                style="color: var(--yellow); font-size: 0.8rem"
+              >
+                9.1650 m²
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════
+     LISTA DE CORTES — 25mm
+════════════════════════════ -->
+      <div class="section-label">
+        LISTA DE CORTES — 25mm MDF (tablero de trabajo)
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>CÓD.</th>
+              <th>DESCRIPCIÓN</th>
+              <th>ANCHO (mm)</th>
+              <th>ALTO (mm)</th>
+              <th>CANT.</th>
+              <th>ÁREA UNIT. (m²)</th>
+              <th>ÁREA TOTAL (m²)</th>
+              <th>NOTA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="section-row grp-t">
+              <td colspan="8">
+                <span class="tag-t"></span>TABLERO PRINCIPAL — DOS CAPAS
+                ENCOLADAS = 50mm TOTAL
+              </td>
+            </tr>
+            <tr>
+              <td>TP-01</td>
+              <td class="desc-col">Tablero — capa inferior (1 de 2)</td>
+              <td class="dim">2640</td>
+              <td class="dim">1000</td>
+              <td class="qty">×1</td>
+              <td class="area-col">2.6400</td>
+              <td class="area-col">2.6400</td>
+              <td style="font-size: 0.65rem; color: rgba(244, 200, 66, 0.6)">
+                1 plancha entera por capa
+              </td>
+            </tr>
+            <tr>
+              <td>TP-02</td>
+              <td class="desc-col">Tablero — capa superior (2 de 2)</td>
+              <td class="dim">2640</td>
+              <td class="dim">1000</td>
+              <td class="qty">×1</td>
+              <td class="area-col">2.6400</td>
+              <td class="area-col">2.6400</td>
+              <td style="font-size: 0.65rem; color: rgba(244, 200, 66, 0.6)">
+                Encolar + prensas hasta curado
+              </td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4">TOTAL 25mm</td>
+              <td class="qty">2</td>
+              <td></td>
+              <td
+                class="area-col"
+                style="color: var(--yellow); font-size: 0.8rem"
+              >
+                5.2800 m²
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════
+     LISTONES MADERA MACIZA
+════════════════════════════ -->
+      <div class="section-label">
+        LISTONES MADERA MACIZA PINO 50×40mm — SOPORTE TABLERO
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>CÓD.</th>
+              <th>DESCRIPCIÓN</th>
+              <th>LARGO (mm)</th>
+              <th>CANT.</th>
+              <th>ML TOTAL</th>
+              <th>FUNCIÓN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LT-01</td>
+              <td class="desc-col">Listón longitudinal Isla A</td>
+              <td class="dim">1240</td>
+              <td class="qty">×2</td>
+              <td class="area-col">2.48 ml</td>
+              <td style="font-size: 0.65rem; color: var(--dim)">
+                Borde frontal y trasero de Isla A, sobre los que apoya el
+                tablero
+              </td>
+            </tr>
+            <tr>
+              <td>LT-02</td>
+              <td class="desc-col">Listón longitudinal Isla B</td>
+              <td class="dim">600</td>
+              <td class="qty">×2</td>
+              <td class="area-col">1.20 ml</td>
+              <td style="font-size: 0.65rem; color: var(--dim)">
+                Borde frontal y trasero de Isla B
+              </td>
+            </tr>
+            <tr>
+              <td>LT-03</td>
+              <td class="desc-col">Listón transversal (a lo largo de 900mm)</td>
+              <td class="dim">900</td>
+              <td class="qty">×4</td>
+              <td class="area-col">3.60 ml</td>
+              <td style="font-size: 0.65rem; color: var(--dim)">
+                2 por isla, en los extremos del ancho 900mm para cerrar el marco
+              </td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4">TOTAL LISTONES</td>
+              <td class="area-col" style="color: var(--yellow)">7.28 ml</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ═══════════════════════════
+     OPTIMIZACIÓN DE PLANCHAS
+════════════════════════════ -->
+      <div class="section-label">
+        OPTIMIZACIÓN DE PLANCHAS (1830×2750mm · desperdicio 20%)
+      </div>
+      <div class="optimizer-grid">
+        <div class="sheet-box">
+          <h4>18mm Melamina / MDF Blanca</h4>
+          <div class="sheet-stat">Área útil total: <span>10.19 m²</span></div>
+          <div class="sheet-stat">
+            Área plancha (1 ud.): <span>5.03 m²</span>
+          </div>
+          <div class="sheet-stat">
+            Eficiencia uso / plancha: <span>~68%</span>
+          </div>
+          <div class="sheet-bar">
+            <div class="sheet-bar-fill" style="width: 68%"></div>
+          </div>
+          <div class="sheet-stat">Planchas necesarias: <span>3 ud.</span></div>
+          <div class="sheet-stat" style="color: rgba(110, 201, 160, 0.6)">
+            Área sobrante (recortes):
+            <span style="color: var(--green)">4.90 m²</span>
+          </div>
+          <div class="sheet-count">3 <span>planchas 18mm</span></div>
+          <div style="font-size: 0.63rem; color: var(--dim); margin-top: 6px">
+            Pedir 4 si hay piezas complejas o margen de error
+          </div>
+        </div>
+        <div class="sheet-box">
+          <h4>6mm MDF / HDF</h4>
+          <div class="sheet-stat">Área útil total: <span>9.17 m²</span></div>
+          <div class="sheet-stat">
+            Área plancha (1 ud.): <span>5.03 m²</span>
+          </div>
+          <div class="sheet-stat">
+            Eficiencia uso / plancha: <span>~76%</span>
+          </div>
+          <div class="sheet-bar">
+            <div class="sheet-bar-fill green" style="width: 76%"></div>
+          </div>
+          <div class="sheet-stat">Planchas necesarias: <span>3 ud.</span></div>
+          <div class="sheet-stat" style="color: rgba(110, 201, 160, 0.6)">
+            Área sobrante (recortes):
+            <span style="color: var(--green)">5.92 m²</span>
+          </div>
+          <div class="sheet-count">3 <span>planchas 6mm</span></div>
+          <div style="font-size: 0.63rem; color: var(--dim); margin-top: 6px">
+            Los fondos FFC (1168×842mm) son las piezas dominantes — priorizar su
+            anidado
+          </div>
+        </div>
+        <div class="sheet-box">
+          <h4>25mm MDF (tablero)</h4>
+          <div class="sheet-stat">Pieza tablero: <span>2640×1000mm</span></div>
+          <div class="sheet-stat">
+            Área plancha (1 ud.): <span>5.03 m²</span>
+          </div>
+          <div class="sheet-stat">
+            Eficiencia uso / plancha: <span>~52%</span>
+          </div>
+          <div class="sheet-bar">
+            <div class="sheet-bar-fill yellow" style="width: 52%"></div>
+          </div>
+          <div class="sheet-stat">
+            Planchas necesarias: <span>2 ud. (1 por capa)</span>
+          </div>
+          <div class="sheet-stat" style="color: rgba(110, 201, 160, 0.6)">
+            Sobrante c/plancha:
+            <span style="color: var(--green)">~2.39 m²</span>
+          </div>
+          <div class="sheet-count">2 <span>planchas 25mm</span></div>
+          <div style="font-size: 0.63rem; color: var(--dim); margin-top: 6px">
+            El tablero mide 2640mm &lt; 2750mm (largo plancha). Entra exacto en
+            1 plancha.
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════
+     HERRAJES Y COMPLEMENTOS
+════════════════════════════ -->
+      <div class="section-label">
+        LISTA DE HERRAJES Y MATERIALES COMPLEMENTARIOS
+      </div>
+      <div class="hardware-grid">
+        <div class="hw-card">
+          <h4>🔩 Herrajes estructurales</h4>
+          <table>
+            <tr>
+              <td>6</td>
+              <td class="desc-col">
+                Pares de guías telescópicas full-extension 900mm (para cajones
+                FFC)
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">
+                carga mín. 35kg/par
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="desc-col">
+                Pares de guías telescópicas full-extension 500mm (para Isla B)
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">
+                carga mín. 20kg/par
+              </td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td class="desc-col">
+                Ruedas industriales 75mm con freno (4 por isla)
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">tornillo placa M10</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td class="desc-col">
+                Platos de roseta metálicos para ruedas + tornillería M10
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td class="desc-col">
+                Tiradores de barra corrida 1240mm — cajones FFC
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">
+                Al. anodizado o blanco
+              </td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="desc-col">
+                Tiradores de barra corrida 600mm — cajones Isla B
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td class="desc-col">
+                Kit escuadras metálicas internas 50mm (pack 20 unidades)
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td class="desc-col">
+                Tornillos M8×50mm mariposa — fijación tablero removible
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="desc-col">
+                Cajas tornillos para MDF 3.5×40mm (200 ud/caja)
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="desc-col">Bolsas tarugos madera 8mm (100 ud/bolsa)</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+        <div class="hw-card">
+          <h4>🎨 Materiales de acabado — Blanco RAL 9003</h4>
+          <table>
+            <tr>
+              <td>3L</td>
+              <td class="desc-col">Sellador fondo para MDF (lijable)</td>
+              <td style="color: rgba(244, 200, 66, 0.6)">2 manos en cortes</td>
+            </tr>
+            <tr>
+              <td>6L</td>
+              <td class="desc-col">
+                Laca PU satinada blanca RAL 9003 (componente A)
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">2–3 manos</td>
+            </tr>
+            <tr>
+              <td>1L</td>
+              <td class="desc-col">Catalizador laca PU (componente B)</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>2L</td>
+              <td class="desc-col">
+                Cola PVA para madera (encolado tablero + refuerzos)
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td class="desc-col">Pliegos de lija nº 120 (preparación)</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td class="desc-col">
+                Pliegos de lija nº 240 (entre manos de laca)
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td class="desc-col">Pliegos de lija nº 400 (acabado final)</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td class="desc-col">
+                Cinta de canto ABS blanca 18mm (rollo 50ml) — cantos visibles
+              </td>
+              <td style="color: rgba(244, 200, 66, 0.6)">
+                para sierra de canto
+              </td>
+            </tr>
+            <tr>
+              <td>1L</td>
+              <td class="desc-col">Aguarrás / diluyente para herramientas</td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════
+     CALCULADORA DE PRESUPUESTO
+════════════════════════════ -->
+      <div class="section-label">
+        CALCULADORA DE PRESUPUESTO — CIUDAD DE BUENOS AIRES
+      </div>
+      <div class="budget-note">
+        ⚠️ Los precios por defecto son
+        <strong>orientativos para marzo 2026</strong>. Argentina tiene alta
+        inflación — verificar con su proveedor (Madermaq, Maderplac, Leroy
+        Merlin, corralón local, etc.) antes de tomar decisiones. Haga clic en
+        cualquier precio para editarlo. El total se actualiza automáticamente.
+      </div>
+
+      <div class="tbl-wrap">
+        <table class="budget-table" id="budgetTable">
+          <thead>
+            <tr>
+              <th>ÍTEM</th>
+              <th>DESCRIPCIÓN</th>
+              <th>CANT.</th>
+              <th>UNIDAD</th>
+              <th>PRECIO UNITARIO (ARS)</th>
+              <th>SUBTOTAL (ARS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- MATERIALES TABLEROS -->
+            <tr class="cat-row">
+              <td colspan="6">MATERIALES — TABLEROS Y MADERAS</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>Plancha MDF/Melamina blanca 18mm 1830×2750mm</td>
+              <td>3</td>
+              <td>plancha</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="125000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-0"></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Plancha MDF 6mm 1830×2750mm (fondos y traseros)</td>
+              <td>3</td>
+              <td>plancha</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="55000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-1"></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Plancha MDF 25mm 1830×2750mm (tablero de trabajo)</td>
+              <td>2</td>
+              <td>plancha</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="195000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-2"></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Listón pino 50×40mm (precio por metro lineal)</td>
+              <td>8</td>
+              <td>ml</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="3200"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-3"></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Cinta ABS blanca 18mm rollo 50ml (cantos)</td>
+              <td>1</td>
+              <td>rollo</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="18000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-4"></td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="5">SUBTOTAL MADERAS:</td>
+              <td class="subtotal-cell" id="subtot-mad"></td>
+            </tr>
+
+            <!-- HERRAJES -->
+            <tr class="cat-row">
+              <td colspan="6">HERRAJES — GUÍAS, RUEDAS Y TIRADORES</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Par guías telescópicas full-extension 900mm (cajones FFC)</td>
+              <td>6</td>
+              <td>par</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="42000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-5"></td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Par guías telescópicas full-extension 500mm (Isla B)</td>
+              <td>5</td>
+              <td>par</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="26000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-6"></td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Rueda industrial 75mm con freno (tornillo placa)</td>
+              <td>8</td>
+              <td>unidad</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="15000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-7"></td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Tirador barra corrida 1240mm (cajones FFC)</td>
+              <td>6</td>
+              <td>unidad</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="9500"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-8"></td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Tirador barra corrida 600mm (Isla B)</td>
+              <td>5</td>
+              <td>unidad</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="5800"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-9"></td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>Escuadras metálicas + tornillería MDF (pack)</td>
+              <td>1</td>
+              <td>pack</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="28000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-10"></td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="5">SUBTOTAL HERRAJES:</td>
+              <td class="subtotal-cell" id="subtot-her"></td>
+            </tr>
+
+            <!-- ACABADO -->
+            <tr class="cat-row">
+              <td colspan="6">ACABADO — LACA BLANCA RAL 9003 + CONSUMIBLES</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Sellador fondo MDF lijable</td>
+              <td>3</td>
+              <td>litro</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="8500"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-11"></td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>Laca PU satinada blanca RAL 9003 (componente A)</td>
+              <td>6</td>
+              <td>litro</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="11500"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-12"></td>
+            </tr>
+            <tr>
+              <td>14</td>
+              <td>Catalizador laca PU (componente B)</td>
+              <td>1</td>
+              <td>litro</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="14000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-13"></td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>Cola PVA para madera</td>
+              <td>2</td>
+              <td>litro</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="6500"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-14"></td>
+            </tr>
+            <tr>
+              <td>16</td>
+              <td>Lijas varias (nº 120 + 240 + 400) — pliegos</td>
+              <td>50</td>
+              <td>pliego</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="450"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-15"></td>
+            </tr>
+            <tr>
+              <td>17</td>
+              <td>Misceláneos (diluyente, trapos, tarugos, etc.)</td>
+              <td>1</td>
+              <td>global</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="22000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-16"></td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="5">SUBTOTAL ACABADO:</td>
+              <td class="subtotal-cell" id="subtot-acab"></td>
+            </tr>
+
+            <!-- MANO DE OBRA (opcional) -->
+            <tr class="cat-row">
+              <td colspan="6">
+                MANO DE OBRA (opcional — para usar si contrata carpintero)
+              </td>
+            </tr>
+            <tr>
+              <td>18</td>
+              <td>
+                Carpintero — corte de planchas en taller (costo por corte)
+              </td>
+              <td>95</td>
+              <td>corte</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="800"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-17"></td>
+            </tr>
+            <tr>
+              <td>19</td>
+              <td>Jornada carpintero armado (8hs)</td>
+              <td>5</td>
+              <td>jornada</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="90000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-18"></td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>Jornada laqueador (8hs)</td>
+              <td>2</td>
+              <td>jornada</td>
+              <td>
+                <input
+                  class="price-input"
+                  type="number"
+                  value="80000"
+                  oninput="recalculate()"
+                />
+              </td>
+              <td class="subtotal-cell" id="sub-19"></td>
+            </tr>
+            <tr class="subtotal-row">
+              <td colspan="5">SUBTOTAL MANO DE OBRA:</td>
+              <td class="subtotal-cell" id="subtot-mdo"></td>
+            </tr>
+
+            <!-- TOTAL -->
+            <tr class="total-row">
+              <td colspan="3">
+                TOTAL GENERAL (materiales + herrajes + acabado + mano de obra)
+              </td>
+              <td></td>
+              <td
+                style="text-align: right; font-size: 0.75rem; color: var(--dim)"
+              >
+                USD ≈ (cotiz. oficial) →
+              </td>
+              <td>
+                <div class="total-ars" id="grandTotal">—</div>
+                <div class="total-usd" id="totalUSD">— USD</div>
+                <div class="usd-note">
+                  USD a
+                  <input
+                    class="price-input"
+                    type="number"
+                    id="usdRate"
+                    value="1220"
+                    oninput="recalculate()"
+                    style="width: 90px"
+                  />
+                  ARS/USD
+                </div>
+              </td>
+            </tr>
+            <tr class="total-row" style="background: rgba(110, 201, 160, 0.08)">
+              <td colspan="3" style="color: var(--green)">
+                TOTAL SOLO MATERIALES + HERRAJES (sin mano de obra)
+              </td>
+              <td colspan="2"></td>
+              <td>
+                <div
+                  style="
+                    font-family: &quot;Bebas Neue&quot;;
+                    font-size: 1.3rem;
+                    color: var(--green);
+                  "
+                  id="totalSinMDO"
+                >
+                  —
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- NOTAS CONSTRUCTIVAS -->
+      <div class="section-label">NOTAS IMPORTANTES DE CONSTRUCCIÓN</div>
+      <div class="notes-box">
+        <strong>⚠️ Cajones FFC y formato A0:</strong> El formato A0 mide
+        841×1189mm. Con la Isla A de 1240mm de largo, el interior de los cajones
+        resulta en ~1178mm de ancho (después de paneles y guías estándar), lo
+        cual es 11mm menos que los 1189mm necesarios.
+        <strong>Solución recomendada:</strong> usar guías especiales de bajo
+        perfil tipo "cajón mapoteca" con montaje central de fondo (en lugar de
+        guías laterales), que permiten aprovechar el ancho interior completo de
+        1168mm + el grosor del panel (1204mm interior). O bien ampliar la Isla A
+        a 1270mm. <br /><br />
+        <strong>📐 Tablero desmontable:</strong> El tablero se fija a los
+        listones con tornillos mariposa (desde abajo), lo que permite separar
+        las dos islas si necesitás mover el taller o reconfigurar el espacio.
+        <br /><br />
+        <strong>🪵 Frentes de cajón FFC:</strong> Los frentes decorativos
+        (IC-04) de 1240×100mm tienen un solape de 1mm arriba y abajo sobre el
+        cajón adyacente. Este "lip" oculta las guías y las uniones y da el look
+        limpio que se ve en las referencias. <br /><br />
+        <strong>🛒 Compra de materiales en Buenos Aires:</strong> Consultar en
+        Madermaq (Av. Corrientes), Maderplac, Brimax, o cualquier distribuidora
+        de tableros de la zona industrial de Villa Lugano o el corralón de tu
+        zona. Las guías telescópicas de 900mm para flat file se consiguen en
+        ferreterías industriales (zona Once, Villa del Parque) o en
+        MercadoLibre. Las ruedas industriales en ferreterías de herrajes.
+      </div>
+
+      <div class="footer">
+        <span
+          >PLAN DE CORTES — MESA ARTISTA DOS ISLAS · Ciudad de Buenos Aires ·
+          Marzo 2026</span
+        >
+        <span
+          >Precios orientativos — verificar con proveedores locales · Revisión
+          B</span
+        >
+      </div>
+    </div>
+    <!-- /.page -->
+
+    <script>
+      // ─── Items: [id, quantity] ───
+      const items = [
+        ["sub-0", 3], // melamina 18mm
+        ["sub-1", 3], // MDF 6mm
+        ["sub-2", 2], // MDF 25mm
+        ["sub-3", 8], // listones
+        ["sub-4", 1], // cinta ABS
+        ["sub-5", 6], // guías 900mm
+        ["sub-6", 5], // guías 500mm
+        ["sub-7", 8], // ruedas
+        ["sub-8", 6], // tiradores 1240
+        ["sub-9", 5], // tiradores 600
+        ["sub-10", 1], // escuadras pack
+        ["sub-11", 3], // sellador
+        ["sub-12", 6], // laca PU
+        ["sub-13", 1], // catalizador
+        ["sub-14", 2], // cola PVA
+        ["sub-15", 50], // lijas
+        ["sub-16", 1], // misceláneos
+        ["sub-17", 95], // cortes CNC
+        ["sub-18", 5], // jornada carpintero
+        ["sub-19", 2], // jornada laqueador
+      ];
+
+      const subtotGroups = {
+        "subtot-mad": [0, 1, 2, 3, 4],
+        "subtot-her": [5, 6, 7, 8, 9, 10],
+        "subtot-acab": [11, 12, 13, 14, 15, 16],
+        "subtot-mdo": [17, 18, 19],
+      };
+
+      function fmt(n) {
+        return "$ " + Math.round(n).toLocaleString("es-AR");
+      }
+
+      function recalculate() {
+        const inputs = document.querySelectorAll(".price-input");
+        const prices = Array.from(inputs)
+          .slice(0, items.length)
+          .map((i) => parseFloat(i.value) || 0);
+        const usdRate =
+          parseFloat(document.getElementById("usdRate").value) || 1;
+
+        let subtotals = [];
+        items.forEach(([id, qty], i) => {
+          const sub = prices[i] * qty;
+          subtotals.push(sub);
+          document.getElementById(id).textContent = fmt(sub);
+        });
+
+        // Group subtotals
+        Object.entries(subtotGroups).forEach(([gid, idxs]) => {
+          const s = idxs.reduce((acc, i) => acc + subtotals[i], 0);
+          document.getElementById(gid).textContent = fmt(s);
+        });
+
+        const total = subtotals.reduce((a, b) => a + b, 0);
+        const sinMDO = subtotals.slice(0, 17).reduce((a, b) => a + b, 0);
+
+        document.getElementById("grandTotal").textContent = fmt(total);
+        document.getElementById("totalUSD").textContent =
+          "≈ USD " + Math.round(total / usdRate).toLocaleString("es-AR");
+        document.getElementById("totalSinMDO").textContent =
+          fmt(sinMDO) +
+          "  ≈ USD " +
+          Math.round(sinMDO / usdRate).toLocaleString("es-AR");
+      }
+
+      // Run on load
+      recalculate();
+    </script>
+  </body>
+</html>
