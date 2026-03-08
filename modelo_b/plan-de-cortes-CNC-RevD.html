@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos de Corte CNC — Rev D</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1B2A;--ink:#E8EFF7;--accent:#4A9ECD;--yellow:#F4C842;
+  --green:#6EC9A0;--red:#E07070;--dim:rgba(232,239,247,.38);
+  --grid:rgba(74,158,205,.065);
+}
+body{background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(rgba(74,158,205,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,158,205,.025) 1px,transparent 1px);
+  background-size:100px 100px,100px 100px,20px 20px,20px 20px}
+.page{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:30px 20px 60px}
+.header{border:1px solid var(--accent);border-bottom:3px solid var(--accent);
+  padding:16px 24px 12px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:16px;
+  align-items:end;background:rgba(26,58,92,.3)}
+.header h1{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:.08em;line-height:1}
+.header h2{font-family:'Crimson Pro';font-style:italic;font-weight:300;font-size:.95rem;color:var(--accent);margin-top:4px}
+.rev{background:rgba(244,200,66,.15);border:1px solid rgba(244,200,66,.5);color:var(--yellow);font-size:.65rem;padding:3px 10px;letter-spacing:.15em;margin-top:6px;display:inline-block}
+.meta{font-size:.63rem;text-align:right;line-height:2.2;color:var(--dim)}.meta span{color:var(--ink)}
+.alert{border:1px solid rgba(110,201,160,.35);background:rgba(110,201,160,.05);
+  padding:11px 15px;font-size:.68rem;color:rgba(110,201,160,.85);margin-bottom:16px;line-height:1.8}
+.alert strong{color:var(--green)}
+.changes{border:1px solid rgba(244,200,66,.35);background:rgba(244,200,66,.05);
+  padding:11px 15px;font-size:.68rem;color:rgba(244,200,66,.82);margin-bottom:16px;line-height:1.9}
+.changes strong{color:var(--yellow)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;border:1px solid rgba(74,158,205,.22);
+  padding:9px 13px;background:rgba(13,27,42,.45);margin-bottom:18px;font-size:.65rem;color:var(--dim)}
+.li{display:flex;align-items:center;gap:5px}
+.ls{width:13px;height:13px;border-radius:2px;flex-shrink:0}
+.info-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.info-card{border:1px solid rgba(74,158,205,.3);padding:12px 14px;background:rgba(13,27,42,.55)}
+.info-card .im{font-family:'Bebas Neue';font-size:.68rem;letter-spacing:.2em;color:var(--dim);margin-bottom:2px}
+.info-card .iv{font-family:'Bebas Neue';font-size:2.4rem;line-height:1;color:var(--accent)}
+.info-card .iu{font-size:.63rem;color:var(--dim)}
+.info-card .in{font-size:.63rem;color:rgba(110,201,160,.8);margin-top:3px}
+.tabs{display:flex;gap:3px;margin-bottom:18px}
+.tab{font-family:'Bebas Neue';font-size:.82rem;letter-spacing:.16em;padding:7px 18px;cursor:pointer;
+  border:1px solid rgba(74,158,205,.3);background:rgba(13,27,42,.5);color:var(--dim);transition:all .18s}
+.tab:hover{background:rgba(74,158,205,.1);color:var(--ink)}
+.tab.active{background:rgba(74,158,205,.18);color:var(--accent);border-color:var(--accent);
+  border-bottom-color:var(--bg);position:relative;top:1px}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.sheet-section{margin-bottom:28px}
+.sheet-hdr{display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid rgba(74,158,205,.18)}
+.sheet-title{font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.18em;color:var(--accent)}
+.sheet-stats{font-size:.64rem;color:var(--dim);margin-top:2px}
+.sheet-stats span{color:var(--ink)}
+.usage-bar{height:6px;background:rgba(74,158,205,.1);border-radius:3px;width:180px;margin-top:5px}
+.usage-fill{height:100%;border-radius:3px}
+.btns{display:flex;gap:7px;align-items:center;flex-shrink:0}
+.btn{font-family:'Share Tech Mono';font-size:.62rem;letter-spacing:.06em;padding:5px 11px;
+  border:1px solid;cursor:pointer;transition:all .15s;background:transparent;white-space:nowrap}
+.btn-dxf{color:var(--yellow);border-color:rgba(244,200,66,.45)}
+.btn-dxf:hover{background:rgba(244,200,66,.1);border-color:var(--yellow)}
+.btn-svg{color:var(--green);border-color:rgba(110,201,160,.45)}
+.btn-svg:hover{background:rgba(110,201,160,.08);border-color:var(--green)}
+.canvas-wrap{border:1px solid rgba(74,158,205,.28);background:rgba(7,15,26,.8);overflow:auto;padding:10px}
+.canvas-wrap svg{display:block;margin:0 auto}
+.piece-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:7px;margin-top:10px}
+.piece-item{border:1px solid rgba(74,158,205,.18);padding:6px 9px;font-size:.65rem;
+  display:flex;align-items:center;gap:7px;background:rgba(13,27,42,.4)}
+.piece-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.piece-code{color:var(--accent);width:84px;flex-shrink:0}
+.piece-dims{color:var(--yellow);width:92px;flex-shrink:0}
+.piece-desc{color:var(--dim);flex:1}
+.piece-rot{color:rgba(244,200,66,.6);font-size:.6rem;margin-left:3px}
+.piece-new{color:var(--green);font-size:.6rem;margin-left:3px}
+.piece-mod{color:var(--yellow);font-size:.6rem;margin-left:3px}
+.footer{margin-top:30px;border-top:1px solid rgba(74,158,205,.2);padding-top:11px;
+  font-size:.61rem;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.info-bar{grid-template-columns:1fr 1fr}.header{grid-template-columns:1fr}}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,20,34,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:0 28px;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 20px rgba(0,0,0,.4)
+}
+.navbar-brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;flex-shrink:0
+}
+.navbar-brand-icon{
+  width:30px;height:30px;border:1.5px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(45deg);transition:background .2s
+}
+.navbar-brand:hover .navbar-brand-icon{background:rgba(74,158,205,.15)}
+.navbar-brand-icon svg{transform:rotate(-45deg)}
+.navbar-brand-text{font-family:'Bebas Neue';font-size:1.15rem;letter-spacing:.1em;color:var(--ink);line-height:1}
+.navbar-brand-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--accent);letter-spacing:.1em}
+.navbar-links{
+  display:flex;align-items:center;gap:4px;list-style:none
+}
+.navbar-links a{
+  display:flex;align-items:center;gap:7px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.8rem;font-weight:500;color:var(--dim);
+  padding:6px 14px;border:1px solid transparent;
+  letter-spacing:.04em;white-space:nowrap;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-links a:hover{color:var(--ink);border-color:rgba(74,158,205,.3);background:rgba(74,158,205,.07)}
+.navbar-links a.active{color:var(--accent);border-color:rgba(74,158,205,.4);background:rgba(74,158,205,.1)}
+.navbar-links a .nav-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:currentColor;flex-shrink:0;opacity:.6
+}
+.navbar-burger{
+  display:none;background:none;
+  border:1px solid rgba(74,158,205,.4);color:var(--ink);
+  cursor:pointer;padding:6px 9px;
+  transition:background .18s,border-color .18s
+}
+.navbar-burger:hover{background:rgba(74,158,205,.1);border-color:var(--accent)}
+.navbar-mobile-menu{
+  display:none;position:absolute;top:54px;left:0;right:0;
+  background:rgba(10,20,34,.97);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:8px 0;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5)
+}
+.navbar-mobile-menu.open{display:block}
+.navbar-mobile-menu a{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.88rem;font-weight:500;color:var(--dim);
+  padding:13px 28px;border-left:3px solid transparent;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-mobile-menu a:hover{color:var(--ink);background:rgba(74,158,205,.07);border-left-color:rgba(74,158,205,.5)}
+.navbar-mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,158,205,.08)}
+.navbar-wrapper{position:relative}
+@media(max-width:900px){
+  .navbar-links{display:none}
+  .navbar-burger{display:block}
+  .navbar{padding:0 18px}
+}
+
+</style>
+</head>
+<body>
+<!-- ── NAVBAR ── -->
+<div class="navbar-wrapper">
+  <nav class="navbar">
+    <a href="../index.html" class="navbar-brand">
+      <div class="navbar-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="12" height="12" stroke="#4A9ECD" stroke-width="1.5" fill="none"/>
+          <line x1="1" y1="7" x2="13" y2="7" stroke="#4A9ECD" stroke-width="1"/>
+          <line x1="7" y1="1" x2="7" y2="13" stroke="#4A9ECD" stroke-width="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="navbar-brand-text">Mesa de Artista</div>
+        <div class="navbar-brand-sub">Sistema Dos Islas · Rev. D</div>
+      </div>
+    </a>
+
+    <ul class="navbar-links">
+      <li><a href="index.html"><span class="nav-dot"></span>Plano Técnico</a></li>
+      <li><a href="presupuesto-RevD.html"><span class="nav-dot"></span>Presupuesto</a></li>
+      <li><a href="plan-de-cortes-CNC-RevD.html" class="active"><span class="nav-dot"></span>Planos CNC</a></li>
+      <li><a href="detalles-constructivos-RevD.html"><span class="nav-dot"></span>Detalles Constructivos</a></li>
+    </ul>
+
+    <button class="navbar-burger" id="burgerBtn" aria-label="Menú" onclick="toggleMenu()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="4" x2="16" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="navbar-mobile-menu" id="mobileMenu">
+    <a href="index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="1" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="0.8"/></svg>
+      Plano Técnico
+    </a>
+    <a href="presupuesto-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="2" y1="3" x2="12" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Presupuesto
+    </a>
+    <a href="plan-de-cortes-CNC-RevD.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="4" y1="4" x2="10" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="10" y1="4" x2="4" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      Planos CNC
+    </a>
+    <a href="detalles-constructivos-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="7" y1="5" x2="7" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="3.5" r="0.8" fill="currentColor"/></svg>
+      Detalles Constructivos
+    </a>
+  </div>
+</div>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.navbar-wrapper');
+  if (!wrapper.contains(e.target)) {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+});
+</script>
+
+<div class="page">
+<div class="header">
+  <div>
+    <h1>Planos de Corte CNC — Rev D</h1>
+    <h2>Mesa de Artista · Full-Overlay · Fox MF18 · Isla B Doble Zona · MaxRects BSSF</h2>
+    <div class="rev">REVISIÓN D — MARZO 2026</div>
+  </div>
+  <div class="meta">PLANCHA: <span>1830 × 2750mm</span><br>ALGORITMO: <span>MaxRects BSSF</span><br>KERF: <span>4mm</span> · MARGEN: <span>20mm</span></div>
+</div>
+
+<div class="changes">
+  ▶ <strong>CAMBIOS REV D:</strong>
+  IB-05 reducido a 600mm prof. &nbsp;·&nbsp; IBC-01/05/09/10 a 600mm prof. &nbsp;·&nbsp;
+  IB-06 <strong>eliminado</strong> (zona estante abierta) &nbsp;·&nbsp;
+  IB-07 <strong>nuevo</strong> (panel divisor 564×589mm) &nbsp;·&nbsp;
+  IB-08 <strong>nuevo</strong> (estantes traseros 564×300mm ×2) &nbsp;·&nbsp;
+  Tiradores barra <strong>eliminados</strong> (→ perfil Fox MF18 en borde del frente)
+</div>
+
+<div class="alert">✔ <strong>MaxRects BSSF</strong> — 3 planchas de 18mm · 3 planchas de 6mm · 2 planchas de 25mm · Total 83 piezas en 8 planchas</div>
+
+<div class="info-bar">
+  <div class="info-card"><div class="im">18mm Melamina blanca</div><div class="iv">3</div><div class="iu">planchas 1830×2750mm</div><div class="in">Algoritmo MaxRects BSSF</div></div>
+  <div class="info-card"><div class="im">6mm MDF — fondos</div><div class="iv">3</div><div class="iu">planchas 1830×2750mm</div><div class="in">Fondos cajones FFC dominantes</div></div>
+  <div class="info-card"><div class="im">25mm MDF — tablero</div><div class="iv">2</div><div class="iu">planchas 1830×2750mm</div><div class="in">1 pieza por plancha · 2 capas encoladas</div></div>
+</div>
+
+<div class="legend">
+  <strong style="color:var(--accent);margin-right:5px">COLORES:</strong>
+  <div class="li"><div class="ls" style="background:#2E7DB8"></div>Isla A · carcasa</div>
+  <div class="li"><div class="ls" style="background:#5FA8D4"></div>Isla A · cajones FFC</div>
+  <div class="li"><div class="ls" style="background:#2E9B6E"></div>Isla B · carcasa</div>
+  <div class="li"><div class="ls" style="background:#5BBFA0"></div>Isla B · cajones/estantes</div>
+  <div class="li"><div class="ls" style="background:#C49030"></div>Tablero 25mm</div>
+  <div class="li"><div class="ls" style="background:rgba(74,158,205,.07);border:1px dashed rgba(74,158,205,.35)"></div>Zona libre</div>
+  <span style="font-size:.6rem;margin-left:6px">Borde punteado amarillo = rotada 90°</span>
+  <span style="font-size:.6rem;color:var(--green);margin-left:4px">★ = pieza nueva</span>
+  <span style="font-size:.6rem;color:var(--yellow);margin-left:4px">◆ = pieza modificada</span>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="sw('18mm',this)">18mm Melamina — 3 planchas</div>
+  <div class="tab" onclick="sw('6mm',this)">6mm MDF — 3 planchas</div>
+  <div class="tab" onclick="sw('25mm',this)">25mm MDF — 2 planchas</div>
+</div>
+
+<div id="panel-18mm" class="tab-panel active"></div>
+<div id="panel-6mm" class="tab-panel"></div>
+<div id="panel-25mm" class="tab-panel"></div>
+
+<div class="footer">
+  <span>PLAN DE CORTES CNC · REV D · MESA ARTISTA DOS ISLAS · Marzo 2026</span>
+  <span>DXF AutoCAD 2000+ · SVG · Unidades mm · Kerf 4mm</span>
+</div>
+</div>
+
+<script>
+const SW=1830,SH=2750;
+const GRP={
+  a:  {fill:'rgba(46,125,184,.52)',  stroke:'#4A9ECD',txt:'#B8D8F0'},
+  ac: {fill:'rgba(95,168,212,.48)',  stroke:'#5FA8D4',txt:'#D8EEFA'},
+  b:  {fill:'rgba(46,155,110,.48)',  stroke:'#2E9B6E',txt:'#A8DCC8'},
+  bc: {fill:'rgba(91,191,160,.44)',  stroke:'#5BBFA0',txt:'#CCF0E2'},
+  t:  {fill:'rgba(196,144,48,.52)',  stroke:'#C49030',txt:'#F0D890'},
+};
+
+// NEW pieces flagged
+const NEW_PIECES = ['IB-07','IB-08 #1','IB-08 #2'];
+const MOD_PIECES = ['IB-05','IBC-01 #1','IBC-01 #2','IBC-01 #3','IBC-01 #4',
+  'IBC-05 #1','IBC-05 #2','IBC-05 #3','IBC-05 #4','IBC-05 #5','IBC-05 #6',
+  'IBC-09 #1','IBC-09 #2','IBC-10 #1','IBC-10 #2','IBC-10 #3'];
+
+const NESTING={
+'18mm':[
+ {label:'Plancha 18-1', items:[
+  {code:'IA-02',    desc:'Panel tapa Isla A',           px:20,  py:20,   pw:1204,ph:900,  grp:'a', rot:false},
+  {code:'IA-03',    desc:'Panel base Isla A',           px:20,  py:920,  pw:1204,ph:900,  grp:'a', rot:false},
+  {code:'IA-01 #1', desc:'Panel lateral Isla A',        px:20,  py:1820, pw:625, ph:900,  grp:'a', rot:true},
+  {code:'IA-01 #2', desc:'Panel lateral Isla A',        px:645, py:1820, pw:625, ph:900,  grp:'a', rot:true},
+ ]},
+ {label:'Plancha 18-2', items:[
+  {code:'IB-01 #1', desc:'Panel lateral Isla B',        px:20,  py:20,   pw:900, ph:625,  grp:'b', rot:false},
+  {code:'IB-01 #2', desc:'Panel lateral Isla B',        px:920, py:20,   pw:625, ph:900,  grp:'b', rot:true},
+  {code:'IB-02',    desc:'Panel tapa Isla B',           px:20,  py:645,  pw:900, ph:564,  grp:'b', rot:true},
+  {code:'IB-03',    desc:'Panel base Isla B',           px:920, py:920,  pw:564, ph:900,  grp:'b', rot:false},
+  {code:'IB-05',    desc:'Estante inter. B 600mm',      px:20,  py:1209, pw:600, ph:564,  grp:'b', rot:true},
+  {code:'IB-07',    desc:'Panel divisor zona cajones',  px:620, py:1209, pw:589, ph:564,  grp:'b', rot:true},
+  {code:'IB-08 #1', desc:'Estante trasero abierto',     px:20,  py:1773, pw:300, ph:564,  grp:'b', rot:true},
+  {code:'IB-08 #2', desc:'Estante trasero abierto',     px:324, py:1773, pw:300, ph:564,  grp:'b', rot:true},
+  {code:'IC-04 #1', desc:'Frente full-overlay FFC',     px:1545,py:20,   pw:100, ph:1240, grp:'ac',rot:true},
+  {code:'IC-04 #2', desc:'Frente full-overlay FFC',     px:1645,py:20,   pw:100, ph:1240, grp:'ac',rot:true},
+  {code:'IC-04 #3', desc:'Frente full-overlay FFC',     px:1484,py:1260, pw:100, ph:1240, grp:'ac',rot:true},
+  {code:'IC-04 #4', desc:'Frente full-overlay FFC',     px:1584,py:1260, pw:100, ph:1240, grp:'ac',rot:true},
+  {code:'IC-04 #5', desc:'Frente full-overlay FFC',     px:1684,py:1260, pw:100, ph:1240, grp:'ac',rot:true},
+  {code:'IC-04 #6', desc:'Frente full-overlay FFC',     px:20,  py:2500, pw:1240,ph:100,  grp:'ac',rot:false},
+  {code:'IA-04',    desc:'Plinto frontal Isla A',       px:20,  py:2600, pw:1240,ph:80,   grp:'a', rot:false},
+  {code:'IC-02 #1', desc:'Frente caja cajón FFC',       px:20,  py:2337, pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-02 #2', desc:'Frente caja cajón FFC',       px:20,  py:2417, pw:1168,ph:80,   grp:'ac',rot:false},
+ ]},
+ {label:'Plancha 18-3', items:[
+  {code:'IC-02 #3', desc:'Frente caja cajón FFC',       px:20,  py:20,   pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-02 #4', desc:'Frente caja cajón FFC',       px:1188,py:20,   pw:80,  ph:1168, grp:'ac',rot:true},
+  {code:'IC-02 #5', desc:'Frente caja cajón FFC',       px:20,  py:100,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-02 #6', desc:'Frente caja cajón FFC',       px:20,  py:180,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #1', desc:'Trasero cajón FFC',           px:20,  py:260,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #2', desc:'Trasero cajón FFC',           px:20,  py:340,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #3', desc:'Trasero cajón FFC',           px:20,  py:420,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #4', desc:'Trasero cajón FFC',           px:20,  py:500,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #5', desc:'Trasero cajón FFC',           px:20,  py:580,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IC-03 #6', desc:'Trasero cajón FFC',           px:20,  py:660,  pw:1168,ph:80,   grp:'ac',rot:false},
+  {code:'IBC-04 #1',desc:'Frente full-overlay gde B',   px:1268,py:20,   pw:130, ph:600,  grp:'bc',rot:true},
+  {code:'IBC-04 #2',desc:'Frente full-overlay gde B',   px:1398,py:20,   pw:130, ph:600,  grp:'bc',rot:true},
+  {code:'IBC-01 #1',desc:'Lateral cajón grande B 600',  px:1528,py:20,   pw:120, ph:600,  grp:'bc',rot:true},
+  {code:'IBC-01 #2',desc:'Lateral cajón grande B 600',  px:1648,py:20,   pw:120, ph:600,  grp:'bc',rot:true},
+  {code:'IBC-01 #3',desc:'Lateral cajón grande B 600',  px:1268,py:620,  pw:120, ph:600,  grp:'bc',rot:true},
+  {code:'IBC-01 #4',desc:'Lateral cajón grande B 600',  px:1388,py:620,  pw:120, ph:600,  grp:'bc',rot:true},
+  {code:'IC-01 #1', desc:'Lateral cajón FFC',           px:1508,py:620,  pw:80,  ph:842,  grp:'ac',rot:true},
+  {code:'IC-01 #2', desc:'Lateral cajón FFC',           px:1588,py:620,  pw:80,  ph:842,  grp:'ac',rot:true},
+  {code:'IC-01 #3', desc:'Lateral cajón FFC',           px:1668,py:620,  pw:80,  ph:842,  grp:'ac',rot:true},
+  {code:'IC-01 #4', desc:'Lateral cajón FFC',           px:20,  py:740,  pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #5', desc:'Lateral cajón FFC',           px:862, py:740,  pw:80,  ph:842,  grp:'ac',rot:true},
+  {code:'IC-01 #6', desc:'Lateral cajón FFC',           px:20,  py:820,  pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #7', desc:'Lateral cajón FFC',           px:20,  py:900,  pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #8', desc:'Lateral cajón FFC',           px:20,  py:980,  pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #9', desc:'Lateral cajón FFC',           px:20,  py:1060, pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #10',desc:'Lateral cajón FFC',           px:20,  py:1140, pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #11',desc:'Lateral cajón FFC',           px:20,  py:1220, pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IC-01 #12',desc:'Lateral cajón FFC',           px:20,  py:1300, pw:842, ph:80,   grp:'ac',rot:false},
+  {code:'IBC-02 #1',desc:'Frente caja cajón grande B',  px:942, py:1220, pw:528, ph:120,  grp:'bc',rot:false},
+  {code:'IBC-02 #2',desc:'Frente caja cajón grande B',  px:942, py:1340, pw:528, ph:120,  grp:'bc',rot:false},
+  {code:'IBC-03 #1',desc:'Trasero cajón grande B',      px:942, py:1460, pw:528, ph:120,  grp:'bc',rot:false},
+  {code:'IBC-03 #2',desc:'Trasero cajón grande B',      px:1470,py:1462, pw:120, ph:528,  grp:'bc',rot:true},
+  {code:'IB-04',    desc:'Plinto frontal Isla B',       px:1590,py:1462, pw:80,  ph:600,  grp:'b', rot:true},
+  {code:'IBC-08 #1',desc:'Frente full-overlay med B',   px:20,  py:2062, pw:68,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-08 #2',desc:'Frente full-overlay med B',   px:20,  py:2662, pw:600, ph:68,   grp:'bc',rot:false},
+  {code:'IBC-08 #3',desc:'Frente full-overlay med B',   px:88,  py:2062, pw:68,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #1',desc:'Lat. cajón mediano B 600',    px:156, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #2',desc:'Lat. cajón mediano B 600',    px:216, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #3',desc:'Lat. cajón mediano B 600',    px:276, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #4',desc:'Lat. cajón mediano B 600',    px:336, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #5',desc:'Lat. cajón mediano B 600',    px:396, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-05 #6',desc:'Lat. cajón mediano B 600',    px:456, py:2062, pw:60,  ph:600,  grp:'bc',rot:true},
+  {code:'IBC-06 #1',desc:'Frente caja cajón med B',     px:942, py:1580, pw:528, ph:60,   grp:'bc',rot:false},
+  {code:'IBC-06 #2',desc:'Frente caja cajón med B',     px:1748,py:620,  pw:60,  ph:528,  grp:'bc',rot:true},
+  {code:'IBC-06 #3',desc:'Frente caja cajón med B',     px:1748,py:1148, pw:60,  ph:528,  grp:'bc',rot:true},
+  {code:'IBC-07 #1',desc:'Trasero cajón med B',         px:20,  py:1990, pw:528, ph:60,   grp:'bc',rot:false},
+  {code:'IBC-07 #2',desc:'Trasero cajón med B',         px:1670,py:1462, pw:60,  ph:528,  grp:'bc',rot:true},
+  {code:'IBC-07 #3',desc:'Trasero cajón med B',         px:1730,py:1676, pw:60,  ph:528,  grp:'bc',rot:true},
+ ]},
+],
+'6mm':[
+ {label:'Plancha 6-1', items:[
+  {code:'IC-05 #1', desc:'Fondo cajón FFC',              px:20,  py:20,   pw:1168,ph:842,  grp:'ac',rot:false},
+  {code:'IC-05 #2', desc:'Fondo cajón FFC',              px:20,  py:862,  pw:1168,ph:842,  grp:'ac',rot:false},
+  {code:'IC-05 #3', desc:'Fondo cajón FFC',              px:20,  py:1704, pw:1168,ph:842,  grp:'ac',rot:false},
+ ]},
+ {label:'Plancha 6-2', items:[
+  {code:'IC-05 #4', desc:'Fondo cajón FFC',              px:20,  py:20,   pw:1168,ph:842,  grp:'ac',rot:false},
+  {code:'IC-05 #5', desc:'Fondo cajón FFC',              px:20,  py:862,  pw:1168,ph:842,  grp:'ac',rot:false},
+  {code:'IC-05 #6', desc:'Fondo cajón FFC',              px:20,  py:1704, pw:1168,ph:842,  grp:'ac',rot:false},
+  {code:'IA-05',    desc:'Panel trasero Isla A',         px:1188,py:20,   pw:589, ph:1204, grp:'a', rot:true},
+  {code:'IBC-09 #1',desc:'Fondo cajón grande B (600)',   px:1188,py:1224, pw:600, ph:528,  grp:'bc',rot:true},
+  {code:'IBC-09 #2',desc:'Fondo cajón grande B (600)',   px:1188,py:1752, pw:600, ph:528,  grp:'bc',rot:true},
+ ]},
+ {label:'Plancha 6-3', items:[
+  {code:'IBC-10 #1',desc:'Fondo cajón mediano B (600)',  px:20,  py:20,   pw:600, ph:528,  grp:'bc',rot:true},
+  {code:'IBC-10 #2',desc:'Fondo cajón mediano B (600)',  px:620, py:20,   pw:600, ph:528,  grp:'bc',rot:true},
+  {code:'IBC-10 #3',desc:'Fondo cajón mediano B (600)',  px:1220,py:20,   pw:528, ph:600,  grp:'bc',rot:false},
+ ]},
+],
+'25mm':[
+ {label:'Plancha 25-1',items:[{code:'TP-01',desc:'Tablero capa 1/2',px:20,py:20,pw:1000,ph:2640,grp:'t',rot:false}]},
+ {label:'Plancha 25-2',items:[{code:'TP-02',desc:'Tablero capa 2/2',px:20,py:20,pw:1000,ph:2640,grp:'t',rot:false}]},
+],
+};
+
+const SCALE=0.197, s=v=>Math.round(v*SCALE);
+
+function usagePct(items){return (items.reduce((a,it)=>a+it.pw*it.ph,0)/(SW*SH)*100).toFixed(1)}
+
+function isNew(code){return NEW_PIECES.some(n=>code.startsWith(n.replace(/ #\d+/,'')))}
+function isMod(code){return MOD_PIECES.some(n=>code===n||n.startsWith(code.replace(/ #\d+/,'')))}
+
+function buildSVG(sheet,matKey,idx){
+  const W=s(SW),H=s(SH);const pct=parseFloat(usagePct(sheet.items));
+  let svg=`<svg id="svg-${matKey}-${idx}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#07111E"/>`;
+  for(let x=200;x<SW;x+=200)svg+=`<line x1="${s(x)}" y1="0" x2="${s(x)}" y2="${H}" stroke="rgba(74,158,205,.05)" stroke-width="0.5"/>`;
+  for(let y=200;y<SH;y+=200)svg+=`<line x1="0" y1="${s(y)}" x2="${W}" y2="${s(y)}" stroke="rgba(74,158,205,.05)" stroke-width="0.5"/>`;
+  svg+=`<rect x="0" y="0" width="${W}" height="${H}" fill="none" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>`;
+  const m=s(20);
+  svg+=`<rect x="${m}" y="${m}" width="${W-2*m}" height="${H-2*m}" fill="none" stroke="rgba(74,158,205,.18)" stroke-width="0.5" stroke-dasharray="4,3"/>`;
+  sheet.items.forEach(it=>{
+    const c=GRP[it.grp]||GRP.ac;
+    const x=s(it.px),y=s(it.py),w=s(it.pw),h=s(it.ph);
+    const isN=isNew(it.code),isM=isMod(it.code);
+    const strokeColor=isN?'#6EC9A0':isM?'#F4C842':c.stroke;
+    const strokeW=isN||isM?2:it.rot?1.8:1.2;
+    svg+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c.fill}" stroke="${strokeColor}" stroke-width="${strokeW}"/>`;
+    if(it.rot)svg+=`<rect x="${x+1.5}" y="${y+1.5}" width="${w-3}" height="${h-3}" fill="none" stroke="rgba(244,200,66,.55)" stroke-width="0.7" stroke-dasharray="3,2"/>`;
+    const minD=Math.min(w,h),cx=x+w/2,cy=y+h/2;
+    if(minD>10){
+      const cfs=Math.min(9.5,Math.max(5,minD*0.38));
+      const code=it.code.replace(/ #\d+$/,'');
+      const num=it.code.match(/#(\d+)$/);
+      svg+=`<text x="${cx}" y="${cy+(num&&minD>20?-cfs*.7:0)}" fill="${c.txt}" font-family="Share Tech Mono,monospace" font-size="${cfs}" text-anchor="middle" dominant-baseline="middle" font-weight="bold">${code}</text>`;
+      if(num&&minD>20)svg+=`<text x="${cx}" y="${cy+cfs*.8}" fill="${c.txt}" font-family="Share Tech Mono,monospace" font-size="${cfs*.72}" text-anchor="middle" dominant-baseline="middle" opacity=".75">#${num[1]}</text>`;
+      if(minD>28)svg+=`<text x="${cx}" y="${cy+cfs*1.7}" fill="${c.txt}" font-family="Share Tech Mono,monospace" font-size="${cfs*.62}" text-anchor="middle" dominant-baseline="middle" opacity=".6">${it.pw}×${it.ph}</text>`;
+      // Mark new/modified
+      if(isN&&minD>14)svg+=`<text x="${x+3}" y="${y+10}" fill="#6EC9A0" font-family="Share Tech Mono" font-size="6" font-weight="bold">★NEW</text>`;
+      if(isM&&minD>14)svg+=`<text x="${x+3}" y="${y+10}" fill="#F4C842" font-family="Share Tech Mono" font-size="6">◆MOD</text>`;
+    }
+  });
+  svg+=`<text x="${W/2}" y="${H-3}" fill="rgba(74,158,205,.4)" font-family="Share Tech Mono" font-size="6.5" text-anchor="middle">${SW}mm</text>`;
+  svg+=`<text x="5" y="${H/2}" fill="rgba(74,158,205,.4)" font-family="Share Tech Mono" font-size="6.5" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90,5,${H/2})">${SH}mm</text>`;
+  const ub=Math.round(W*pct/100),uc=pct>=75?'#6EC9A0':pct>=50?'#F4C842':'#E07070';
+  svg+=`<rect x="0" y="${H-4}" width="${ub}" height="4" fill="${uc}" opacity=".9"/>`;
+  svg+=`<text x="${W-3}" y="${H-6}" fill="${uc}" font-family="Share Tech Mono" font-size="6" text-anchor="end">${pct}%</text>`;
+  svg+=`</svg>`;return svg;
+}
+
+function buildPanel(matKey){
+  const sheets=NESTING[matKey];const panel=document.getElementById('panel-'+matKey);panel.innerHTML='';
+  sheets.forEach((sheet,idx)=>{
+    const pct=usagePct(sheet.items);const pctN=parseFloat(pct);
+    const uc=pctN>=75?'#6EC9A0':pctN>=50?'#F4C842':'#E07070';
+    const div=document.createElement('div');div.className='sheet-section';
+    div.innerHTML=`<div class="sheet-hdr"><div>
+      <div class="sheet-title">${sheet.label} · ${matKey}</div>
+      <div class="sheet-stats">${sheet.items.length} piezas &nbsp;·&nbsp; <span style="color:${uc}">${pct}%</span> aprovechamiento &nbsp;·&nbsp; <span>${(sheet.items.reduce((a,it)=>a+it.pw*it.ph,0)/1e6).toFixed(3)} m²</span> usados</div>
+      <div class="usage-bar"><div class="usage-fill" style="width:${pct}%;background:${uc}"></div></div>
+    </div><div class="btns">
+      <button class="btn btn-dxf" onclick="dlDXF('${matKey}',${idx})">⬇ DXF ${idx+1}</button>
+      <button class="btn btn-svg" onclick="dlSVG('${matKey}',${idx})">⬇ SVG ${idx+1}</button>
+    </div></div>
+    <div class="canvas-wrap">${buildSVG(sheet,matKey,idx)}</div>`;
+    let list=`<div class="piece-list">`;
+    sheet.items.forEach(it=>{
+      const c=GRP[it.grp]||GRP.ac;
+      const isN=isNew(it.code),isM=isMod(it.code);
+      const badge=isN?`<span class="piece-new">★NEW</span>`:isM?`<span class="piece-mod">◆MOD</span>`:'';
+      list+=`<div class="piece-item"><div class="piece-dot" style="background:${c.stroke}${isN?';box-shadow:0 0 4px #6EC9A0':''}"></div>
+        <div class="piece-code">${it.code}</div>
+        <div class="piece-dims">${it.pw}×${it.ph}mm</div>
+        <div class="piece-desc">${it.desc}</div>
+        ${it.rot?'<span class="piece-rot">↺ROT</span>':''}${badge}</div>`;
+    });
+    list+=`</div>`;div.innerHTML+=list;panel.appendChild(div);
+  });
+  const bulk=document.createElement('div');
+  bulk.style.cssText='display:flex;gap:10px;margin-top:4px;padding-top:12px;border-top:1px solid rgba(74,158,205,.15)';
+  bulk.innerHTML=`<button class="btn btn-dxf" onclick="dlAllDXF('${matKey}')">⬇ Todos DXF ${matKey}</button>
+    <button class="btn btn-svg" onclick="dlAllSVG('${matKey}')">⬇ Todos SVG ${matKey}</button>`;
+  panel.appendChild(bulk);
+}
+
+function makeDXF(matKey,idx){
+  const sheet=NESTING[matKey][idx];const fy=y=>SH-y;
+  let d=`0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1015\n9\n$INSUNITS\n70\n4\n9\n$EXTMIN\n10\n0\n20\n0\n30\n0\n9\n$EXTMAX\n10\n${SW}\n20\n${SH}\n30\n0\n0\nENDSEC\n`;
+  d+=`0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n70\n4\n0\nLAYER\n2\nCORTES\n70\n0\n62\n5\n6\nContinuous\n0\nLAYER\n2\nCOTAS\n70\n0\n62\n7\n6\nContinuous\n0\nLAYER\n2\nPLANCA\n70\n0\n62\n3\n6\nContinuous\n0\nLAYER\n2\nMARGEN\n70\n0\n62\n8\n6\nDASHED\n0\nENDTAB\n0\nENDSEC\n`;
+  d+=`0\nSECTION\n2\nENTITIES\n`;
+  d+=poly('PLANCHA',0,0,SW,SH,fy);d+=poly('MARGEN',20,20,SW-20,SH-20,fy);
+  sheet.items.forEach(it=>{
+    d+=poly('CORTES',it.px,it.py,it.px+it.pw,it.py+it.ph,fy);
+    const cx=(it.px+it.px+it.pw)/2,cy=(it.py+it.py+it.ph)/2;
+    const fh=Math.min(50,Math.max(8,Math.min(it.pw,it.ph)*0.22));
+    d+=txt('COTAS',cx,cy+fh*.5,fh,it.code,fy);
+    d+=txt('COTAS',cx,cy-fh*.6,fh*.65,`${it.pw}x${it.ph}mm${it.rot?' [ROT]':''}`,fy);
+  });
+  d+=`0\nENDSEC\n0\nEOF\n`;return d;
+}
+function poly(l,x1,y1,x2,y2,fy){const b1=fy(y2),b2=fy(y1);return `0\nLWPOLYLINE\n8\n${l}\n90\n4\n70\n1\n10\n${x1}\n20\n${b1}\n10\n${x2}\n20\n${b1}\n10\n${x2}\n20\n${b2}\n10\n${x1}\n20\n${b2}\n`;}
+function txt(l,x,y,h,str,fy){return `0\nTEXT\n8\n${l}\n10\n${x}\n20\n${fy(y)}\n30\n0\n40\n${h}\n1\n${str}\n72\n1\n11\n${x}\n21\n${fy(y)}\n`;}
+function dlDXF(m,i){const b=new Blob([makeDXF(m,i)],{type:'application/dxf'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`corte_${NESTING[m][i].label.replace(/\s+/g,'_')}_RevD.dxf`;a.click();}
+function dlSVG(m,i){const el=document.getElementById(`svg-${m}-${i}`);if(!el)return;const b=new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n'+el.outerHTML],{type:'image/svg+xml'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`corte_${NESTING[m][i].label.replace(/\s+/g,'_')}_RevD.svg`;a.click();}
+function dlAllDXF(m){NESTING[m].forEach((_,i)=>setTimeout(()=>dlDXF(m,i),i*500));}
+function dlAllSVG(m){NESTING[m].forEach((_,i)=>setTimeout(()=>dlSVG(m,i),i*500));}
+function sw(k,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('panel-'+k).classList.add('active');}
+window.addEventListener('load',()=>{buildPanel('18mm');buildPanel('6mm');buildPanel('25mm');});
+</script>
+</body>
+</html>

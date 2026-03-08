@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuesto — Mesa Artista Rev D</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1B2A;--ink:#E8EFF7;--accent:#4A9ECD;--yellow:#F4C842;
+  --green:#6EC9A0;--red:#E07070;--dim:rgba(232,239,247,.38);
+  --grid:rgba(74,158,205,.065);
+}
+body{background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(rgba(74,158,205,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,158,205,.025) 1px,transparent 1px);
+  background-size:100px 100px,100px 100px,20px 20px,20px 20px}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:28px 18px 60px}
+.header{border:1px solid var(--accent);border-bottom:3px solid var(--accent);
+  padding:16px 24px 12px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:16px;
+  align-items:end;background:rgba(26,58,92,.3)}
+.header h1{font-family:'Bebas Neue';font-size:2.3rem;letter-spacing:.08em;line-height:1}
+.header h2{font-family:'Crimson Pro';font-style:italic;font-size:.9rem;color:var(--accent);margin-top:4px}
+.rev{background:rgba(244,200,66,.15);border:1px solid rgba(244,200,66,.5);color:var(--yellow);font-size:.65rem;padding:3px 10px;margin-top:6px;display:inline-block;letter-spacing:.15em}
+.meta{font-size:.63rem;text-align:right;line-height:2.2;color:var(--dim)}.meta span{color:var(--ink)}
+.note{border:1px solid rgba(74,158,205,.3);background:rgba(74,158,205,.04);padding:10px 14px;font-size:.68rem;color:var(--dim);margin-bottom:18px;line-height:1.8}
+.note span{color:var(--ink)}
+.changes{border:1px solid rgba(244,200,66,.35);background:rgba(244,200,66,.05);padding:10px 14px;font-size:.68rem;color:rgba(244,200,66,.82);margin-bottom:18px;line-height:1.9}
+.changes strong{color:var(--yellow)}
+
+.sect{font-family:'Bebas Neue';font-size:.76rem;letter-spacing:.26em;color:var(--accent);
+  border-left:3px solid var(--accent);padding-left:10px;margin:22px 0 11px}
+
+table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:.7rem}
+thead tr{background:rgba(74,158,205,.1)}
+thead th{padding:8px 10px;text-align:left;font-family:'Bebas Neue';letter-spacing:.12em;font-size:.72rem;color:var(--accent);border-bottom:1px solid rgba(74,158,205,.3);font-weight:normal}
+tbody tr{border-bottom:1px solid rgba(74,158,205,.08)}
+tbody tr:hover{background:rgba(74,158,205,.04)}
+tbody td{padding:6px 10px;color:var(--dim);vertical-align:middle}
+tbody td:first-child{color:var(--accent);font-size:.68rem}
+.td-desc{color:var(--ink)}
+.price-input{background:rgba(13,27,42,.8);border:1px solid rgba(74,158,205,.4);color:var(--yellow);
+  font-family:'Share Tech Mono';font-size:.72rem;padding:4px 8px;width:120px;text-align:right}
+.price-input:focus{outline:none;border-color:var(--accent)}
+.subtotal{color:var(--green);font-weight:bold;text-align:right}
+.tr-new td{background:rgba(110,201,160,.04);border-left:2px solid rgba(110,201,160,.5)}
+.tr-mod td{background:rgba(244,200,66,.03);border-left:2px solid rgba(244,200,66,.4)}
+.tr-del td{opacity:.4;text-decoration:line-through}
+.badge{font-size:.58rem;padding:1px 5px;border-radius:2px;margin-left:5px}
+.badge-new{background:rgba(110,201,160,.15);border:1px solid rgba(110,201,160,.4);color:var(--green)}
+.badge-mod{background:rgba(244,200,66,.12);border:1px solid rgba(244,200,66,.4);color:var(--yellow)}
+.badge-del{background:rgba(224,112,112,.1);border:1px solid rgba(224,112,112,.4);color:var(--red)}
+
+.totals-box{border:1px solid rgba(74,158,205,.4);background:rgba(13,27,42,.6);padding:20px 24px;margin-top:20px}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(74,158,205,.08);font-size:.75rem}
+.total-row.big{padding:12px 0;border-bottom:none;border-top:1px solid rgba(74,158,205,.3);margin-top:4px}
+.total-label{color:var(--dim)}
+.total-val{color:var(--green);font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.06em}
+.total-val.highlight{font-size:1.8rem;color:var(--yellow)}
+.mo-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
+.mo-card{border:1px solid rgba(74,158,205,.2);padding:12px 14px;background:rgba(13,27,42,.4)}
+.mo-title{font-family:'Bebas Neue';font-size:.7rem;letter-spacing:.16em;color:var(--accent);margin-bottom:8px}
+.mo-field{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.69rem;color:var(--dim)}
+.mo-field span{color:var(--ink)}
+
+.btn-recalc{font-family:'Share Tech Mono';font-size:.7rem;letter-spacing:.1em;padding:9px 20px;
+  border:1px solid var(--accent);background:rgba(74,158,205,.12);color:var(--accent);
+  cursor:pointer;transition:all .18s;margin-top:14px}
+.btn-recalc:hover{background:rgba(74,158,205,.22);color:var(--ink)}
+
+.footer{margin-top:28px;border-top:1px solid rgba(74,158,205,.2);padding-top:10px;
+  font-size:.61rem;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.header{grid-template-columns:1fr}.mo-row{grid-template-columns:1fr}}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,20,34,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:0 28px;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 20px rgba(0,0,0,.4)
+}
+.navbar-brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;flex-shrink:0
+}
+.navbar-brand-icon{
+  width:30px;height:30px;border:1.5px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(45deg);transition:background .2s
+}
+.navbar-brand:hover .navbar-brand-icon{background:rgba(74,158,205,.15)}
+.navbar-brand-icon svg{transform:rotate(-45deg)}
+.navbar-brand-text{font-family:'Bebas Neue';font-size:1.15rem;letter-spacing:.1em;color:var(--ink);line-height:1}
+.navbar-brand-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--accent);letter-spacing:.1em}
+.navbar-links{
+  display:flex;align-items:center;gap:4px;list-style:none
+}
+.navbar-links a{
+  display:flex;align-items:center;gap:7px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.8rem;font-weight:500;color:var(--dim);
+  padding:6px 14px;border:1px solid transparent;
+  letter-spacing:.04em;white-space:nowrap;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-links a:hover{color:var(--ink);border-color:rgba(74,158,205,.3);background:rgba(74,158,205,.07)}
+.navbar-links a.active{color:var(--accent);border-color:rgba(74,158,205,.4);background:rgba(74,158,205,.1)}
+.navbar-links a .nav-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:currentColor;flex-shrink:0;opacity:.6
+}
+.navbar-burger{
+  display:none;background:none;
+  border:1px solid rgba(74,158,205,.4);color:var(--ink);
+  cursor:pointer;padding:6px 9px;
+  transition:background .18s,border-color .18s
+}
+.navbar-burger:hover{background:rgba(74,158,205,.1);border-color:var(--accent)}
+.navbar-mobile-menu{
+  display:none;position:absolute;top:54px;left:0;right:0;
+  background:rgba(10,20,34,.97);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:8px 0;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5)
+}
+.navbar-mobile-menu.open{display:block}
+.navbar-mobile-menu a{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.88rem;font-weight:500;color:var(--dim);
+  padding:13px 28px;border-left:3px solid transparent;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-mobile-menu a:hover{color:var(--ink);background:rgba(74,158,205,.07);border-left-color:rgba(74,158,205,.5)}
+.navbar-mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,158,205,.08)}
+.navbar-wrapper{position:relative}
+@media(max-width:900px){
+  .navbar-links{display:none}
+  .navbar-burger{display:block}
+  .navbar{padding:0 18px}
+}
+
+</style>
+</head>
+<body>
+<!-- ── NAVBAR ── -->
+<div class="navbar-wrapper">
+  <nav class="navbar">
+    <a href="../index.html" class="navbar-brand">
+      <div class="navbar-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="12" height="12" stroke="#4A9ECD" stroke-width="1.5" fill="none"/>
+          <line x1="1" y1="7" x2="13" y2="7" stroke="#4A9ECD" stroke-width="1"/>
+          <line x1="7" y1="1" x2="7" y2="13" stroke="#4A9ECD" stroke-width="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="navbar-brand-text">Mesa de Artista</div>
+        <div class="navbar-brand-sub">Sistema Dos Islas · Rev. D</div>
+      </div>
+    </a>
+
+    <ul class="navbar-links">
+      <li><a href="index.html"><span class="nav-dot"></span>Plano Técnico</a></li>
+      <li><a href="presupuesto-RevD.html" class="active"><span class="nav-dot"></span>Presupuesto</a></li>
+      <li><a href="plan-de-cortes-CNC-RevD.html"><span class="nav-dot"></span>Planos CNC</a></li>
+      <li><a href="detalles-constructivos-RevD.html"><span class="nav-dot"></span>Detalles Constructivos</a></li>
+    </ul>
+
+    <button class="navbar-burger" id="burgerBtn" aria-label="Menú" onclick="toggleMenu()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="4" x2="16" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="navbar-mobile-menu" id="mobileMenu">
+    <a href="index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="1" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="0.8"/></svg>
+      Plano Técnico
+    </a>
+    <a href="presupuesto-RevD.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="2" y1="3" x2="12" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Presupuesto
+    </a>
+    <a href="plan-de-cortes-CNC-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="4" y1="4" x2="10" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="10" y1="4" x2="4" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      Planos CNC
+    </a>
+    <a href="detalles-constructivos-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="7" y1="5" x2="7" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="3.5" r="0.8" fill="currentColor"/></svg>
+      Detalles Constructivos
+    </a>
+  </div>
+</div>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.navbar-wrapper');
+  if (!wrapper.contains(e.target)) {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+});
+</script>
+
+<div class="page">
+<div class="header">
+  <div>
+    <h1>Calculadora de Presupuesto</h1>
+    <h2>Mesa de Artista · Sistema Dos Islas · Full-Overlay · Fox MF18 · Isla B Doble Zona</h2>
+    <div class="rev">REVISIÓN D — MARZO 2026</div>
+  </div>
+  <div class="meta">
+    Buenos Aires, Argentina<br>
+    Precios en <span>ARS</span> · Editables<br>
+    IVA <span>no incluido</span>
+  </div>
+</div>
+
+<div class="changes">
+  ▶ <strong>CAMBIOS REV D:</strong>
+  Tiradores de barra corrida <strong>eliminados</strong> → reemplazados por <strong>perfil Fox MF18</strong> (4 barras × 3m) &nbsp;·&nbsp;
+  Isla B cajones profundidad <strong>600mm</strong> (guías 600mm) &nbsp;·&nbsp;
+  Piezas IB-07 (panel divisor) y IB-08 ×2 (estantes) <strong>nuevas</strong>
+</div>
+
+<div class="note">
+  Todos los precios son editables. Escribí el precio unitario y hacé clic en <strong>Recalcular</strong>.
+  Los subtotales y el total se actualizan automáticamente. Última referencia de precios: <span>Marzo 2026, Buenos Aires.</span>
+</div>
+
+<!-- MATERIALES MDF/MELAMINA -->
+<div class="sect">MATERIALES — TABLEROS</div>
+<table id="tbl-mat">
+  <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Precio unit.</th><th>Subtotal</th></tr></thead>
+  <tbody>
+    <tr data-q="3" data-id="m1"><td>MDF/MEL-18</td><td class="td-desc">Melamina / MDF blanco 18mm · plancha 1830×2750mm</td><td>3</td><td><input class="price-input" type="number" value="125000" oninput="recalc()"></td><td class="subtotal" id="sub-m1">$375.000</td></tr>
+    <tr data-q="3" data-id="m2"><td>MDF-6</td><td class="td-desc">MDF / HDF 6mm · plancha 1830×2750mm</td><td>3</td><td><input class="price-input" type="number" value="55000" oninput="recalc()"></td><td class="subtotal" id="sub-m2">$165.000</td></tr>
+    <tr data-q="2" data-id="m3"><td>MDF-25</td><td class="td-desc">MDF grueso 25mm · plancha 1830×2750mm (tablero)</td><td>2</td><td><input class="price-input" type="number" value="195000" oninput="recalc()"></td><td class="subtotal" id="sub-m3">$390.000</td></tr>
+    <tr data-q="7.28" data-id="m4"><td>LISTÓN-50×40</td><td class="td-desc">Pino macizo cepillado 50×40mm (listones soporte tablero) · ml</td><td>7.28 ml</td><td><input class="price-input" type="number" value="3200" oninput="recalc()"></td><td class="subtotal" id="sub-m4">$23.296</td></tr>
+  </tbody>
+</table>
+
+<!-- HERRAJES -->
+<div class="sect">HERRAJES Y PERFILES</div>
+<table id="tbl-her">
+  <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Precio unit.</th><th>Subtotal</th></tr></thead>
+  <tbody>
+    <tr data-q="6" data-id="h1"><td>GUÍA-900</td><td class="td-desc">Guía telescópica full-extension 900mm · par · cajones FFC (mín. 35kg)</td><td>6 pares</td><td><input class="price-input" type="number" value="42000" oninput="recalc()"></td><td class="subtotal" id="sub-h1">$252.000</td></tr>
+    <tr class="tr-mod" data-q="5" data-id="h2"><td>GUÍA-600</td><td class="td-desc">Guía telescópica full-extension <strong>600mm</strong> · par · cajones Isla B <span class="badge badge-mod">MOD</span></td><td>5 pares</td><td><input class="price-input" type="number" value="26000" oninput="recalc()"></td><td class="subtotal" id="sub-h2">$130.000</td></tr>
+    <tr data-q="8" data-id="h3"><td>RUEDAS-75</td><td class="td-desc">Rueda industrial ⌀75mm doble bola · 4 con freno + 4 sin freno</td><td>8 u.</td><td><input class="price-input" type="number" value="15000" oninput="recalc()"></td><td class="subtotal" id="sub-h3">$120.000</td></tr>
+    <tr class="tr-new" data-q="4" data-id="h4"><td>FOX-MF18</td><td class="td-desc">Perfil aluminio anodizado Fox MF18 · 3000mm · finger pull <span class="badge badge-new">NUEVO</span></td><td>4 barras</td><td><input class="price-input" type="number" value="28000" oninput="recalc()"></td><td class="subtotal" id="sub-h4">$112.000</td></tr>
+    <tr class="tr-del" data-q="0" data-id="h5"><td>TIR-BARRA</td><td class="td-desc">Tirador barra corrida 1240mm <span class="badge badge-del">ELIMINADO</span></td><td>0</td><td><input class="price-input" type="number" value="0" oninput="recalc()" disabled></td><td class="subtotal" id="sub-h5">$0</td></tr>
+    <tr data-q="1" data-id="h6"><td>HERRAJES-VAR</td><td class="td-desc">Tornillería, tarugos ⌀8, escuadras 50mm, pernos M10, inserts M8, tapas PVC, cinta ABS</td><td>1 lote</td><td><input class="price-input" type="number" value="85000" oninput="recalc()"></td><td class="subtotal" id="sub-h6">$85.000</td></tr>
+  </tbody>
+</table>
+
+<!-- ACABADO -->
+<div class="sect">ACABADO Y LACADO</div>
+<table id="tbl-ac">
+  <thead><tr><th>Código</th><th>Descripción</th><th>Cant.</th><th>Precio unit.</th><th>Subtotal</th></tr></thead>
+  <tbody>
+    <tr data-q="3" data-id="a1"><td>SELLADOR</td><td class="td-desc">Sellador fondo MDF · litros</td><td>3 L</td><td><input class="price-input" type="number" value="12000" oninput="recalc()"></td><td class="subtotal" id="sub-a1">$36.000</td></tr>
+    <tr data-q="6" data-id="a2"><td>LACA-PU</td><td class="td-desc">Laca PU satinada blanca RAL 9003 · litros</td><td>6 L</td><td><input class="price-input" type="number" value="18000" oninput="recalc()"></td><td class="subtotal" id="sub-a2">$108.000</td></tr>
+    <tr data-q="1" data-id="a3"><td>CATALIZADOR</td><td class="td-desc">Catalizador laca PU · litro</td><td>1 L</td><td><input class="price-input" type="number" value="16000" oninput="recalc()"></td><td class="subtotal" id="sub-a3">$16.000</td></tr>
+    <tr data-q="2" data-id="a4"><td>COLA-PVA</td><td class="td-desc">Cola PVA carpintero · litros</td><td>2 L</td><td><input class="price-input" type="number" value="4200" oninput="recalc()"></td><td class="subtotal" id="sub-a4">$8.400</td></tr>
+    <tr data-q="5" data-id="a5"><td>CANTO-ABS</td><td class="td-desc">Canto ABS blanco 18mm · metros lineales</td><td>5 ml</td><td><input class="price-input" type="number" value="2800" oninput="recalc()"></td><td class="subtotal" id="sub-a5">$14.000</td></tr>
+  </tbody>
+</table>
+
+<button class="btn-recalc" onclick="recalc()">⟳ Recalcular totales</button>
+
+<!-- MANO DE OBRA -->
+<div class="sect">MANO DE OBRA (OPCIONAL)</div>
+<div class="mo-row">
+  <div class="mo-card">
+    <div class="mo-title">Corte CNC / Sierra</div>
+    <div class="mo-field"><span>Precio:</span> <input class="price-input" id="mo1" type="number" value="180000" oninput="recalc()"> <span>ARS</span></div>
+    <div style="font-size:.63rem;color:var(--dim);line-height:1.6">Corte de todas las planchas según plan DXF. Incluye corte 18mm, 6mm y 25mm.</div>
+  </div>
+  <div class="mo-card">
+    <div class="mo-title">Armado y Herrajes</div>
+    <div class="mo-field"><span>Precio:</span> <input class="price-input" id="mo2" type="number" value="280000" oninput="recalc()"> <span>ARS</span></div>
+    <div style="font-size:.63rem;color:var(--dim);line-height:1.6">Armado de carcasas, instalación de guías, cajones, frentes, perfil Fox MF18, ruedas y tablero.</div>
+  </div>
+  <div class="mo-card">
+    <div class="mo-title">Sellado y Lacado</div>
+    <div class="mo-field"><span>Precio:</span> <input class="price-input" id="mo3" type="number" value="220000" oninput="recalc()"> <span>ARS</span></div>
+    <div style="font-size:.63rem;color:var(--dim);line-height:1.6">Sellado MDF, lija, 2-3 manos laca PU RAL 9003 con pistola. Incluye frentes y tablero.</div>
+  </div>
+</div>
+
+<!-- TOTALES -->
+<div class="totals-box">
+  <div style="font-family:'Bebas Neue';font-size:.8rem;letter-spacing:.2em;color:var(--accent);margin-bottom:12px">RESUMEN DE PRESUPUESTO</div>
+  <div class="total-row"><div class="total-label">Materiales (tableros y listones)</div><div class="total-val" id="tot-mat">—</div></div>
+  <div class="total-row"><div class="total-label">Herrajes y perfiles</div><div class="total-val" id="tot-her">—</div></div>
+  <div class="total-row"><div class="total-label">Acabado y lacado</div><div class="total-val" id="tot-ac">—</div></div>
+  <div class="total-row"><div class="total-label">Subtotal materiales + herrajes</div><div class="total-val" id="tot-sub" style="color:var(--green);font-size:1.3rem">—</div></div>
+  <div class="total-row" style="margin-top:10px"><div class="total-label">Mano de obra (opcional)</div><div class="total-val" id="tot-mo" style="color:rgba(74,158,205,.8)">—</div></div>
+  <div class="total-row big"><div class="total-label" style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:.1em;color:var(--ink)">TOTAL CON MANO DE OBRA</div><div class="total-val highlight" id="tot-full">—</div></div>
+  <div style="font-size:.65rem;color:var(--dim);margin-top:10px;line-height:1.8">
+    * Precios orientativos Buenos Aires, Marzo 2026. No incluyen IVA. Pueden variar según proveedor.<br>
+    * El perfil Fox MF18 reemplaza los tiradores de barra corrida. 4 barras × 3000mm alcanzan para las 11 piezas (6 de 1240mm + 5 de 600mm).<br>
+    * Guías Isla B ahora de 600mm en lugar de 900mm → menor costo.
+  </div>
+</div>
+
+<div class="footer">
+  <span>PRESUPUESTO MESA ARTISTA DOS ISLAS · REV D · Buenos Aires · Marzo 2026</span>
+  <span>Precios en ARS · Todos los campos son editables</span>
+</div>
+</div>
+
+<script>
+function fmt(n){return '$'+Math.round(n).toLocaleString('es-AR');}
+
+function recalc(){
+  const tables=['tbl-mat','tbl-her','tbl-ac'];
+  const totals={mat:0,her:0,ac:0};
+  tables.forEach((tId,ti)=>{
+    const tbl=document.getElementById(tId);
+    if(!tbl)return;
+    const rows=tbl.querySelectorAll('tbody tr[data-id]');
+    let groupTotal=0;
+    rows.forEach(row=>{
+      const id=row.dataset.id;
+      const q=parseFloat(row.dataset.q||0);
+      const inp=row.querySelector('input');
+      const price=inp?parseFloat(inp.value)||0:0;
+      const sub=q*price;
+      const subEl=document.getElementById('sub-'+id);
+      if(subEl)subEl.textContent=fmt(sub);
+      groupTotal+=sub;
+    });
+    const key=['mat','her','ac'][ti];
+    totals[key]=groupTotal;
+    const totEl=document.getElementById('tot-'+key);
+    if(totEl)totEl.textContent=fmt(groupTotal);
+  });
+
+  const subMat=totals.mat+totals.her+totals.ac;
+  const mo1=parseFloat(document.getElementById('mo1').value)||0;
+  const mo2=parseFloat(document.getElementById('mo2').value)||0;
+  const mo3=parseFloat(document.getElementById('mo3').value)||0;
+  const totalMO=mo1+mo2+mo3;
+  const totalFull=subMat+totalMO;
+
+  document.getElementById('tot-sub').textContent=fmt(subMat);
+  document.getElementById('tot-mo').textContent=fmt(totalMO);
+  document.getElementById('tot-full').textContent=fmt(totalFull);
+}
+
+window.addEventListener('load',recalc);
+</script>
+</body>
+</html>

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planos Técnicos — Mesa Artista Dos Islas Rev D</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1B2A;--ink:#E8EFF7;--accent:#4A9ECD;--yellow:#F4C842;
+  --green:#6EC9A0;--red:#E07070;--dim:rgba(232,239,247,.38);
+  --grid:rgba(74,158,205,.065);
+  --mdf:rgba(200,170,100,.55);--mdf-fill:rgba(200,170,100,.12);
+  --alum:rgba(180,200,220,.8);--alum-fill:rgba(180,200,220,.18);
+}
+body{background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(rgba(74,158,205,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(74,158,205,.025) 1px,transparent 1px);
+  background-size:100px 100px,100px 100px,20px 20px,20px 20px}
+.page{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:28px 18px 60px}
+.header{border:1px solid var(--accent);border-bottom:3px solid var(--accent);
+  padding:16px 24px 12px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:16px;
+  align-items:end;background:rgba(26,58,92,.3)}
+.header h1{font-family:'Bebas Neue';font-size:2.5rem;letter-spacing:.08em;line-height:1}
+.header h2{font-family:'Crimson Pro';font-style:italic;font-weight:300;font-size:.95rem;color:var(--accent);margin-top:4px}
+.rev-badge{background:rgba(244,200,66,.15);border:1px solid rgba(244,200,66,.5);color:var(--yellow);
+  font-size:.65rem;padding:3px 10px;letter-spacing:.15em;margin-top:6px;display:inline-block}
+.meta{font-size:.63rem;text-align:right;line-height:2.2;color:var(--dim)}
+.meta span{color:var(--ink)}
+
+.changes{border:1px solid rgba(244,200,66,.35);background:rgba(244,200,66,.05);
+  padding:12px 16px;margin-bottom:18px;font-size:.69rem;color:rgba(244,200,66,.85);line-height:2}
+.changes strong{color:var(--yellow)}
+
+.sect{font-family:'Bebas Neue';font-size:.78rem;letter-spacing:.26em;color:var(--accent);
+  border-left:3px solid var(--accent);padding-left:10px;margin:24px 0 12px}
+
+.tabs{display:flex;gap:3px;margin-bottom:18px}
+.tab{font-family:'Bebas Neue';font-size:.82rem;letter-spacing:.15em;
+  padding:7px 18px;cursor:pointer;border:1px solid rgba(74,158,205,.3);
+  background:rgba(13,27,42,.5);color:var(--dim);transition:all .18s}
+.tab:hover{background:rgba(74,158,205,.1);color:var(--ink)}
+.tab.active{background:rgba(74,158,205,.18);color:var(--accent);
+  border-color:var(--accent);border-bottom-color:var(--bg);position:relative;top:1px}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+.drawing-wrap{border:1px solid rgba(74,158,205,.3);background:rgba(7,14,24,.8);
+  padding:16px;overflow-x:auto;margin-bottom:14px}
+.drawing-wrap svg{display:block;margin:0 auto}
+.drawing-title{font-family:'Bebas Neue';font-size:.72rem;letter-spacing:.2em;color:var(--accent);
+  margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(74,158,205,.2)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+.spec-box{border:1px solid rgba(74,158,205,.22);padding:12px 14px;background:rgba(13,27,42,.45)}
+.spec-box h4{font-family:'Bebas Neue';letter-spacing:.16em;font-size:.74rem;color:var(--yellow);margin-bottom:8px}
+.spec-box ul{list-style:none;font-size:.67rem;color:var(--dim);line-height:2.1}
+.spec-box ul li::before{content:'→  ';color:var(--accent)}
+.spec-box ul li span{color:var(--ink)}
+.spec-box ul li em{color:var(--yellow)}
+
+.tag-new{background:rgba(110,201,160,.15);border:1px solid rgba(110,201,160,.4);
+  color:var(--green);font-size:.58rem;padding:1px 5px;margin-left:4px}
+.tag-mod{background:rgba(244,200,66,.12);border:1px solid rgba(244,200,66,.4);
+  color:var(--yellow);font-size:.58rem;padding:1px 5px;margin-left:4px}
+.tag-del{background:rgba(224,112,112,.1);border:1px solid rgba(224,112,112,.4);
+  color:var(--red);font-size:.58rem;padding:1px 5px;margin-left:4px;text-decoration:line-through}
+
+.footer{margin-top:32px;border-top:1px solid rgba(74,158,205,.2);padding-top:10px;
+  font-size:.61rem;color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.two-col,.three-col{grid-template-columns:1fr}.header{grid-template-columns:1fr}}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,20,34,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:0 28px;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 20px rgba(0,0,0,.4)
+}
+.navbar-brand{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;flex-shrink:0
+}
+.navbar-brand-icon{
+  width:30px;height:30px;border:1.5px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  transform:rotate(45deg);transition:background .2s
+}
+.navbar-brand:hover .navbar-brand-icon{background:rgba(74,158,205,.15)}
+.navbar-brand-icon svg{transform:rotate(-45deg)}
+.navbar-brand-text{font-family:'Bebas Neue';font-size:1.15rem;letter-spacing:.1em;color:var(--ink);line-height:1}
+.navbar-brand-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--accent);letter-spacing:.1em}
+.navbar-links{
+  display:flex;align-items:center;gap:4px;list-style:none
+}
+.navbar-links a{
+  display:flex;align-items:center;gap:7px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.8rem;font-weight:500;color:var(--dim);
+  padding:6px 14px;border:1px solid transparent;
+  letter-spacing:.04em;white-space:nowrap;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-links a:hover{color:var(--ink);border-color:rgba(74,158,205,.3);background:rgba(74,158,205,.07)}
+.navbar-links a.active{color:var(--accent);border-color:rgba(74,158,205,.4);background:rgba(74,158,205,.1)}
+.navbar-links a .nav-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:currentColor;flex-shrink:0;opacity:.6
+}
+.navbar-burger{
+  display:none;background:none;
+  border:1px solid rgba(74,158,205,.4);color:var(--ink);
+  cursor:pointer;padding:6px 9px;
+  transition:background .18s,border-color .18s
+}
+.navbar-burger:hover{background:rgba(74,158,205,.1);border-color:var(--accent)}
+.navbar-mobile-menu{
+  display:none;position:absolute;top:54px;left:0;right:0;
+  background:rgba(10,20,34,.97);
+  border-bottom:1px solid rgba(74,158,205,.25);
+  padding:8px 0;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5)
+}
+.navbar-mobile-menu.open{display:block}
+.navbar-mobile-menu a{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;font-family:'IBM Plex Sans',sans-serif;
+  font-size:.88rem;font-weight:500;color:var(--dim);
+  padding:13px 28px;border-left:3px solid transparent;
+  transition:color .18s,border-color .18s,background .18s
+}
+.navbar-mobile-menu a:hover{color:var(--ink);background:rgba(74,158,205,.07);border-left-color:rgba(74,158,205,.5)}
+.navbar-mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,158,205,.08)}
+.navbar-wrapper{position:relative}
+@media(max-width:900px){
+  .navbar-links{display:none}
+  .navbar-burger{display:block}
+  .navbar{padding:0 18px}
+}
+
+</style>
+</head>
+<body>
+<!-- ── NAVBAR ── -->
+<div class="navbar-wrapper">
+  <nav class="navbar">
+    <a href="../index.html" class="navbar-brand">
+      <div class="navbar-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="12" height="12" stroke="#4A9ECD" stroke-width="1.5" fill="none"/>
+          <line x1="1" y1="7" x2="13" y2="7" stroke="#4A9ECD" stroke-width="1"/>
+          <line x1="7" y1="1" x2="7" y2="13" stroke="#4A9ECD" stroke-width="1"/>
+        </svg>
+      </div>
+      <div>
+        <div class="navbar-brand-text">Mesa de Artista</div>
+        <div class="navbar-brand-sub">Sistema Dos Islas · Rev. D</div>
+      </div>
+    </a>
+
+    <ul class="navbar-links">
+      <li><a href="index.html" class="active"><span class="nav-dot"></span>Plano Técnico</a></li>
+      <li><a href="presupuesto-RevD.html"><span class="nav-dot"></span>Presupuesto</a></li>
+      <li><a href="plan-de-cortes-CNC-RevD.html"><span class="nav-dot"></span>Planos CNC</a></li>
+      <li><a href="detalles-constructivos-RevD.html"><span class="nav-dot"></span>Detalles Constructivos</a></li>
+    </ul>
+
+    <button class="navbar-burger" id="burgerBtn" aria-label="Menú" onclick="toggleMenu()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="2" y1="4" x2="16" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="navbar-mobile-menu" id="mobileMenu">
+    <a href="index.html" class="active">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="1" y1="7" x2="13" y2="7" stroke="currentColor" stroke-width="0.8"/></svg>
+      Plano Técnico
+    </a>
+    <a href="presupuesto-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><line x1="2" y1="3" x2="12" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="7" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="2" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Presupuesto
+    </a>
+    <a href="plan-de-cortes-CNC-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="4" y1="4" x2="10" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="10" y1="4" x2="4" y2="10" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+      Planos CNC
+    </a>
+    <a href="detalles-constructivos-RevD.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2" fill="none"/><line x1="7" y1="5" x2="7" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="3.5" r="0.8" fill="currentColor"/></svg>
+      Detalles Constructivos
+    </a>
+  </div>
+</div>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  menu.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.navbar-wrapper');
+  if (!wrapper.contains(e.target)) {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+});
+</script>
+
+<div class="page">
+
+<div class="header">
+  <div>
+    <h1>Planos Técnicos — Dos Islas</h1>
+    <h2>Mesa de Artista · Sistema Dos Islas · Frentes Full-Overlay · Perfil Fox MF18 · Isla B Doble Zona</h2>
+    <div class="rev-badge">REVISIÓN D — MARZO 2026</div>
+  </div>
+  <div class="meta">
+    ISLA A: <span>1240 × 900 × 750mm</span><br>
+    ISLA B: <span>600 × 900 × 750mm</span><br>
+    TABLERO: <span>2640 × 1000 × 50mm</span><br>
+    ALTURA TOTAL: <span>825mm (con ruedas 75mm)</span>
+  </div>
+</div>
+
+<div class="changes">
+  ▶ <strong>CAMBIOS REV D:</strong>
+  &nbsp;(1) Frentes de cajones <strong>full-overlay</strong> — cubren laterales de carcasa (1240mm Isla A / 600mm Isla B) &nbsp;|&nbsp;
+  (2) Tiradores reemplazados por <strong>perfil aluminio Fox MF18</strong> (finger pull, aplicar en borde superior) &nbsp;|&nbsp;
+  (3) Isla B: cajones profundidad <strong>600mm</strong> + zona estantes traseros <strong>300mm</strong> abierta (acceso ambos lados)
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="sw('planta',this)">Planta General</div>
+  <div class="tab" onclick="sw('alzadoA',this)">Alzado Isla A</div>
+  <div class="tab" onclick="sw('alzadoB',this)">Alzado Isla B</div>
+  <div class="tab" onclick="sw('seccionB',this)">Sección Isla B</div>
+  <div class="tab" onclick="sw('fox',this)">Perfil Fox MF18</div>
+  <div class="tab" onclick="sw('iso',this)">Vista Conjunto</div>
+</div>
+
+<!-- ── PLANTA ── -->
+<div id="panel-planta" class="tab-panel active">
+  <div class="drawing-title">PLANTA GENERAL — VISTA DESDE ARRIBA · ESC. 1:20</div>
+  <div class="drawing-wrap">
+<svg width="1060" height="480" viewBox="0 0 1060 480" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="p1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="p2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="py1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+  <marker id="py2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+</defs>
+
+<!-- Scale: 1mm = 0.05px → 1000mm = 50px -->
+<!-- TABLERO: 2640×1000mm → 132×50px, centered -->
+<!-- Let's use 1:20 → 1mm = 0.05px. 2640mm=132px, 1000mm=50px. Too small. Use 1:10: 2640=264, 1000=100 -->
+<!-- 1:10: 2640mm=264px, 1000mm=100px. Still small. Use 1:5: 2640=528, 1000=200 -->
+<!-- Let's use different: ISLA A 1240mm = 248px, space 700mm=140px, ISLA B 600mm=120px. Total=508px. Good. -->
+<!-- Scale 1:5: 1mm=0.2px -->
+
+<!-- TABLERO outline (2640×1000mm = 528×200px) -->
+<rect x="40" y="90" width="528" height="200" fill="rgba(196,144,48,.08)" stroke="rgba(196,144,48,.5)" stroke-width="1" stroke-dasharray="6,4"/>
+<text x="304" y="83" fill="rgba(196,144,48,.6)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">TABLERO 2640 × 1000 mm (2 capas 25mm)</text>
+
+<!-- ISLA A (1240×900mm = 248×180px) at x=40 -->
+<rect x="40" y="100" width="248" height="180" fill="rgba(46,125,184,.12)" stroke="rgba(46,125,184,.6)" stroke-width="2"/>
+<!-- Lateral panels -->
+<rect x="40" y="100" width="3.6" height="180" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1"/>
+<rect x="284.4" y="100" width="3.6" height="180" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1"/>
+<rect x="40" y="100" width="248" height="3.6" fill="rgba(200,170,100,.25)" stroke="var(--mdf)" stroke-width="0.8"/>
+<rect x="40" y="276.4" width="248" height="3.6" fill="rgba(200,170,100,.25)" stroke="var(--mdf)" stroke-width="0.8"/>
+<!-- Panel trasero -->
+<rect x="40" y="103.6" width="3.6" height="172.8" fill="rgba(200,170,100,.18)" stroke="var(--mdf)" stroke-width="0.8"/>
+<!-- Full-overlay drawer fronts (visible as thick front edge) -->
+<rect x="284.4" y="100" width="4" height="180" fill="rgba(74,158,205,.55)" stroke="rgba(74,158,205,.9)" stroke-width="1.5"/>
+<!-- Fox MF18 profile lines on each drawer front -->
+<line x1="288.4" y1="107" x2="288.4" y2="110" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<line x1="288.4" y1="137" x2="288.4" y2="140" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<line x1="288.4" y1="167" x2="288.4" y2="170" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<line x1="288.4" y1="197" x2="288.4" y2="200" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<line x1="288.4" y1="227" x2="288.4" y2="230" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<line x1="288.4" y1="257" x2="288.4" y2="260" stroke="rgba(180,200,220,.8)" stroke-width="1.2"/>
+<!-- Ruedas -->
+<circle cx="56" cy="116" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="268" cy="116" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="56" cy="264" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="268" cy="264" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<text x="164" y="195" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="10" text-anchor="middle">ISLA A</text>
+<text x="164" y="208" fill="rgba(74,158,205,.5)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">FFC · 6 cajones full-overlay</text>
+<text x="164" y="220" fill="rgba(46,125,184,.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">1240 × 900mm</text>
+
+<!-- ESPACIO ENTRE ISLAS (700mm=140px) -->
+<rect x="288" y="100" width="140" height="180" fill="rgba(244,200,66,.03)" stroke="rgba(244,200,66,.15)" stroke-width="1" stroke-dasharray="4,4"/>
+<text x="358" y="195" fill="rgba(244,200,66,.4)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">700mm</text>
+<text x="358" y="207" fill="rgba(244,200,66,.3)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">acceso / asiento</text>
+
+<!-- ISLA B (600×900mm = 120×180px) -->
+<rect x="428" y="100" width="120" height="180" fill="rgba(46,155,110,.12)" stroke="rgba(46,155,110,.6)" stroke-width="2"/>
+<!-- Laterals -->
+<rect x="428" y="100" width="3.6" height="180" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1"/>
+<rect x="544.4" y="100" width="3.6" height="180" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1"/>
+<rect x="428" y="100" width="120" height="3.6" fill="rgba(200,170,100,.25)" stroke="var(--mdf)" stroke-width="0.8"/>
+<rect x="428" y="276.4" width="120" height="3.6" fill="rgba(200,170,100,.25)" stroke="var(--mdf)" stroke-width="0.8"/>
+<!-- Panel divisor a 600mm profundidad (=120px from front) — in plan view it splits depth -->
+<!-- Front is at x=548, depth 900mm=180px. 600mm=120px from front → divisor at x=548-120+120=... -->
+<!-- In plan: front face = right side (x=548), back = left (x=428). 600mm from front = x=548-120=428 -> that's the back -->
+<!-- Actually: if front is right side at x=548, back wall at x=428 (900mm=180px, scale 1:5→36px... wait *)
+<!-- Re-check scale. 900mm at 1:5 = 180px. But Isla B is 120px wide here (600mm at 1:5=120px... no *)
+<!-- Let me re-examine. I said: ISLA A 1240mm = 248px → scale ~1:5 but 1240/248=5. Yes, 1mm=0.2px *)
+<!-- Isla B 600mm = 120px. Depth 900mm = 180px. So Isla B should be 120px wide × 180px deep *)
+<!-- But I drew it 120×180 which is correct: width=600mm=120px, depth=900mm=180px *)
+<!-- The depth goes top-to-bottom in plan: y=100 (back) to y=280 (front) *)
+<!-- Divisor at 600mm from front: front is at y=280, so divisor at y=280-120=160 *)
+<line x1="428" y1="160" x2="548" y2="160" stroke="rgba(74,158,205,.6)" stroke-width="1.5" stroke-dasharray="none"/>
+<rect x="428" y="157" width="120" height="3.6" fill="rgba(74,158,205,.2)" stroke="rgba(74,158,205,.6)" stroke-width="1"/>
+<!-- Zone labels -->
+<text x="488" y="230" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">cajones</text>
+<text x="488" y="241" fill="rgba(74,158,205,.5)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">600mm prof.</text>
+<text x="488" y="135" fill="rgba(110,201,160,.7)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">estantes</text>
+<text x="488" y="146" fill="rgba(110,201,160,.5)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">300mm · abierto</text>
+<!-- full-overlay front -->
+<rect x="544.4" y="100" width="4" height="180" fill="rgba(74,158,205,.5)" stroke="rgba(74,158,205,.8)" stroke-width="1.5"/>
+<!-- Ruedas B -->
+<circle cx="444" cy="116" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="532" cy="116" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="444" cy="264" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<circle cx="532" cy="264" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<text x="488" y="195" fill="rgba(46,155,110,.7)" font-family="Share Tech Mono" font-size="9.5" text-anchor="middle">ISLA B</text>
+
+<!-- COTAS -->
+<!-- Ancho Isla A -->
+<line x1="40" y1="320" x2="288" y2="320" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="164" y="333" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">1240mm</text>
+<!-- Espacio -->
+<line x1="288" y1="320" x2="428" y2="320" stroke="var(--yellow)" stroke-width="0.9" marker-start="url(#py2)" marker-end="url(#py1)"/>
+<text x="358" y="333" fill="var(--yellow)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">700mm</text>
+<!-- Isla B -->
+<line x1="428" y1="320" x2="548" y2="320" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="488" y="333" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">600mm</text>
+<!-- Total tablero -->
+<line x1="40" y1="350" x2="568" y2="350" stroke="rgba(196,144,48,.8)" stroke-width="0.9" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="304" y="363" fill="rgba(196,144,48,.9)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">2640mm tablero corrido</text>
+<!-- Profundidad -->
+<line x1="590" y1="100" x2="590" y2="280" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="620" y="195" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(90,620,195)">900mm profundidad</text>
+<!-- Tablero width -->
+<line x1="40" y1="390" x2="568" y2="390" stroke="rgba(74,158,205,.5)" stroke-width="0.8" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="304" y="402" fill="rgba(74,158,205,.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">tablero voladizo: +50mm c/extremo</text>
+<line x1="575" y1="90" x2="575" y2="290" stroke="rgba(196,144,48,.4)" stroke-width="0.8" marker-start="url(#p2)" marker-end="url(#p1)"/>
+<text x="640" y="193" fill="rgba(196,144,48,.6)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle" transform="rotate(90,640,193)">1000mm tablero</text>
+
+<!-- Legend -->
+<rect x="40" y="420" width="12" height="8" fill="rgba(74,158,205,.5)" stroke="rgba(74,158,205,.8)" stroke-width="1"/>
+<text x="57" y="429" fill="var(--dim)" font-family="Share Tech Mono" font-size="8">Frente full-overlay + Fox MF18</text>
+<rect x="200" y="420" width="12" height="8" fill="rgba(74,158,205,.2)" stroke="rgba(74,158,205,.6)" stroke-width="1"/>
+<text x="217" y="429" fill="var(--dim)" font-family="Share Tech Mono" font-size="8">Panel divisor cajones/estantes (Isla B)</text>
+<circle cx="406" cy="424" r="5" fill="none" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+<text x="416" y="429" fill="var(--dim)" font-family="Share Tech Mono" font-size="8">Rueda ⌀75mm con freno</text>
+
+<text x="304" y="460" fill="rgba(74,158,205,.35)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">PLANTA GENERAL · ESC. 1:5 · VISTA DESDE ARRIBA</text>
+</svg>
+  </div>
+  <div class="three-col">
+    <div class="spec-box"><h4>ISLA A — DIMENSIONES</h4><ul>
+      <li>Exterior: <span>1240 × 900 × 625mm</span></li>
+      <li>Interior (entre laterales): <span>1204 × 900mm</span></li>
+      <li>Cajones: <span>6 u. full-overlay, frente 1240mm</span></li>
+      <li>Apertura/cajón: <span>~98mm</span></li>
+      <li>Profundidad cajón: <span>842mm (para A0=841mm)</span></li>
+    </ul></div>
+    <div class="spec-box"><h4>ISLA B — DIMENSIONES REV D</h4><ul>
+      <li>Exterior: <span>600 × 900 × 625mm</span></li>
+      <li>Cajones: <span>5 u. full-overlay, frente 600mm</span></li>
+      <li>Prof. cajones: <em>600mm (nueva)</em> <span class="tag-mod">MOD</span></li>
+      <li>Zona estantes: <em>300mm traseros abiertos</em> <span class="tag-new">NEW</span></li>
+      <li>Panel divisor IB-07: <span>564×589mm a 600mm del frente</span></li>
+    </ul></div>
+    <div class="spec-box"><h4>FINGER PULL FOX MF18</h4><ul>
+      <li>Modelo: <span>Fox MF18 · Grupo Euro</span></li>
+      <li>Material: <span>aluminio anodizado natural</span></li>
+      <li>Sistema: <span>de aplicar en borde superior del frente</span></li>
+      <li>Isla A: <span>6 frentes × 1240mm = 3 barras × 3000mm</span></li>
+      <li>Isla B: <span>5 frentes × 600mm = 1 barra × 3000mm</span></li>
+      <li>Total: <em>4 barras de 3000mm</em></li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ── ALZADO ISLA A ── -->
+<div id="panel-alzadoA" class="tab-panel">
+  <div class="drawing-title">ALZADO FRONTAL ISLA A — FLAT FILE CABINET · ESC. 1:5</div>
+  <div class="drawing-wrap">
+<svg width="680" height="600" viewBox="0 0 680 600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="a1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="a2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="ay1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+  <marker id="ay2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+</defs>
+<!-- Scale 1:5 → 1mm = 0.2px -->
+<!-- Isla A: 1240mm wide = 248px, 625+75=700mm total visible height = 140px -->
+<!-- Let's use larger scale for clarity: 1:4 → 1mm=0.25px -->
+<!-- Isla A 1240mm = 310px, Height: 75+625+50(tablero) = 750mm = 187px -->
+<!-- 
+
+Scale 1:5: 1240=248, 625=125, 75=15, 50=10. Reasonable.
+Let's use 1:4: 1240=310px (too wide for one view, use 1:5)
+1:5: 1240=248px. OK.
+
+Full-overlay front:
+- Carcass exterior 1240mm = 248px
+- Each drawer front = 1240mm wide = 248px (full width)
+- Height of each front = 100mm = 20px
+- Visible gap between fronts = 2mm = 0.4px ≈ 0.5px
+- Plinto (bottom): 80mm = 16px (or visible as base)
+- Fox MF18 profile at top of each front
+
+Bottom: ruedas 75mm = 15px
+Carcass body: 625mm = 125px
+Tablero: 50mm = 10px
+Total: 15+125+10 = 150px
+
+-->
+<!-- Carcass outline -->
+<rect x="180" y="80" width="248" height="125" fill="rgba(46,125,184,.1)" stroke="rgba(46,125,184,.6)" stroke-width="2"/>
+
+<!-- FRENTES FULL-OVERLAY (6 cajones) -->
+<!-- Each front: 248px wide, 20px high (100mm). Plus 2mm gap = 0.4px -->
+<!-- Plinto 80mm = 16px at bottom: y=80+125-16=189, but let's distribute 6 fronts in 125px -->
+<!-- Total fronts: 6×100mm = 600mm + plinto 80mm = 680mm... that's > 625mm. Hmm -->
+<!-- Let me recalculate: Carcass interior height = 625-36=589mm. 6 drawers × 98mm = 588mm ≈ 589mm ✓ -->
+<!-- But fronts are 100mm each (98mm aperture + 2mm overlap) -->
+<!-- Front total = 6×100 = 600mm. Carcass exterior = 625mm. That leaves 25mm = plinto + tapa overlap -->
+<!-- Actually: Plinto (IA-04) = 80mm at base. So drawer zone = 625-80 = 545mm... 6×90mm = 540mm ≈ ok -->
+<!-- Let me just draw what makes visual sense: 6 fronts + plinto in 125px -->
+<!-- Plinto = 80mm → 16px. Drawer zone = 625-80=545mm → 545/5=109px. Each front = 545/6 ≈ 91px → ~18px each -->
+<!-- Actually: let's say aperture = (589-plinto)/6 = (589-16px*5... no this is getting complex -->
+<!-- Simple: top 3.6px=18mm tapa, then 6 fronts of ~17px each, then 16px plinto, then close -->
+<!-- Tapa: 3.6px from top. -->
+
+<!-- Tapa (visible) -->
+<rect x="180" y="80" width="248" height="3.6" fill="rgba(200,170,100,.3)" stroke="var(--mdf)" stroke-width="1"/>
+
+<!-- 6 full-overlay drawer fronts: y from 83.6, each ~18px, gap 0.4px -->
+<!-- Heights: 100mm each / 5 scale = 20px. Let's just fit them -->
+<!-- Inner height: 125-3.6-3.6 = 117.8px for fronts + plinto -->
+<!-- Plinto: 80/5=16px. Remaining for fronts: 101.8px. 6 fronts = 101.8/6 ≈ 17px each -->
+<!-- Let's do 17px per front, 0.4px gap -->
+<!-- Front 1: y=83.6, h=17 -->
+<!-- Front 2: y=101, h=17 -->
+<!-- Front 3: y=118.4, h=17 -->
+<!-- Front 4: y=135.8, h=17 -->
+<!-- Front 5: y=153.2, h=17 -->
+<!-- Front 6: y=170.6, h=17 -->
+<!-- Plinto: y=188, h=16 -->
+
+<!-- Drawer fronts (full-overlay, 1240mm wide each) -->
+<!-- Each front rendered as a blue rect the full width of the carcass -->
+<!-- Fox MF18 profile = thin aluminum strip at top of each front -->
+<g id="fronts-A">
+  <rect x="180" y="83.6" width="248" height="17" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.5"/>
+  <rect x="180" y="83.6" width="248" height="3" fill="rgba(180,200,220,.35)" stroke="rgba(180,200,220,.6)" stroke-width="0.8"/> <!-- Fox MF18 -->
+  <text x="304" y="94" fill="rgba(180,200,220,.8)" font-family="Share Tech Mono" font-size="7" text-anchor="middle">Fox MF18 ↑</text>
+
+  <rect x="180" y="101" width="248" height="17" fill="rgba(74,158,205,.15)" stroke="rgba(74,158,205,.7)" stroke-width="1.2"/>
+  <rect x="180" y="101" width="248" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+
+  <rect x="180" y="118.4" width="248" height="17" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.2"/>
+  <rect x="180" y="118.4" width="248" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+
+  <rect x="180" y="135.8" width="248" height="17" fill="rgba(74,158,205,.15)" stroke="rgba(74,158,205,.7)" stroke-width="1.2"/>
+  <rect x="180" y="135.8" width="248" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+
+  <rect x="180" y="153.2" width="248" height="17" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.2"/>
+  <rect x="180" y="153.2" width="248" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+
+  <rect x="180" y="170.6" width="248" height="17" fill="rgba(74,158,205,.15)" stroke="rgba(74,158,205,.7)" stroke-width="1.2"/>
+  <rect x="180" y="170.6" width="248" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+</g>
+
+<!-- Plinto (bottom strip, visible below last drawer) -->
+<rect x="180" y="188" width="248" height="16" fill="rgba(200,170,100,.2)" stroke="var(--mdf)" stroke-width="1.2"/>
+<text x="304" y="199" fill="rgba(200,170,100,.6)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">plinto IA-04</text>
+
+<!-- Base + Ruedas -->
+<rect x="180" y="205" width="248" height="15" fill="rgba(46,125,184,.08)" stroke="rgba(46,125,184,.3)" stroke-width="0.8" stroke-dasharray="4,3"/>
+<!-- Ruedas -->
+<circle cx="200" cy="217" r="7.5" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="408" cy="217" r="7.5" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="200" cy="217" r="2" fill="rgba(74,158,205,.5)"/>
+<circle cx="408" cy="217" r="2" fill="rgba(74,158,205,.5)"/>
+<!-- Freno (derecha) -->
+<rect x="414" y="220" width="8" height="4" rx="2" fill="rgba(224,112,112,.5)" stroke="rgba(224,112,112,.7)" stroke-width="0.8"/>
+
+<!-- Tablero (sobre la carcasa) -->
+<rect x="170" y="70" width="268" height="10" fill="rgba(196,144,48,.2)" stroke="rgba(196,144,48,.7)" stroke-width="1.5"/>
+<text x="304" y="65" fill="rgba(196,144,48,.7)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">TABLERO 50mm (2×25mm)</text>
+
+<!-- SUELO -->
+<line x1="120" y1="228" x2="580" y2="228" stroke="rgba(232,239,247,.15)" stroke-width="2"/>
+
+<!-- COTAS -->
+<!-- Ancho 1240mm -->
+<line x1="180" y1="270" x2="428" y2="270" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#a2)" marker-end="url(#a1)"/>
+<text x="304" y="282" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">1240mm — ancho total (frente full-overlay)</text>
+
+<!-- Alto cuerpo 625mm -->
+<line x1="460" y1="80" x2="460" y2="205" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#a2)" marker-end="url(#a1)"/>
+<text x="480" y="147" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(90,480,147)">625mm cuerpo</text>
+
+<!-- Rueda 75mm -->
+<line x1="140" y1="205" x2="140" y2="228" stroke="var(--yellow)" stroke-width="0.8" marker-start="url(#ay2)" marker-end="url(#ay1)"/>
+<text x="128" y="218" fill="var(--yellow)" font-family="Share Tech Mono" font-size="8" text-anchor="middle" transform="rotate(-90,128,218)">75mm</text>
+
+<!-- Total height -->
+<line x1="120" y1="70" x2="120" y2="228" stroke="rgba(74,158,205,.6)" stroke-width="0.9" marker-start="url(#a2)" marker-end="url(#a1)"/>
+<text x="106" y="150" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(-90,106,150)">750mm total</text>
+
+<!-- Each front height -->
+<line x1="450" y1="83.6" x2="450" y2="100.6" stroke="rgba(244,200,66,.6)" stroke-width="0.8" marker-start="url(#ay2)" marker-end="url(#ay1)"/>
+<text x="470" y="93" fill="rgba(244,200,66,.7)" font-family="Share Tech Mono" font-size="7.5">~100mm</text>
+
+<!-- Fox MF18 callout -->
+<line x1="420" y1="85" x2="500" y2="55" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+<circle cx="420" cy="85" r="2" fill="rgba(180,200,220,.7)"/>
+<text x="505" y="50" fill="rgba(180,200,220,.8)" font-family="Share Tech Mono" font-size="8.5">Perfil Fox MF18</text>
+<text x="505" y="62" fill="rgba(180,200,220,.6)" font-family="Share Tech Mono" font-size="7.5">aluminio anodizado · 1240mm</text>
+
+<text x="304" y="530" fill="rgba(74,158,205,.35)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">ALZADO FRONTAL ISLA A · FRENTES FULL-OVERLAY · 6 CAJONES FFC · ESC. 1:5</text>
+</svg>
+  </div>
+  <div class="spec-box"><h4>FULL-OVERLAY ISLA A — NOTAS</h4>
+    <ul>
+      <li>Frente decorativo <em>IC-04</em>: <span>1240mm ancho (igual al exterior de la carcasa)</span></li>
+      <li>Solape lateral: <span>18mm sobre cada lateral de la carcasa → no se ven los paneles laterales</span></li>
+      <li>Gap entre cajones: <span>2mm (para poder abrirlos con el perfil MF18)</span></li>
+      <li>Perfil MF18: <span>atornillado al borde superior de cada frente, actúa como agarre al jalar hacia abajo y afuera</span></li>
+      <li>Guías: <span>full-extension 900mm, 35kg/par, montadas a 13mm del lateral de la carcasa</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── ALZADO ISLA B ── -->
+<div id="panel-alzadoB" class="tab-panel">
+  <div class="drawing-title">ALZADO FRONTAL ISLA B — CAJONES + ZONA ESTANTES · ESC. 1:5</div>
+  <div class="drawing-wrap">
+<svg width="600" height="560" viewBox="0 0 600 560" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="b1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="b2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="by1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+  <marker id="by2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#F4C842"/></marker>
+</defs>
+<!-- Scale 1:5. Isla B: 600mm wide = 120px, body 625mm = 125px -->
+<!-- 5 cajones (2 grandes 120mm + estante 18mm + 3 medianos 80mm = 358mm... Hmm -->
+<!-- Distribution: tapa 18mm→3.6px, plinto 80mm→16px -->
+<!-- Interior 589mm for drawers. 2 drawers × 120mm + IB-05 × 18mm + 3 × 80mm = 240+18+240 = 498mm + 91mm free at top? -->
+<!-- Let me rethink. Total interior height = 625-36=589mm -->
+<!-- From bottom: plinto visible 60mm=12px, 2 large drawers 130mm each=26px, IB-05 shelf 18mm=3.6px, 3 medium drawers 80mm each=16px, empty space at top -->
+<!-- 12+26+26+3.6+16+16+16 = 115.6px but total should be 125px (carcass height) -->
+<!-- Top free space: 125-115.6 = 9.4px = ~47mm → could be upper large drawer or open shelf -->
+<!-- For now, let's just distribute nicely: 5 fronts visible + plinto -->
+<!-- 2 cajones grandes: 26px each, 3 medianos: 14px each, plinto 12px -->
+<!-- Total fronts: 52+42+12 = 106px, carcass 125px → 19px tapa+gap -->
+<!-- Let's also show the Fox MF18 profile on each front -->
+
+<!-- Carcass -->
+<rect x="200" y="80" width="120" height="125" fill="rgba(46,155,110,.1)" stroke="rgba(46,155,110,.6)" stroke-width="2"/>
+
+<!-- Tapa -->
+<rect x="200" y="80" width="120" height="3.6" fill="rgba(200,170,100,.3)" stroke="var(--mdf)" stroke-width="1"/>
+
+<!-- 2 CAJONES GRANDES (full-overlay 600mm, 26px each) -->
+<rect x="200" y="83.6" width="120" height="26" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.5"/>
+<rect x="200" y="83.6" width="120" height="3" fill="rgba(180,200,220,.35)" stroke="rgba(180,200,220,.6)" stroke-width="0.8"/>
+<text x="260" y="99" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">cajón grande #1 · 600mm</text>
+
+<rect x="200" y="110" width="120" height="26" fill="rgba(74,158,205,.15)" stroke="rgba(74,158,205,.7)" stroke-width="1.2"/>
+<rect x="200" y="110" width="120" height="3" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+<text x="260" y="126" fill="rgba(74,158,205,.6)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">cajón grande #2 · 600mm</text>
+
+<!-- IB-05 shelf marker (not visible from front but shown as dividing line) -->
+<line x1="200" y1="136.4" x2="320" y2="136.4" stroke="rgba(74,158,205,.25)" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="340" y="139" fill="rgba(74,158,205,.35)" font-family="Share Tech Mono" font-size="7">IB-05</text>
+
+<!-- 3 CAJONES MEDIANOS (full-overlay 600mm, ~14px each) -->
+<rect x="200" y="136.8" width="120" height="14" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.2"/>
+<rect x="200" y="136.8" width="120" height="2.5" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.7"/>
+
+<rect x="200" y="151.2" width="120" height="14" fill="rgba(74,158,205,.15)" stroke="rgba(74,158,205,.7)" stroke-width="1.2"/>
+<rect x="200" y="151.2" width="120" height="2.5" fill="rgba(180,200,220,.28)" stroke="rgba(180,200,220,.5)" stroke-width="0.7"/>
+
+<rect x="200" y="165.6" width="120" height="14" fill="rgba(74,158,205,.18)" stroke="rgba(74,158,205,.8)" stroke-width="1.2"/>
+<rect x="200" y="165.6" width="120" height="2.5" fill="rgba(180,200,220,.3)" stroke="rgba(180,200,220,.5)" stroke-width="0.7"/>
+
+<!-- Plinto -->
+<rect x="200" y="180" width="120" height="16" fill="rgba(200,170,100,.2)" stroke="var(--mdf)" stroke-width="1.2"/>
+<text x="260" y="191" fill="rgba(200,170,100,.6)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">plinto IB-04</text>
+
+<!-- Ruedas -->
+<circle cx="215" cy="210" r="7.5" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="305" cy="210" r="7.5" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="215" cy="210" r="2" fill="rgba(74,158,205,.5)"/>
+<circle cx="305" cy="210" r="2" fill="rgba(74,158,205,.5)"/>
+<rect x="311" y="213" width="8" height="4" rx="2" fill="rgba(224,112,112,.5)" stroke="rgba(224,112,112,.7)" stroke-width="0.8"/>
+
+<!-- Tablero -->
+<rect x="190" y="70" width="140" height="10" fill="rgba(196,144,48,.2)" stroke="rgba(196,144,48,.7)" stroke-width="1.5"/>
+
+<!-- Suelo -->
+<line x1="140" y1="222" x2="460" y2="222" stroke="rgba(232,239,247,.15)" stroke-width="2"/>
+
+<!-- COTAS -->
+<line x1="200" y1="260" x2="320" y2="260" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#b2)" marker-end="url(#b1)"/>
+<text x="260" y="272" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">600mm</text>
+
+<line x1="360" y1="80" x2="360" y2="205" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#b2)" marker-end="url(#b1)"/>
+<text x="380" y="147" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(90,380,147)">625mm</text>
+
+<line x1="140" y1="80" x2="140" y2="222" stroke="rgba(74,158,205,.6)" stroke-width="0.9" marker-start="url(#b2)" marker-end="url(#b1)"/>
+<text x="126" y="152" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(-90,126,152)">750mm</text>
+
+<!-- cajón grande height -->
+<line x1="170" y1="83.6" x2="170" y2="109.6" stroke="var(--yellow)" stroke-width="0.8" marker-start="url(#by2)" marker-end="url(#by1)"/>
+<text x="158" y="99" fill="var(--yellow)" font-family="Share Tech Mono" font-size="8" text-anchor="middle" transform="rotate(-90,158,99)">130mm</text>
+
+<!-- cajón mediano height -->
+<line x1="170" y1="136.8" x2="170" y2="150.8" stroke="var(--yellow)" stroke-width="0.8" marker-start="url(#by2)" marker-end="url(#by1)"/>
+<text x="158" y="146" fill="var(--yellow)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle" transform="rotate(-90,158,146)">80mm</text>
+
+<!-- Fox MF18 callout -->
+<line x1="320" y1="85" x2="400" y2="60" stroke="rgba(180,200,220,.5)" stroke-width="0.8"/>
+<text x="405" y="55" fill="rgba(180,200,220,.8)" font-family="Share Tech Mono" font-size="8.5">Perfil Fox MF18</text>
+<text x="405" y="67" fill="rgba(180,200,220,.6)" font-family="Share Tech Mono" font-size="7.5">600mm · aluminio anodizado</text>
+
+<text x="260" y="490" fill="rgba(74,158,205,.35)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">ALZADO FRONTAL ISLA B · FRENTES FULL-OVERLAY · ESC. 1:5</text>
+</svg>
+  </div>
+</div>
+
+<!-- ── SECCIÓN ISLA B ── -->
+<div id="panel-seccionB" class="tab-panel">
+  <div class="drawing-title">SECCIÓN LATERAL ISLA B — DOBLE ZONA: CAJONES 600mm + ESTANTES 300mm · ESC. 1:5</div>
+  <div class="drawing-wrap">
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="s1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="s2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="sg1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6EC9A0"/></marker>
+  <marker id="sg2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#6EC9A0"/></marker>
+</defs>
+<!-- Scale 1:5. Depth 900mm = 180px. Height: 75+625+50 = 750mm = 150px -->
+<!-- Section: front on right (x=440), back on left (x=260) -->
+<!-- Width/depth shown as horizontal: 900mm=180px -->
+
+<!-- CARCASS SECTION -->
+<!-- Base panel -->
+<rect x="260" y="170" width="180" height="3.6" fill="rgba(200,170,100,.3)" stroke="var(--mdf)" stroke-width="1.5"/>
+<!-- Top panel -->
+<rect x="260" y="50" width="180" height="3.6" fill="rgba(200,170,100,.3)" stroke="var(--mdf)" stroke-width="1.5"/>
+<!-- Front face (right side) - lateral panel -->
+<rect x="436.4" y="50" width="3.6" height="123.6" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1.5"/>
+<!-- Back face (left side) - lateral panel, but OPEN in shelf zone -->
+<!-- Only lower part has back panel (behind cajones) -- actually Isla B has laterales de 900mm full depth -->
+<rect x="260" y="50" width="3.6" height="123.6" fill="rgba(200,170,100,.35)" stroke="var(--mdf)" stroke-width="1.5"/>
+
+<!-- DIVISOR PANEL IB-07 at 600mm from front = 120px from right -->
+<!-- Front is at x=440, so divisor at x=440-120=320 -->
+<rect x="316.4" y="53.6" width="3.6" height="116.4" fill="rgba(74,158,205,.35)" stroke="rgba(74,158,205,.8)" stroke-width="2"/>
+<!-- Label -->
+<text x="318" y="44" fill="rgba(74,158,205,.8)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">IB-07</text>
+<text x="318" y="34" fill="rgba(74,158,205,.6)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">panel divisor</text>
+
+<!-- ZONA CAJONES (derecha del divisor, 600mm = 120px, x=320 to x=440) -->
+<rect x="320" y="53.6" width="120" height="116.4" fill="rgba(74,158,205,.06)" stroke="none"/>
+<text x="380" y="95" fill="rgba(74,158,205,.6)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">ZONA CAJONES</text>
+<text x="380" y="107" fill="rgba(74,158,205,.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">600mm profundidad</text>
+<!-- Cajón drawer profile (side view) -->
+<rect x="324" y="100" width="112" height="22" fill="rgba(74,158,205,.12)" stroke="rgba(74,158,205,.5)" stroke-width="1" stroke-dasharray="4,2"/>
+<text x="380" y="115" fill="rgba(74,158,205,.4)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">cajón (perfil lateral)</text>
+<!-- Fox MF18 at front of drawer -->
+<rect x="432" y="100" width="8" height="22" fill="rgba(180,200,220,.4)" stroke="rgba(180,200,220,.7)" stroke-width="1"/>
+<text x="470" y="113" fill="rgba(180,200,220,.7)" font-family="Share Tech Mono" font-size="7.5">MF18</text>
+<line x1="468" y1="111" x2="442" y2="111" stroke="rgba(180,200,220,.4)" stroke-width="0.7"/>
+
+<!-- ZONA ESTANTES (izquierda del divisor, 300mm = 60px, x=260 to x=320) -->
+<rect x="263.6" y="53.6" width="52.8" height="116.4" fill="rgba(110,201,160,.05)" stroke="none"/>
+<text x="290" y="90" fill="rgba(110,201,160,.65)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">ZONA</text>
+<text x="290" y="102" fill="rgba(110,201,160,.65)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">ESTANTES</text>
+<text x="290" y="114" fill="rgba(110,201,160,.45)" font-family="Share Tech Mono" font-size="7" text-anchor="middle">300mm</text>
+<text x="290" y="125" fill="rgba(110,201,160,.45)" font-family="Share Tech Mono" font-size="7" text-anchor="middle">ABIERTO</text>
+<!-- Shelf IB-08 (shown as horizontal line) -->
+<line x1="263.6" y1="110" x2="316.4" y2="110" stroke="rgba(110,201,160,.6)" stroke-width="2"/>
+<text x="230" y="113" fill="rgba(110,201,160,.6)" font-family="Share Tech Mono" font-size="7.5" text-anchor="end">IB-08</text>
+<!-- Arrow indicating open from back -->
+<line x1="230" y1="95" x2="264" y2="95" stroke="rgba(110,201,160,.4)" stroke-width="0.8" marker-end="url(#sg1)"/>
+<text x="228" y="99" fill="rgba(110,201,160,.5)" font-family="Share Tech Mono" font-size="7.5" text-anchor="end">acceso ←</text>
+<!-- Arrow from front side -->
+<line x1="370" y1="75" x2="320" y2="75" stroke="rgba(110,201,160,.4)" stroke-width="0.8" marker-end="url(#sg1)"/>
+<text x="374" y="79" fill="rgba(110,201,160,.5)" font-family="Share Tech Mono" font-size="7.5">→ acceso</text>
+
+<!-- Rueda (perfil) -->
+<circle cx="280" cy="194" r="15" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="280" cy="194" r="4" fill="rgba(74,158,205,.4)"/>
+<circle cx="420" cy="194" r="15" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.6)" stroke-width="1.5"/>
+<circle cx="420" cy="194" r="4" fill="rgba(74,158,205,.4)"/>
+
+<!-- Tablero (section profile) -->
+<rect x="250" y="40" width="200" height="10" fill="rgba(196,144,48,.2)" stroke="rgba(196,144,48,.7)" stroke-width="1.5"/>
+<text x="350" y="30" fill="rgba(196,144,48,.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">TABLERO 50mm</text>
+
+<!-- Suelo -->
+<line x1="180" y1="210" x2="580" y2="210" stroke="rgba(232,239,247,.15)" stroke-width="2"/>
+
+<!-- COTAS -->
+<!-- Cajones zone 600mm -->
+<line x1="320" y1="240" x2="440" y2="240" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#s2)" marker-end="url(#s1)"/>
+<text x="380" y="252" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">600mm · cajones</text>
+
+<!-- Shelf zone 300mm -->
+<line x1="263.6" y1="240" x2="316.4" y2="240" stroke="var(--green)" stroke-width="0.9" marker-start="url(#sg2)" marker-end="url(#sg1)"/>
+<text x="290" y="252" fill="var(--green)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">300mm · estantes</text>
+
+<!-- Total depth 900mm -->
+<line x1="263.6" y1="270" x2="440" y2="270" stroke="rgba(74,158,205,.6)" stroke-width="0.9" marker-start="url(#s2)" marker-end="url(#s1)"/>
+<text x="352" y="282" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">900mm profundidad total</text>
+
+<!-- Body height 625mm -->
+<line x1="480" y1="50" x2="480" y2="173.6" stroke="var(--accent)" stroke-width="0.9" marker-start="url(#s2)" marker-end="url(#s1)"/>
+<text x="498" y="115" fill="var(--accent)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(90,498,115)">625mm</text>
+
+<text x="350" y="430" fill="rgba(74,158,205,.35)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">SECCIÓN LATERAL ISLA B · DOBLE ZONA · ESC. 1:5</text>
+</svg>
+  </div>
+  <div class="two-col">
+    <div class="spec-box"><h4>ZONA CAJONES (600mm)</h4><ul>
+      <li>Profundidad: <em>600mm desde el frente</em> <span class="tag-mod">MOD</span></li>
+      <li>Cajones: <span>2 grandes (prof. útil 600mm) + 3 medianos</span></li>
+      <li>Panel divisor IB-07: <span>564×589mm a 600mm del frente</span></li>
+      <li>Guías: <span>telescópicas 500mm full-extension por cada cajón</span></li>
+      <li>Estante intermedio IB-05: <span>564×600mm</span></li>
+    </ul></div>
+    <div class="spec-box"><h4>ZONA ESTANTES ABIERTA (300mm)</h4><ul>
+      <li>Profundidad: <em>300mm desde la parte trasera</em> <span class="tag-new">NEW</span></li>
+      <li>Estantes IB-08: <span>564×300mm ×2, ajustables</span></li>
+      <li>Acceso: <span>por ambos lados (frente y fondo) — sin puerta ni panel trasero</span></li>
+      <li>Uso sugerido: <span>botes de pintura, tarros, pinceles largos</span></li>
+      <li>Sin IB-06: <span>panel trasero eliminado en esta zona</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ── PERFIL FOX MF18 ── -->
+<div id="panel-fox" class="tab-panel">
+  <div class="drawing-title">PERFIL FINGER PULL FOX MF18 — DETALLE DE SECCIÓN Y MONTAJE · ESC. 2:1</div>
+  <div class="two-col">
+    <div class="drawing-wrap">
+<svg width="500" height="360" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="f1" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+  <marker id="f2" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto-start-reverse"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A9ECD"/></marker>
+</defs>
+<!-- Fox MF18 section detail at 2:1 scale (2px per mm) -->
+<!-- Profile cross-section: typical "fox" style -->
+<!-- Overall outer dimensions approx: 25mm wide × 20mm tall (for 18mm panel) -->
+<!-- Section view: profile attached to top of drawer front panel -->
+
+<!-- FRENTE DECORATIVO (100mm tall, 18mm thick) - partial view -->
+<rect x="180" y="100" width="36" height="200" fill="rgba(200,170,100,.2)" stroke="var(--mdf)" stroke-width="1.5"/>
+<text x="198" y="205" fill="rgba(200,170,100,.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle" transform="rotate(90,198,205)">frente 18mm</text>
+
+<!-- Fox MF18 profile -->
+<!-- Outer body: approximately 30mm wide × 20mm tall -->
+<path d="M 180,100 L 210,100 L 210,84 L 236,84 L 236,60 L 180,60 Z" fill="rgba(180,200,220,.25)" stroke="rgba(180,200,220,.8)" stroke-width="2"/>
+<!-- Inner groove (finger channel) -->
+<path d="M 180,94 L 204,94 L 204,70 L 230,70 L 230,64 L 180,64 Z" fill="rgba(13,27,42,.8)" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+<!-- Front face of profile -->
+<line x1="180" y1="60" x2="180" y2="100" stroke="rgba(180,200,220,.9)" stroke-width="2.5"/>
+<!-- Aluminum texture lines -->
+<line x1="182" y1="65" x2="182" y2="95" stroke="rgba(180,200,220,.15)" stroke-width="0.7"/>
+<line x1="186" y1="62" x2="186" y2="98" stroke="rgba(180,200,220,.12)" stroke-width="0.7"/>
+<line x1="228" y1="64" x2="228" y2="82" stroke="rgba(180,200,220,.12)" stroke-width="0.7"/>
+<!-- Tornillo de fijación (through profile into panel top) -->
+<circle cx="220" cy="88" r="4" fill="rgba(176,200,224,.6)" stroke="rgba(74,158,205,.7)" stroke-width="1"/>
+<line x1="220" y1="92" x2="220" y2="120" stroke="rgba(176,200,224,.4)" stroke-width="1.2" stroke-dasharray="2,2"/>
+<text x="260" y="92" fill="rgba(74,158,205,.7)" font-family="Share Tech Mono" font-size="7.5">tornillo</text>
+<text x="260" y="102" fill="rgba(74,158,205,.6)" font-family="Share Tech Mono" font-size="7.5">3.5×30mm</text>
+<line x1="256" y1="96" x2="228" y2="90" stroke="rgba(74,158,205,.3)" stroke-width="0.7"/>
+
+<!-- CARCASS CONTEXT (top panel visible above drawer front) -->
+<!-- Tapa carcasa above -->
+<rect x="144" y="96.4" width="72" height="3.6" fill="rgba(200,170,100,.2)" stroke="var(--mdf)" stroke-width="1" stroke-dasharray="3,2"/>
+<text x="120" y="99" fill="rgba(200,170,100,.4)" font-family="Share Tech Mono" font-size="7.5" text-anchor="end">tapa carcasa</text>
+
+<!-- Arrow showing finger grip direction -->
+<path d="M 155,80 Q 170,80 175,88" fill="none" stroke="rgba(244,200,66,.7)" stroke-width="1.5" marker-end="url(#f1)"/>
+<text x="115" y="72" fill="rgba(244,200,66,.8)" font-family="Share Tech Mono" font-size="8">agarre</text>
+<text x="115" y="83" fill="rgba(244,200,66,.6)" font-family="Share Tech Mono" font-size="7.5">del dedo →</text>
+
+<!-- COTAS -->
+<!-- Profile width ~56mm total at 2:1 = 112px... but we drew 56px. Adjust labels to match -->
+<!-- From x=180 to x=236 = 56px = 28mm at 2:1 -->
+<line x1="180" y1="50" x2="236" y2="50" stroke="var(--accent)" stroke-width="0.8" marker-start="url(#f2)" marker-end="url(#f1)"/>
+<text x="208" y="44" fill="var(--accent)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">~28mm</text>
+
+<!-- Height: 60 to 100 = 40px = 20mm -->
+<line x1="246" y1="60" x2="246" y2="100" stroke="var(--accent)" stroke-width="0.8" marker-start="url(#f2)" marker-end="url(#f1)"/>
+<text x="258" y="83" fill="var(--accent)" font-family="Share Tech Mono" font-size="8" text-anchor="middle" transform="rotate(90,258,83)">~20mm</text>
+
+<!-- Panel 18mm -->
+<line x1="148" y1="100" x2="148" y2="116" stroke="var(--accent)" stroke-width="0.8" marker-start="url(#f2)" marker-end="url(#f1)"/>
+<text x="136" y="110" fill="var(--accent)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle" transform="rotate(-90,136,110)">18mm</text>
+
+<text x="250" y="320" fill="rgba(74,158,205,.4)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">SECCIÓN PERFIL FOX MF18 · ESC. 2:1</text>
+<text x="250" y="333" fill="rgba(74,158,205,.3)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">El canal inferior aloja los dedos para abrir el cajón halando hacia abajo/afuera</text>
+</svg>
+    </div>
+    <div class="spec-box" style="height:fit-content">
+      <h4>PERFIL FOX MF18 — DATOS TÉCNICOS</h4>
+      <ul>
+        <li>Código: <span>MF18 · Grupo Euro</span></li>
+        <li>Material: <span>aluminio anodizado natural</span></li>
+        <li>Largo estándar: <span>3000mm por tira</span></li>
+        <li>Para placa: <span>18mm de espesor</span></li>
+        <li>Sistema: <span>de aplicar en borde superior del frente</span></li>
+        <li>Canal de agarre: <span>rebaje frontal-inferior para los dedos</span></li>
+        <li>Fijación: <span>tornillos 3,5×30mm desde arriba, c/400mm aprox.</span></li>
+        <li>Corte: <span>sierra de metales o sierra circular con hoja fina</span></li>
+      </ul>
+      <h4 style="margin-top:12px">CANTIDAD NECESARIA</h4>
+      <ul>
+        <li>Isla A: <span>6 cajones × 1240mm = 7440mm</span></li>
+        <li>Isla A: <em>3 barras de 3000mm</em></li>
+        <li>Isla B: <span>5 cajones × 600mm = 3000mm</span></li>
+        <li>Isla B: <em>1 barra de 3000mm</em></li>
+        <li>Total: <em>4 barras × 3000mm</em></li>
+        <li>Sin desperdicio en Isla A: <span>3×3000=9000 / 7440 = 6 piezas exactas + 1560mm sobrante</span></li>
+        <li>Sin desperdicio en Isla B: <span>1×3000=3000 / 3000 = 5 piezas × 600mm exacto</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── ISO ── -->
+<div id="panel-iso" class="tab-panel">
+  <div class="drawing-title">VISTA CONJUNTO — SISTEMA DOS ISLAS (PERSPECTIVA ISOMÉTRICA ESQUEMÁTICA)</div>
+  <div class="drawing-wrap">
+<svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+<!-- Simplified isometric view of the complete system -->
+<!-- Colors: Isla A blue, Isla B green, tablero gold, profiles silver -->
+
+<!-- ISO transformation: x'=x*cos30-y*cos30, y'=x*sin30+y*sin30-z -->
+<!-- Scale 1:10. Isla A: 1240×900×700mm = 124×90×70px -->
+
+<!-- TABLERO (top surface, iso) -->
+<!-- Rough isometric sketch -->
+<g transform="translate(100, 200)">
+  <!-- Tablero top face -->
+  <polygon points="0,0 264,0 294,-26 30,-26" fill="rgba(196,144,48,.18)" stroke="rgba(196,144,48,.7)" stroke-width="1.5"/>
+  <!-- Tablero front face -->
+  <polygon points="0,0 264,0 264,10 0,10" fill="rgba(196,144,48,.12)" stroke="rgba(196,144,48,.5)" stroke-width="1"/>
+  <!-- tablero left side -->
+  <polygon points="0,0 30,-26 30,-16 0,10" fill="rgba(196,144,48,.08)" stroke="rgba(196,144,48,.4)" stroke-width="1"/>
+  <text x="100" y="-10" fill="rgba(196,144,48,.7)" font-family="Share Tech Mono" font-size="9">TABLERO 2640 × 1000 × 50mm</text>
+</g>
+
+<!-- ISLA A body (iso) -->
+<g transform="translate(100, 210)">
+  <!-- Front face: 1240×700mm = 124×70px -->
+  <polygon points="0,0 248,0 248,125 0,125" fill="rgba(46,125,184,.12)" stroke="rgba(46,125,184,.6)" stroke-width="1.5"/>
+  <!-- Top face -->
+  <polygon points="0,0 248,0 272,-22 24,-22" fill="rgba(46,125,184,.08)" stroke="rgba(46,125,184,.4)" stroke-width="1"/>
+  <!-- Left face (depth) -->
+  <polygon points="0,0 24,-22 24,103 0,125" fill="rgba(46,125,184,.06)" stroke="rgba(46,125,184,.3)" stroke-width="1"/>
+  <!-- Full-overlay drawer fronts (front face lines) -->
+  <line x1="0" y1="18" x2="248" y2="18" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="38" x2="248" y2="38" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="58" x2="248" y2="58" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="78" x2="248" y2="78" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="98" x2="248" y2="98" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <!-- Fox MF18 strips -->
+  <line x1="0" y1="3" x2="248" y2="3" stroke="rgba(180,200,220,.6)" stroke-width="1.5"/>
+  <line x1="0" y1="21" x2="248" y2="21" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+  <line x1="0" y1="41" x2="248" y2="41" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+  <line x1="0" y1="61" x2="248" y2="61" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+  <line x1="0" y1="81" x2="248" y2="81" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+  <line x1="0" y1="101" x2="248" y2="101" stroke="rgba(180,200,220,.5)" stroke-width="1"/>
+  <!-- Plinto -->
+  <line x1="0" y1="110" x2="248" y2="110" stroke="rgba(200,170,100,.5)" stroke-width="1.2"/>
+  <!-- Label -->
+  <text x="124" y="65" fill="rgba(46,125,184,.8)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">ISLA A</text>
+  <text x="124" y="77" fill="rgba(74,158,205,.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">6 cajones FFC</text>
+  <!-- Ruedas -->
+  <ellipse cx="24" cy="125" rx="8" ry="4" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+  <ellipse cx="224" cy="125" rx="8" ry="4" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+</g>
+
+<!-- GAP 700mm = 140px (front) / 154px (iso projected) -->
+<!-- ISLA B at x=100+248+140=488 front -->
+<g transform="translate(488, 210)">
+  <!-- Front face: 600×700mm = 120×125px... use 120×125 but scale same -->
+  <polygon points="0,0 120,0 120,125 0,125" fill="rgba(46,155,110,.12)" stroke="rgba(46,155,110,.6)" stroke-width="1.5"/>
+  <!-- Top -->
+  <polygon points="0,0 120,0 142,-20 22,-20" fill="rgba(46,155,110,.08)" stroke="rgba(46,155,110,.4)" stroke-width="1"/>
+  <!-- Left (depth) -->
+  <polygon points="0,0 22,-20 22,105 0,125" fill="rgba(46,155,110,.06)" stroke="rgba(46,155,110,.3)" stroke-width="1"/>
+  <!-- Drawer lines for Isla B -->
+  <line x1="0" y1="22" x2="120" y2="22" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="46" x2="120" y2="46" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="62" x2="120" y2="62" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="78" x2="120" y2="78" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <line x1="0" y1="94" x2="120" y2="94" stroke="rgba(74,158,205,.4)" stroke-width="0.8"/>
+  <!-- Fox MF18 -->
+  <line x1="0" y1="3" x2="120" y2="3" stroke="rgba(180,200,220,.55)" stroke-width="1.2"/>
+  <line x1="0" y1="25" x2="120" y2="25" stroke="rgba(180,200,220,.45)" stroke-width="1"/>
+  <line x1="0" y1="49" x2="120" y2="49" stroke="rgba(180,200,220,.45)" stroke-width="1"/>
+  <line x1="0" y1="65" x2="120" y2="65" stroke="rgba(180,200,220,.45)" stroke-width="1"/>
+  <line x1="0" y1="81" x2="120" y2="81" stroke="rgba(180,200,220,.45)" stroke-width="1"/>
+  <!-- Plinto -->
+  <line x1="0" y1="108" x2="120" y2="108" stroke="rgba(200,170,100,.5)" stroke-width="1.2"/>
+  <!-- Label -->
+  <text x="60" y="56" fill="rgba(46,155,110,.8)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">ISLA B</text>
+  <text x="60" y="68" fill="rgba(74,158,205,.5)" font-family="Share Tech Mono" font-size="7.5" text-anchor="middle">5 cajones</text>
+  <!-- Visible shelf zone on top face -->
+  <!-- In top face, divisor line at 600mm from front = ~24px from front in iso = x at ~0, depth: 600/900=0.67 -->
+  <line x1="22" y1="-20" x2="22" y2="-6" stroke="rgba(74,158,205,.5)" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="11" y="-12" fill="rgba(110,201,160,.6)" font-family="Share Tech Mono" font-size="7">est.</text>
+  <!-- Ruedas -->
+  <ellipse cx="18" cy="125" rx="7" ry="4" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+  <ellipse cx="102" cy="125" rx="7" ry="4" fill="rgba(40,55,70,.8)" stroke="rgba(74,158,205,.5)" stroke-width="1"/>
+</g>
+
+<!-- Labels and callouts -->
+<text x="450" y="460" fill="rgba(180,200,220,.7)" font-family="Share Tech Mono" font-size="9">→ Perfil Fox MF18 (líneas plateadas = borde de cada cajón)</text>
+<text x="450" y="475" fill="rgba(110,201,160,.6)" font-family="Share Tech Mono" font-size="9">→ Isla B: zona estantes traseros accesible por ambos lados</text>
+<text x="450" y="492" fill="rgba(244,200,66,.5)" font-family="Share Tech Mono" font-size="8.5">→ Tablero corrido desmontable apoya sobre listones de pino</text>
+
+<text x="300" y="498" fill="rgba(74,158,205,.3)" font-family="Share Tech Mono" font-size="8.5" text-anchor="middle">PERSPECTIVA ISOMÉTRICA ESQUEMÁTICA — SISTEMA DOS ISLAS · REV D</text>
+</svg>
+  </div>
+</div>
+
+<div class="footer">
+  <span>PLANOS TÉCNICOS — MESA ARTISTA DOS ISLAS · REV D · Marzo 2026</span>
+  <span>Full-Overlay · Fox MF18 · Isla B Doble Zona · MDF 18mm + 25mm · Laca PU Blanca RAL 9003</span>
+</div>
+</div>
+
+<script>
+function sw(key, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-'+key).classList.add('active');
+}
+</script>
+</body>
+</html>
