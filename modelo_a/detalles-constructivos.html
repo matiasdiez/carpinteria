@@ -5,21 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalles Constructivos — Mesa Artista Dos Islas</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../shared.css">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0D1B2A; --ink:#E8EFF7; --accent:#4A9ECD; --yellow:#F4C842;
-  --green:#6EC9A0; --red:#E07070; --dim:rgba(232,239,247,.4);
-  --mdf:rgba(200,170,100,.18); --mdf-s:#C8AA64;
-  --screw:#B0C8E0; --grid:rgba(74,158,205,.065);
-}
-body{background:var(--bg);color:var(--ink);font-family:'Share Tech Mono',monospace;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),
-  linear-gradient(90deg,var(--grid) 1px,transparent 1px),
-  linear-gradient(rgba(74,158,205,.025) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(74,158,205,.025) 1px,transparent 1px);
-  background-size:100px 100px,100px 100px,20px 20px,20px 20px}
 .page{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:32px 22px 70px}
 
 /* ── HEADER ── */
@@ -117,74 +105,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   .header{grid-template-columns:1fr}
   .header h1{font-size:1.8rem}
 }
-
-/* ── NAVBAR ── */
-.navbar{
-  position:sticky;top:0;z-index:100;
-  background:rgba(10,20,34,.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(74,158,205,.25);
-  padding:0 28px;height:54px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 2px 20px rgba(0,0,0,.4)
-}
-.navbar-brand{
-  display:flex;align-items:center;gap:12px;
-  text-decoration:none;flex-shrink:0
-}
-.navbar-brand-icon{
-  width:30px;height:30px;border:1.5px solid var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  transform:rotate(45deg);transition:background .2s
-}
-.navbar-brand:hover .navbar-brand-icon{background:rgba(74,158,205,.15)}
-.navbar-brand-icon svg{transform:rotate(-45deg)}
-.navbar-brand-text{font-family:'Bebas Neue';font-size:1.15rem;letter-spacing:.1em;color:var(--ink);line-height:1}
-.navbar-brand-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--accent);letter-spacing:.1em}
-.navbar-links{
-  display:flex;align-items:center;gap:4px;list-style:none
-}
-.navbar-links a{
-  display:flex;align-items:center;gap:7px;
-  text-decoration:none;font-family:'Share Tech Mono',monospace;
-  font-size:.78rem;color:var(--dim);
-  padding:6px 14px;border:1px solid transparent;
-  letter-spacing:.04em;white-space:nowrap;
-  transition:color .18s,border-color .18s,background .18s
-}
-.navbar-links a:hover{color:var(--ink);border-color:rgba(74,158,205,.3);background:rgba(74,158,205,.07)}
-.navbar-links a.active{color:var(--accent);border-color:rgba(74,158,205,.4);background:rgba(74,158,205,.1)}
-.navbar-links a .nav-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:currentColor;flex-shrink:0;opacity:.6
-}
-.navbar-burger{
-  display:none;background:none;
-  border:1px solid rgba(74,158,205,.4);color:var(--ink);
-  cursor:pointer;padding:6px 9px;
-  transition:background .18s,border-color .18s
-}
-.navbar-burger:hover{background:rgba(74,158,205,.1);border-color:var(--accent)}
-.navbar-mobile-menu{
-  display:none;position:absolute;top:54px;left:0;right:0;
-  background:rgba(10,20,34,.97);
-  border-bottom:1px solid rgba(74,158,205,.25);
-  padding:8px 0;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.5)
-}
-.navbar-mobile-menu.open{display:block}
-.navbar-mobile-menu a{
-  display:flex;align-items:center;gap:10px;
-  text-decoration:none;font-family:'Share Tech Mono',monospace;
-  font-size:.82rem;color:var(--dim);
-  padding:13px 28px;border-left:3px solid transparent;
-  transition:color .18s,border-color .18s,background .18s
-}
-.navbar-mobile-menu a:hover{color:var(--ink);background:rgba(74,158,205,.07);border-left-color:rgba(74,158,205,.5)}
-.navbar-mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(74,158,205,.08)}
-.navbar-wrapper{position:relative}
-@media(max-width:900px){
-  .navbar-links{display:none}
-  .navbar-burger{display:block}
-  .navbar{padding:0 18px}
 }
 </style>
 </head>
