@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planos CNC - Algoritmo MaxRects</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --primary: #2563eb;
+        --text: #0f172a;
+        --border: #cbd5e1;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--surface);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+      h1,
+      h2 {
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 10px;
+      }
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 14px;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      .board-container {
+        margin-bottom: 30px;
+        border: 1px solid var(--border);
+        background: #f1f5f9;
+        padding: 10px;
+      }
+      .board-title {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      svg {
+        background: #e2e8f0;
+        width: 100%;
+        height: auto;
+        border: 2px solid #64748b;
+      }
+      .part {
+        fill: #bae6fd;
+        stroke: #0369a1;
+        stroke-width: 2;
+      }
+      .part-text {
+        fill: #0c4a6e;
+        font-size: 24px;
+        font-family: monospace;
+        text-anchor: middle;
+        dominant-baseline: middle;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cálculo de Cortes CNC (MaxRects - BSSF)</h1>
+      <p>
+        Simulación de cortes para MDF 18mm (Estructura de Islas y Frentes).
+        Espesor de sierra (Kerf): 3mm.
+      </p>
+
+      <div class="controls">
+        <button onclick="runPacking()">🔄 Recalcular Cortes</button>
+        <button onclick="downloadDXF()">📥 Descargar DXF</button>
+        <button onclick="downloadSVG()">📥 Descargar SVG</button>
+      </div>
+
+      <div id="output"></div>
+    </div>
+
+    <script>
+      // --- DATOS DEL PROYECTO ---
+      const BOARD_W = 2750;
+      const BOARD_H = 1830;
+      const KERF = 3; // Espesor del disco de corte en mm
+
+      // Lista de piezas a cortar (Ejemplo: MDF 18mm para la estructura de las Islas)
+      // Se agregan las cantidades para generar el array final
+      const partDefinitions = [
+        { id: "A-TAPA", w: 1296, h: 906, qty: 1 },
+        { id: "A-BASE", w: 1296, h: 906, qty: 1 },
+        { id: "A-LAT", w: 546, h: 888, qty: 2 },
+        { id: "A-FONDO", w: 1260, h: 546, qty: 1 },
+        { id: "A-FRENTE", w: 1296, h: 80, qty: 7 }, // 7 cajones Isla A
+        { id: "B-TAPA", w: 600, h: 906, qty: 1 },
+        { id: "B-BASE", w: 600, h: 906, qty: 1 },
+        { id: "B-LAT", w: 546, h: 888, qty: 2 },
+        { id: "B-FONDO", w: 564, h: 546, qty: 1 },
+        { id: "B-DIV", w: 546, h: 888, qty: 1 },
+        { id: "B-ESTANTE", w: 290, h: 564, qty: 2 },
+        { id: "B-FRENTE-A", w: 596, h: 140, qty: 2 },
+        { id: "B-FRENTE-B", w: 596, h: 60, qty: 3 },
+      ];
+
+      let bins = [];
+
+      // --- ALGORITMO MAXRECTS (BSSF) ---
+      class MaxRectsBin {
+        constructor(w, h) {
+          this.width = w;
+          this.height = h;
+          this.freeRects = [{ x: 0, y: 0, w: w, h: h }];
+          this.usedRects = [];
+        }
+
+        insert(w, h, data) {
+          let bestNode = null;
+          let bestShortFit = Infinity;
+          let bestLongFit = Infinity;
+          let bestRectIndex = -1;
+
+          // Buscar mejor ajuste (rotando y sin rotar)
+          for (let i = 0; i < this.freeRects.length; i++) {
+            let fr = this.freeRects[i];
+            // Sin rotar
+            if (fr.w >= w && fr.h >= h) {
+              let shortFit = Math.min(fr.w - w, fr.h - h);
+              let longFit = Math.max(fr.w - w, fr.h - h);
+              if (
+                shortFit < bestShortFit ||
+                (shortFit === bestShortFit && longFit < bestLongFit)
+              ) {
+                bestNode = {
+                  x: fr.x,
+                  y: fr.y,
+                  w: w,
+                  h: h,
+                  data: data,
+                  rotated: false,
+                };
+                bestShortFit = shortFit;
+                bestLongFit = longFit;
+                bestRectIndex = i;
+              }
+            }
+            // Rotado
+            if (fr.w >= h && fr.h >= w) {
+              let shortFit = Math.min(fr.w - h, fr.h - w);
+              let longFit = Math.max(fr.w - h, fr.h - w);
+              if (
+                shortFit < bestShortFit ||
+                (shortFit === bestShortFit && longFit < bestLongFit)
+              ) {
+                bestNode = {
+                  x: fr.x,
+                  y: fr.y,
+                  w: h,
+                  h: w,
+                  data: data,
+                  rotated: true,
+                };
+                bestShortFit = shortFit;
+                bestLongFit = longFit;
+                bestRectIndex = i;
+              }
+            }
+          }
+
+          if (!bestNode) return null; // No cabe
+
+          this.usedRects.push(bestNode);
+
+          // Dividir los rectángulos libres que intersectan
+          let i = 0;
+          while (i < this.freeRects.length) {
+            if (this.splitFreeNode(this.freeRects[i], bestNode)) {
+              this.freeRects.splice(i, 1);
+            } else {
+              i++;
+            }
+          }
+          this.pruneFreeList();
+          return bestNode;
+        }
+
+        splitFreeNode(freeNode, usedNode) {
+          // Si no intersectan, devolver falso
+          if (
+            usedNode.x >= freeNode.x + freeNode.w ||
+            usedNode.x + usedNode.w <= freeNode.x ||
+            usedNode.y >= freeNode.y + freeNode.h ||
+            usedNode.y + usedNode.h <= freeNode.y
+          ) {
+            return false;
+          }
+
+          // Arriba
+          if (usedNode.y > freeNode.y && usedNode.y < freeNode.y + freeNode.h) {
+            let newNode = { ...freeNode };
+            newNode.h = usedNode.y - newNode.y;
+            this.freeRects.push(newNode);
+          }
+          // Abajo
+          if (usedNode.y + usedNode.h < freeNode.y + freeNode.h) {
+            let newNode = { ...freeNode };
+            newNode.y = usedNode.y + usedNode.h;
+            newNode.h = freeNode.y + freeNode.h - (usedNode.y + usedNode.h);
+            this.freeRects.push(newNode);
+          }
+          // Izquierda
+          if (usedNode.x > freeNode.x && usedNode.x < freeNode.x + freeNode.w) {
+            let newNode = { ...freeNode };
+            newNode.w = usedNode.x - newNode.x;
+            this.freeRects.push(newNode);
+          }
+          // Derecha
+          if (usedNode.x + usedNode.w < freeNode.x + freeNode.w) {
+            let newNode = { ...freeNode };
+            newNode.x = usedNode.x + usedNode.w;
+            newNode.w = freeNode.x + freeNode.w - (usedNode.x + usedNode.w);
+            this.freeRects.push(newNode);
+          }
+          return true;
+        }
+
+        pruneFreeList() {
+          // Eliminar rectángulos totalmente contenidos en otros
+          for (let i = 0; i < this.freeRects.length; i++) {
+            for (let j = i + 1; j < this.freeRects.length; j++) {
+              let rectI = this.freeRects[i];
+              let rectJ = this.freeRects[j];
+              if (
+                rectI.x >= rectJ.x &&
+                rectI.y >= rectJ.y &&
+                rectI.x + rectI.w <= rectJ.x + rectJ.w &&
+                rectI.y + rectI.h <= rectJ.y + rectJ.h
+              ) {
+                this.freeRects.splice(i, 1);
+                i--;
+                break;
+              }
+              if (
+                rectJ.x >= rectI.x &&
+                rectJ.y >= rectI.y &&
+                rectJ.x + rectJ.w <= rectI.x + rectI.w &&
+                rectJ.y + rectJ.h <= rectI.y + rectI.h
+              ) {
+                this.freeRects.splice(j, 1);
+                j--;
+              }
+            }
+          }
+        }
+      }
+
+      // --- EJECUCIÓN DEL ALGORITMO ---
+      function runPacking() {
+        bins = [];
+        let partsToPack = [];
+
+        // Expandir cantidades y agregar Kerf
+        partDefinitions.forEach((p) => {
+          for (let i = 0; i < p.qty; i++) {
+            partsToPack.push({
+              id: `${p.id}-${i + 1}`,
+              w: p.w + KERF,
+              h: p.h + KERF,
+            });
+          }
+        });
+
+        // Ordenar por área descendente (Mejora radicalmente el empaquetado)
+        partsToPack.sort((a, b) => b.w * b.h - a.w * a.h);
+
+        // Empaquetar
+        partsToPack.forEach((part) => {
+          let placed = false;
+          for (let i = 0; i < bins.length; i++) {
+            if (bins[i].insert(part.w, part.h, part.id)) {
+              placed = true;
+              break;
+            }
+          }
+          if (!placed) {
+            let newBin = new MaxRectsBin(BOARD_W, BOARD_H);
+            newBin.insert(part.w, part.h, part.id);
+            bins.push(newBin);
+          }
+        });
+
+        renderHTML();
+      }
+
+      // --- RENDERIZADO VISUAL ---
+      function renderHTML() {
+        const out = document.getElementById("output");
+        out.innerHTML = "";
+
+        bins.forEach((bin, index) => {
+          let svgContent = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg">`;
+          bin.usedRects.forEach((rect) => {
+            // Restar el Kerf para dibujar la pieza real final
+            let finalW = rect.w - KERF;
+            let finalH = rect.h - KERF;
+            let displayTxt = rect.rotated ? `${rect.data} (Rot)` : rect.data;
+            svgContent += `
+                    <rect x="${rect.x}" y="${rect.y}" width="${finalW}" height="${finalH}" class="part" />
+                    <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2}" class="part-text">${displayTxt}</text>
+                    <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2 + 30}" class="part-text" style="font-size: 16px;">${finalW}x${finalH}</text>
+                `;
+          });
+          svgContent += `</svg>`;
+
+          out.innerHTML += `
+                <div class="board-container">
+                    <div class="board-title">Plancha ${index + 1} - MDF 18mm (2750 x 1830 mm)</div>
+                    ${svgContent}
+                </div>
+            `;
+        });
+      }
+
+      // --- EXPORTACIÓN DXF ---
+      function downloadDXF() {
+        let dxf = "0\nSECTION\n2\nENTITIES\n";
+
+        // Colocar cada plancha desplazada en el eje X para que no se superpongan en CAD
+        const X_OFFSET_PER_BOARD = BOARD_W + 500;
+
+        bins.forEach((bin, index) => {
+          let boardOffsetX = index * X_OFFSET_PER_BOARD;
+
+          // Dibujar el contorno de la placa principal en capa 0
+          dxf += createDXFRectangle(
+            boardOffsetX,
+            0,
+            BOARD_W,
+            BOARD_H,
+            "TABLERO_BASE",
+          );
+
+          // Dibujar las piezas restando el kerf
+          bin.usedRects.forEach((rect) => {
+            let rx = boardOffsetX + rect.x;
+            let ry = rect.y; // DXF usualmente invierte Y, pero para CNC planar está bien
+            let rw = rect.w - KERF;
+            let rh = rect.h - KERF;
+            dxf += createDXFRectangle(rx, ry, rw, rh, "CORTES");
+          });
+        });
+
+        dxf += "0\nENDSEC\n0\nEOF\n";
+
+        triggerDownload(
+          "data:text/plain;charset=utf-8," + encodeURIComponent(dxf),
+          "cortes-cnc.dxf",
+        );
+      }
+
+      function createDXFRectangle(x, y, w, h, layer) {
+        let lines = "";
+        const points = [
+          [x, y],
+          [x + w, y],
+          [x + w, y + h],
+          [x, y + h],
+        ];
+        for (let i = 0; i < 4; i++) {
+          let p1 = points[i];
+          let p2 = points[(i + 1) % 4];
+          lines += `0\nLINE\n8\n${layer}\n10\n${p1[0]}\n20\n${p1[1]}\n30\n0.0\n11\n${p2[0]}\n21\n${p2[1]}\n31\n0.0\n`;
+        }
+        return lines;
+      }
+
+      // --- EXPORTACIÓN SVG MULTI-PLANCHA ---
+      function downloadSVG() {
+        const spacing = 200;
+        const totalW = BOARD_W;
+        const totalH = BOARD_H * bins.length + spacing * (bins.length - 1);
+
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${totalH}">`;
+
+        bins.forEach((bin, index) => {
+          let offsetY = index * (BOARD_H + spacing);
+          svg += `<rect x="0" y="${offsetY}" width="${BOARD_W}" height="${BOARD_H}" fill="#e2e8f0" stroke="#64748b" stroke-width="5"/>`;
+
+          bin.usedRects.forEach((rect) => {
+            svg += `<rect x="${rect.x}" y="${rect.y + offsetY}" width="${rect.w - KERF}" height="${rect.h - KERF}" fill="#bae6fd" stroke="#0369a1" stroke-width="2"/>`;
+            svg += `<text x="${rect.x + (rect.w - KERF) / 2}" y="${rect.y + offsetY + (rect.h - KERF) / 2}" fill="#0c4a6e" font-size="24" font-family="monospace" text-anchor="middle" dominant-baseline="middle" font-weight="bold">${rect.data}</text>`;
+          });
+        });
+        svg += `</svg>`;
+
+        triggerDownload(
+          "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
+          "cortes-cnc.svg",
+        );
+      }
+
+      function triggerDownload(dataUri, filename) {
+        let a = document.createElement("a");
+        a.href = dataUri;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      // Iniciar al cargar
+      window.onload = runPacking;
+    </script>
+  </body>
+</html>
