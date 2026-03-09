@@ -3,14 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalles Constructivos Rigurosos - Mesa de Arte</title>
+    <title>Detalles Constructivos Completos - Mesa de Arte</title>
     <style>
       :root {
         --bg: #e2e8f0;
         --paper: #ffffff;
         --ink: #0f172a;
         --dim: #dc2626;
-        --hidden: #64748b;
         --mdf: #fcd34d;
         --mdf-core: #fde68a;
         --metal: #94a3b8;
@@ -46,21 +45,13 @@
         color: #475569;
         font-size: 1.1rem;
       }
-      .warning-box {
-        background-color: #fef2f2;
-        border-left: 4px solid var(--dim);
-        padding: 1rem;
-        margin-bottom: 2rem;
-        color: #991b1b;
-        font-weight: 500;
-      }
 
-      /* Estilos SVG */
       svg {
         width: 100%;
         height: auto;
         border: 1px solid #f1f5f9;
         background-color: #fafafa;
+        margin-bottom: 1rem;
       }
       .hatch-mdf {
         fill: url(#mdfPattern);
@@ -82,21 +73,10 @@
         stroke: #475569;
         stroke-width: 1.5;
       }
-      .screw {
-        fill: #cbd5e1;
-        stroke: #334155;
-        stroke-width: 1.5;
-      }
 
       .view {
         stroke: var(--ink);
         stroke-width: 1.5;
-        fill: none;
-      }
-      .hidden {
-        stroke: var(--hidden);
-        stroke-width: 1.5;
-        stroke-dasharray: 6 6;
         fill: none;
       }
       .dim-line {
@@ -108,6 +88,8 @@
         stroke: var(--dim);
         stroke-width: 2;
       }
+
+      /* Textos con fondo blanco integrado en SVG para que no se superpongan las líneas */
       .dim-text {
         fill: var(--dim);
         font-size: 14px;
@@ -131,6 +113,13 @@
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
         margin-bottom: 2rem;
+      }
+      .detail-title {
+        background: #f8fafc;
+        padding: 10px;
+        border-left: 4px solid var(--ink);
+        margin-bottom: 10px;
+        font-weight: bold;
       }
     </style>
   </head>
@@ -170,262 +159,474 @@
         >
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
         </marker>
+        <filter id="bg-text" x="-10%" y="-10%" width="120%" height="120%">
+          <feFlood flood-color="#fafafa" flood-opacity="0.9" />
+          <feComposite in="SourceGraphic" in2="SourceAlpha" operator="over" />
+        </filter>
       </defs>
     </svg>
 
     <div class="sheet">
       <div class="title-block">
-        <h1>Lámina 4: Detalles Constructivos de Herrajes y Ensambles</h1>
-        <p>
-          Especificaciones técnicas para el banco de carpintería. Tolerancias y
-          anclajes.
-        </p>
-      </div>
-
-      <div class="warning-box">
-        <strong>⚠️ CORRECCIÓN DE DISEÑO EN TALLER:</strong> Se ha modificado la
-        luz entre frentes de cajón de la Isla B. Para poder ingresar los dedos
-        en el Perfil "J" de aluminio, la luz mínima física requerida es de 25 mm
-        a 30 mm. Usar 3 mm haría inoperable la apertura. Los cortes de los
-        frentes de MDF de la Isla B deben achicarse para absorber esta
-        diferencia sin alterar la altura total del mueble.
+        <h1>Lámina 4: Pliego de Detalles Constructivos</h1>
+        <p>Encuentros, herrajes, tolerancias y fijaciones.</p>
       </div>
 
       <div class="grid-2">
         <div>
-          <div style="margin-bottom: 10px">
-            <span class="label">DETALLE 4.1:</span>
-            <span class="sub"
-              >HOLGURA CORREDERA TELESCÓPICA PESADA (VISTA SUPERIOR)</span
-            >
+          <div class="detail-title">
+            4.1 ENSAMBLE TABLERO, LISTÓN Y TARUGO (CORTE FRONTAL)
           </div>
           <svg viewBox="0 0 500 350">
-            <rect x="50" y="50" width="80" height="250" class="hatch-mdf" />
+            <rect x="50" y="50" width="400" height="30" class="hatch-mdf" />
+            <text
+              x="250"
+              y="70"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              TABLERO MDF 25mm
+            </text>
+
+            <rect x="50" y="80" width="130" height="30" class="hatch-mdf" />
+            <rect x="320" y="80" width="130" height="30" class="hatch-mdf" />
+            <text
+              x="115"
+              y="100"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              SUBCAPA 25mm
+            </text>
+
+            <rect x="180" y="80" width="140" height="46" class="solid-pine" />
+            <text
+              x="250"
+              y="105"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              LISTÓN PINO 1.5"
+            </text>
+
+            <rect
+              x="235"
+              y="126"
+              width="30"
+              height="40"
+              fill="#d97706"
+              stroke="#92400e"
+              stroke-width="2"
+              stroke-dasharray="4 2"
+            />
+            <text
+              x="250"
+              y="150"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              TARUGO
+            </text>
+
+            <rect x="50" y="146" width="400" height="22" class="hatch-mdf" />
+            <text
+              x="250"
+              y="162"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              TECHO ISLA (MDF 18mm)
+            </text>
+
+            <line
+              x1="30"
+              y1="80"
+              x2="30"
+              y2="146"
+              class="dim-line"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
+            <text
+              x="25"
+              y="117"
+              class="dim-text"
+              text-anchor="end"
+              filter="url(#bg-text)"
+            >
+              LUZ: 25.0
+            </text>
+
+            <line
+              x1="460"
+              y1="110"
+              x2="460"
+              y2="126"
+              class="dim-line"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
+            <text
+              x="465"
+              y="122"
+              class="dim-text"
+              text-anchor="start"
+              filter="url(#bg-text)"
+            >
+              13.1 (Listón asoma)
+            </text>
+
+            <line
+              x1="460"
+              y1="126"
+              x2="460"
+              y2="146"
+              class="dim-line"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
+            <text
+              x="465"
+              y="140"
+              class="dim-text"
+              text-anchor="start"
+              filter="url(#bg-text)"
+            >
+              11.9 (Vacío para tarugo)
+            </text>
+          </svg>
+        </div>
+
+        <div>
+          <div class="detail-title">
+            4.2 CAJÓN ISLA A: MARCO 12MM Y FONDO (CORTE LATERAL)
+          </div>
+          <svg viewBox="0 0 500 350">
+            <rect x="40" y="30" width="22" height="280" class="hatch-mdf" />
+            <text
+              x="30"
+              y="170"
+              class="label"
+              transform="rotate(-90, 30, 170)"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              LATERAL ISLA MDF 18
+            </text>
+
+            <rect x="62" y="100" width="16" height="60" class="metal" />
+            <text
+              x="70"
+              y="90"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              GUÍA
+            </text>
+
+            <rect x="78" y="100" width="14" height="60" class="solid-mdf" />
+            <text
+              x="145"
+              y="120"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              ← MARCO MDF 12
+            </text>
+
+            <rect x="78" y="160" width="380" height="7" class="hatch-mdf" />
+            <text
+              x="270"
+              y="152"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              FONDO A0 (MDF 5.5)
+            </text>
+
+            <rect x="250" y="167" width="25" height="18" class="solid-pine" />
+            <rect x="420" y="167" width="25" height="18" class="solid-pine" />
+            <text
+              x="262"
+              y="200"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              VARILLAS REFUERZO
+            </text>
+
+            <line
+              x1="40"
+              y1="210"
+              x2="480"
+              y2="210"
+              stroke="#94a3b8"
+              stroke-dasharray="6 4"
+              stroke-width="2"
+            />
+            <text
+              x="270"
+              y="225"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              LÍNEA INICIO PRÓXIMO CAJÓN
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="detail-title">
+            4.3 PERFIL MANIJA FOX MF18 (VISTA LATERAL)
+          </div>
+          <svg viewBox="0 0 500 350">
+            <rect x="250" y="30" width="36" height="100" class="hatch-mdf" />
+            <text
+              x="270"
+              y="80"
+              class="label"
+              transform="rotate(-90, 270, 80)"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              FRENTE SUP.
+            </text>
+
+            <rect x="250" y="136" width="36" height="150" class="hatch-mdf" />
+            <text
+              x="270"
+              y="210"
+              class="label"
+              transform="rotate(-90, 270, 210)"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              FRENTE INF.
+            </text>
+
+            <path
+              d="M 286 136 L 286 138 L 250 138 L 230 138 C 225 138 220 142 220 148 L 220 155 L 223 155 L 223 148 C 223 145 226 141 230 141 L 248 141 L 248 160 L 250 160 L 250 136 Z"
+              fill="#94a3b8"
+              stroke="#475569"
+              stroke-width="1.5"
+            />
+
+            <text
+              x="180"
+              y="145"
+              class="label"
+              fill="#dc2626"
+              filter="url(#bg-text)"
+            >
+              PERFIL FOX MF18
+            </text>
+            <line
+              x1="215"
+              y1="140"
+              x2="225"
+              y2="145"
+              stroke="#dc2626"
+              stroke-width="1.5"
+            />
+
+            <line
+              x1="295"
+              y1="130"
+              x2="295"
+              y2="136"
+              class="dim-line"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
+            <line x1="286" y1="130" x2="305" y2="130" class="dim-tick" />
+            <line x1="286" y1="136" x2="305" y2="136" class="dim-tick" />
+            <text
+              x="310"
+              y="138"
+              class="dim-text"
+              text-anchor="start"
+              filter="url(#bg-text)"
+            >
+              LUZ: 3mm (Holgura estándar)
+            </text>
+
+            <text x="50" y="250" class="sub" filter="url(#bg-text)">
+              *El perfil sobresale hacia el frente,
+            </text>
+            <text x="50" y="270" class="sub" filter="url(#bg-text)">
+              permitiendo agarre tipo "pellizco".
+            </text>
+            <text x="50" y="290" class="sub" filter="url(#bg-text)">
+              No requiere luces de 30mm entre frentes.
+            </text>
+          </svg>
+        </div>
+
+        <div>
+          <div class="detail-title">
+            4.4 TOLERANCIA CORREDERA PESADA (VISTA SUPERIOR)
+          </div>
+          <svg viewBox="0 0 500 350">
+            <rect x="50" y="100" width="80" height="150" class="hatch-mdf" />
             <text
               x="90"
               y="175"
               class="label"
               transform="rotate(-90, 90, 175)"
               text-anchor="middle"
+              filter="url(#bg-text)"
             >
-              GABINETE (MDF 18)
+              LATERAL ISLA (MDF 18)
             </text>
 
-            <rect x="130" y="80" width="4" height="190" class="metal" />
-            <rect x="134" y="90" width="5" height="170" class="metal" />
-            <rect x="139" y="100" width="4" height="150" class="metal" />
+            <rect x="130" y="110" width="5" height="130" class="metal" />
+            <rect x="135" y="120" width="5" height="110" class="metal" />
+            <rect x="140" y="130" width="3" height="90" class="metal" />
 
-            <circle cx="136.5" cy="110" r="1.5" fill="#333" />
-            <circle cx="136.5" cy="240" r="1.5" fill="#333" />
-
-            <rect x="143" y="100" width="60" height="150" class="solid-mdf" />
+            <rect x="143" y="120" width="60" height="110" class="solid-mdf" />
             <text
               x="173"
               y="175"
               class="label"
               transform="rotate(-90, 173, 175)"
               text-anchor="middle"
+              filter="url(#bg-text)"
             >
               CAJÓN (MDF 12)
             </text>
 
             <line
               x1="50"
-              y1="30"
+              y1="80"
               x2="130"
-              y2="30"
+              y2="80"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
-            <text x="90" y="20" class="dim-text" text-anchor="middle">18</text>
+            <text
+              x="90"
+              y="70"
+              class="dim-text"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              18
+            </text>
 
-            <line x1="130" y1="30" x2="143" y2="30" class="dim-line" />
-            <line x1="130" y1="20" x2="130" y2="40" class="dim-tick" />
-            <line x1="143" y1="20" x2="143" y2="40" class="dim-tick" />
+            <line
+              x1="130"
+              y1="80"
+              x2="143"
+              y2="80"
+              class="dim-line"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
             <text
               x="136"
-              y="15"
+              y="65"
               class="dim-text"
               text-anchor="middle"
               fill="#991b1b"
+              filter="url(#bg-text)"
             >
               13 (CRÍTICO)
             </text>
 
             <line
               x1="143"
-              y1="30"
+              y1="80"
               x2="203"
-              y2="30"
+              y2="80"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
-            <text x="173" y="20" class="dim-text" text-anchor="middle">12</text>
+            <text
+              x="173"
+              y="70"
+              class="dim-text"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              12
+            </text>
 
-            <text x="250" y="150" class="sub">
-              *NOTA: La corredera pesada requiere
+            <text x="250" y="150" class="sub" filter="url(#bg-text)">
+              *La guía requiere entre 12.7 y 13.0 mm.
             </text>
-            <text x="250" y="170" class="sub">
-              12.7 mm a 13.0 mm de luz estricta.
+            <text x="250" y="170" class="sub" filter="url(#bg-text)">
+              Si la luz es menor, los balines se traban.
             </text>
-            <text x="250" y="190" class="sub">
-              Si la luz es menor, los balines
-            </text>
-            <text x="250" y="210" class="sub">se traban y el MDF cede.</text>
           </svg>
         </div>
+      </div>
 
+      <div class="grid-2">
         <div>
-          <div style="margin-bottom: 10px">
-            <span class="label">DETALLE 4.2:</span>
-            <span class="sub"
-              >ANCLAJE PERFIL "J" Y LUZ PARA DEDOS (VISTA LATERAL)</span
-            >
+          <div class="detail-title">
+            4.5 ANCLAJE ESTRUCTURAL RUEDA (VISTA LATERAL)
           </div>
           <svg viewBox="0 0 500 350">
-            <rect x="150" y="20" width="50" height="100" class="hatch-mdf" />
+            <rect x="50" y="50" width="350" height="30" class="hatch-mdf" />
             <text
-              x="175"
+              x="225"
               y="70"
               class="label"
-              transform="rotate(-90, 175, 70)"
               text-anchor="middle"
+              filter="url(#bg-text)"
             >
-              FRENTE SUPERIOR
-            </text>
-
-            <rect x="150" y="180" width="50" height="150" class="hatch-mdf" />
-            <text
-              x="175"
-              y="255"
-              class="label"
-              transform="rotate(-90, 175, 255)"
-              text-anchor="middle"
-            >
-              FRENTE INFERIOR
-            </text>
-
-            <path
-              d="M 150 180 L 150 160 C 150 150 160 145 170 145 C 180 145 185 150 185 155 L 180 155 C 180 152 175 149 170 149 C 163 149 155 153 155 160 L 155 180 Z"
-              class="metal"
-              fill="#e2e8f0"
-            />
-            <rect
-              x="195"
-              y="180"
-              width="5"
-              height="20"
-              class="metal"
-              fill="#e2e8f0"
-            />
-            <line
-              x1="155"
-              y1="180"
-              x2="200"
-              y2="180"
-              stroke="#475569"
-              stroke-width="2"
-            />
-            <line
-              x1="220"
-              y1="120"
-              x2="220"
-              y2="145"
-              class="dim-line"
-              marker-start="url(#arrow)"
-              marker-end="url(#arrow)"
-            />
-            <text x="230" y="137" class="dim-text" text-anchor="start">
-              LUZ DEDOS: Mínimo 25mm
-            </text>
-
-            <line
-              x1="110"
-              y1="120"
-              x2="110"
-              y2="180"
-              class="dim-line"
-              marker-start="url(#arrow)"
-              marker-end="url(#arrow)"
-            />
-            <text
-              x="100"
-              y="155"
-              class="dim-text"
-              text-anchor="end"
-              fill="#991b1b"
-            >
-              LUZ REAL: 60mm
-            </text>
-
-            <path
-              d="M 230 130 C 200 130 180 140 170 160 L 190 170 C 200 150 210 145 230 145 Z"
-              fill="#fca5a5"
-              opacity="0.5"
-            />
-
-            <line
-              x1="150"
-              y1="120"
-              x2="220"
-              y2="120"
-              stroke="#dc2626"
-              stroke-width="1"
-              stroke-dasharray="4 2"
-            />
-            <line
-              x1="170"
-              y1="145"
-              x2="220"
-              y2="145"
-              stroke="#dc2626"
-              stroke-width="1"
-              stroke-dasharray="4 2"
-            />
-          </svg>
-        </div>
-
-        <div>
-          <div style="margin-bottom: 10px">
-            <span class="label">DETALLE 4.3:</span>
-            <span class="sub">ANCLAJE ESTRUCTURAL RUEDA (VISTA LATERAL)</span>
-          </div>
-          <svg viewBox="0 0 500 350">
-            <rect x="50" y="50" width="400" height="30" class="hatch-mdf" />
-            <text x="250" y="70" class="label" text-anchor="middle">
               PISO GABINETE (MDF 18)
             </text>
 
-            <rect x="50" y="80" width="400" height="30" class="hatch-mdf" />
-            <text x="250" y="100" class="label" text-anchor="middle">
-              SUPLEMENTO (MDF 18)
+            <rect x="50" y="80" width="350" height="30" class="hatch-mdf" />
+            <text
+              x="225"
+              y="100"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              SUPLEMENTO BASE (MDF 18)
             </text>
 
-            <rect x="150" y="110" width="120" height="8" class="metal" />
+            <rect x="130" y="110" width="120" height="8" class="metal" />
 
             <path
-              d="M 170 50 L 190 50 L 190 53 L 183 53 L 183 110 L 177 110 L 177 53 L 170 53 Z"
+              d="M 150 50 L 170 50 L 170 53 L 163 53 L 163 110 L 157 110 L 157 53 L 150 53 Z"
               fill="#64748b"
             />
             <path
-              d="M 230 50 L 250 50 L 250 53 L 243 53 L 243 110 L 237 110 L 237 53 L 230 53 Z"
+              d="M 210 50 L 230 50 L 230 53 L 223 53 L 223 110 L 217 110 L 217 53 L 210 53 Z"
               fill="#64748b"
             />
             <text
-              x="180"
+              x="160"
               y="40"
-              class="sub"
+              class="label"
               text-anchor="middle"
               fill="#dc2626"
+              filter="url(#bg-text)"
             >
-              Tuerca "Araña" M6 o M8
+              TUERCA ARAÑA
             </text>
 
-            <rect x="175" y="118" width="10" height="15" fill="#333" />
+            <rect x="155" y="118" width="10" height="15" fill="#333" />
             <rect
-              x="177"
+              x="157"
               y="55"
               width="6"
               height="63"
@@ -433,9 +634,9 @@
               stroke="#333"
               stroke-width="1"
             />
-            <rect x="235" y="118" width="10" height="15" fill="#333" />
+            <rect x="215" y="118" width="10" height="15" fill="#333" />
             <rect
-              x="237"
+              x="217"
               y="55"
               width="6"
               height="63"
@@ -443,38 +644,41 @@
               stroke="#333"
               stroke-width="1"
             />
-            <path d="M 190 118 L 230 118 L 220 180 L 200 180 Z" class="metal" />
+
+            <path d="M 170 118 L 210 118 L 200 180 L 180 180 Z" class="metal" />
             <circle
-              cx="210"
+              cx="190"
               cy="220"
               r="40"
               fill="#334155"
               stroke="#0f172a"
               stroke-width="3"
             />
-            <circle cx="210" cy="220" r="25" fill="#94a3b8" />
-            <circle cx="210" cy="220" r="5" fill="#0f172a" />
 
-            <text x="300" y="150" class="sub">
-              1. Perforar pasante Ø8mm o Ø10mm.
+            <text x="260" y="150" class="sub" filter="url(#bg-text)">
+              1. Perforar pasante Ø8mm.
             </text>
-            <text x="300" y="170" class="sub">
-              2. Clavar tuerca T desde el interior.
+            <text x="260" y="170" class="sub" filter="url(#bg-text)">
+              2. Clavar tuerca T por dentro.
             </text>
-            <text x="300" y="190" class="sub">3. Atornillar desde abajo.</text>
-            <text x="300" y="220" class="sub" fill="#991b1b">
-              Evita que el tirón de la rueda
+            <text x="260" y="190" class="sub" filter="url(#bg-text)">
+              3. Atornillar placa desde abajo.
             </text>
-            <text x="300" y="240" class="sub" fill="#991b1b">
-              desgarre la fibra del MDF.
+            <text
+              x="260"
+              y="210"
+              class="sub"
+              fill="#991b1b"
+              filter="url(#bg-text)"
+            >
+              Esto evita desgarros en el MDF.
             </text>
           </svg>
         </div>
 
         <div>
-          <div style="margin-bottom: 10px">
-            <span class="label">DETALLE 4.4:</span>
-            <span class="sub">ENCASTRE FONDO DE CAJÓN (VISTA LATERAL)</span>
+          <div class="detail-title">
+            4.6 ENCASTRE FONDO ISLA B Y VARILLA (VISTA LATERAL)
           </div>
           <svg viewBox="0 0 500 350">
             <rect x="100" y="50" width="30" height="250" class="hatch-mdf" />
@@ -484,62 +688,67 @@
               class="label"
               transform="rotate(-90, 115, 175)"
               text-anchor="middle"
+              filter="url(#bg-text)"
             >
-              CONTRAFRENTE (MDF 12)
+              LATERAL CAJÓN (MDF 12)
             </text>
 
-            <rect x="115" y="240" width="15" height="6" fill="#f1f5f9" />
+            <rect x="115" y="230" width="15" height="7" fill="#fafafa" />
 
-            <rect x="115" y="240" width="250" height="6" class="solid-mdf" />
-            <text x="240" y="230" class="label" text-anchor="middle">
-              FONDO (MDF 5.5)
+            <rect x="115" y="230" width="250" height="7" class="solid-mdf" />
+            <text
+              x="240"
+              y="220"
+              class="label"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              FONDO CAJÓN (MDF 5.5)
             </text>
 
-            <rect x="230" y="246" width="30" height="15" class="solid-pine" />
-            <text x="245" y="280" class="sub" text-anchor="middle">
-              Varilla de Pino
-            </text>
-            <text x="245" y="295" class="sub" text-anchor="middle">
-              Pegada y Clavada
+            <rect x="230" y="237" width="30" height="15" class="solid-pine" />
+            <text
+              x="245"
+              y="270"
+              class="sub"
+              text-anchor="middle"
+              filter="url(#bg-text)"
+            >
+              VARILLA REFUERZO
             </text>
 
             <line
               x1="80"
-              y1="240"
+              y1="230"
               x2="80"
               y2="300"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
-            <line
-              x1="90"
-              y1="240"
-              x2="100"
-              y2="240"
-              stroke="#dc2626"
-              stroke-width="1"
-            />
-            <line
-              x1="90"
-              y1="300"
-              x2="100"
-              y2="300"
-              stroke="#dc2626"
-              stroke-width="1"
-            />
-            <text x="70" y="275" class="dim-text" text-anchor="end">
-              Margen: 15mm
+            <line x1="90" y1="230" x2="100" y2="230" class="dim-tick" />
+            <line x1="90" y1="300" x2="100" y2="300" class="dim-tick" />
+            <text
+              x="70"
+              y="265"
+              class="dim-text"
+              text-anchor="end"
+              filter="url(#bg-text)"
+            >
+              MARGEN: 5mm (Ajustado)
             </text>
 
-            <text x="140" y="100" class="sub">
-              *Al dejar 15mm debajo de la ranura,
+            <text x="140" y="100" class="sub" filter="url(#bg-text)">
+              *La ranura va separada 5mm del
             </text>
-            <text x="140" y="120" class="sub">
-              la varilla de pino queda oculta
+            <text x="140" y="120" class="sub" filter="url(#bg-text)">
+              borde inferior. Justo el espacio
             </text>
-            <text x="140" y="140" class="sub">
-              sin interferir con el cajón inferior.
+            <text x="140" y="140" class="sub" filter="url(#bg-text)">
+              para pegar la varilla de 5mm y que
+            </text>
+            <text x="140" y="160" class="sub" filter="url(#bg-text)">
+              quede a ras de la placa de 12mm.
             </text>
           </svg>
         </div>
