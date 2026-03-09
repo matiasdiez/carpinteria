@@ -3,160 +3,208 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Planos CNC - Optimizador de Cortes Completo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../shared.css">
+    <title>CNC Nesting - Mesa de Arte</title>
     <style>
       :root {
-        --bg: #f8fafc;
-        --surface: #ffffff;
+        --bg-body: #f8fafc;
+        --bg-surface: #ffffff;
+        --border: #e2e8f0;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
         --primary: #2563eb;
-        --text: #0f172a;
-        --border: #cbd5e1;
+        --radius-box: 1rem;
+        --radius-btn: 0.5rem;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
       body {
-        font-family: "Segoe UI", system-ui, sans-serif;
-        background: #f8fafc;
-        color: #0f172a;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg-body);
+        color: var(--text-main);
         margin: 0;
-        padding: 20px;
-        padding-top: calc(54px + 20px);
+        padding: 0;
       }
+
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .navbar-brand {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--text-main);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .navbar-menu {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .nav-item {
+        text-decoration: none;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-btn);
+        transition: all 0.2s;
+      }
+      .nav-item:hover {
+        background: #f1f5f9;
+        color: var(--text-main);
+      }
+      .nav-item.active {
+        background: #eff6ff;
+        color: var(--primary);
+        font-weight: 600;
+      }
+
       .container {
         max-width: 1200px;
-        margin: 0 auto;
-        background: var(--surface);
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+      .card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-box);
         padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
       }
-      h1,
-      h2,
-      h3 {
-        border-bottom: 2px solid var(--primary);
-        padding-bottom: 10px;
-        margin-top: 2rem;
+      .btn {
+        display: inline-flex;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-btn);
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: 0.2s;
       }
-      .controls {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
-      button {
+      .btn-primary {
         background: var(--primary);
         color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 14px;
       }
-      button:hover {
-        background: #1d4ed8;
-      }
-      .material-section {
-        margin-bottom: 40px;
-      }
-      .board-container {
-        margin-bottom: 30px;
+      .btn-outline {
+        background: transparent;
         border: 1px solid var(--border);
-        background: #f1f5f9;
-        padding: 10px;
+        color: var(--text-main);
+        margin-left: 0.5rem;
       }
-      .board-title {
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #334155;
+
+      .material-section {
+        margin-bottom: 3rem;
+      }
+      .material-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text-main);
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 0.5rem;
+      }
+
+      .board-container {
+        margin-bottom: 1.5rem;
+      }
+      .board-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
       }
       svg {
-        background: #e2e8f0;
+        border: 2px solid var(--border);
+        border-radius: 0.25rem;
+        background: #f8fafc;
         width: 100%;
         height: auto;
-        border: 2px solid #64748b;
       }
       .part {
-        fill: #bae6fd;
-        stroke: #0369a1;
+        fill: #dbeafe;
+        stroke: #3b82f6;
         stroke-width: 2;
       }
       .part-text {
-        fill: #0c4a6e;
-        font-size: 20px;
+        fill: #1e3a8a;
+        font-size: 24px;
         font-family: monospace;
         text-anchor: middle;
-        dominant-baseline: middle;
         font-weight: bold;
+      }
+      .part-sub {
+        fill: #1e3a8a;
+        font-size: 16px;
+        font-family: sans-serif;
+        text-anchor: middle;
       }
     </style>
   </head>
   <body>
-    <!-- ── NAVBAR ── -->
-    <div class="navbar-wrapper">
-      <nav class="navbar">
-        <a href="../index.html" class="navbar-brand">
-          <div class="navbar-brand-icon">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="1" y="1" width="12" height="12" stroke="#4A9ECD" stroke-width="1.5" fill="none"/>
-              <line x1="1" y1="7" x2="13" y2="7" stroke="#4A9ECD" stroke-width="1"/>
-              <line x1="7" y1="1" x2="7" y2="13" stroke="#4A9ECD" stroke-width="1"/>
-            </svg>
-          </div>
-          <div>
-            <div class="navbar-brand-text">Mesa de Artista</div>
-            <div class="navbar-brand-sub">Sistema Dos Islas · Rev. B</div>
-          </div>
-        </a>
-        <ul class="navbar-links">
-          <li><a href="index.html"><span class="nav-dot"></span>Planos Técnicos</a></li>
-          <li><a href="detalles-constructivos.html"><span class="nav-dot"></span>Detalles</a></li>
-          <li><a href="planos-cnc.html" class="active"><span class="nav-dot"></span>Planos CNC</a></li>
-          <li><a href="presupuesto.html"><span class="nav-dot"></span>Presupuesto</a></li>
-          <li><a href="plan-armado.html"><span class="nav-dot"></span>Plan de Armado</a></li>
-        </ul>
-        <button class="navbar-burger" id="burgerBtn" aria-label="Menú" onclick="toggleMenu()">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="2" y1="4" x2="16" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="2" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </nav>
-      <div class="navbar-mobile-menu" id="mobileMenu">
-        <a href="index.html">⬡ Planos Técnicos</a>
-        <a href="detalles-constructivos.html">⬡ Detalles Constructivos</a>
-        <a href="planos-cnc.html" class="active">⬡ Planos CNC</a>
-        <a href="presupuesto.html">⬡ Presupuesto</a>
-        <a href="plan-armado.html">⬡ Plan de Armado</a>
+    <nav class="navbar">
+      <a href="#" class="navbar-brand">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          style="border: none; background: transparent; margin: 0"
+        >
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+        EstudioArte
+      </a>
+      <div class="navbar-menu">
+        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
+        <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
+        <a href="planos-cnc.html" class="nav-item active">3. CNC</a>
+        <a href="detalles-rigurosos.html" class="nav-item">4. Detalles</a>
+        <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
-    </div>
-    <script>
-      function toggleMenu() {
-        document.getElementById('mobileMenu').classList.toggle('open');
-      }
-      document.addEventListener('click', function(e) {
-        const wrapper = document.querySelector('.navbar-wrapper');
-        if (!wrapper.contains(e.target)) {
-          document.getElementById('mobileMenu').classList.remove('open');
-        }
-      });
-    </script>
+    </nav>
 
     <div class="container">
-      <h1>Planos CNC y Optimizador de Cortes</h1>
-      <p>
-        Cálculo de aprovechamiento de placas (2750 x 1830 mm) para todos los
-        materiales. Espesor de sierra (Kerf): 3mm.
-      </p>
-
-      <div class="controls">
-        <button onclick="runPacking()">🔄 Calcular Cortes</button>
-        <button onclick="downloadDXF()">
-          📥 Descargar DXF (Todas las placas)
-        </button>
+      <div class="card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+          "
+        >
+          <div>
+            <h2 style="margin: 0; font-size: 1.25rem">
+              Nesting CNC MaxRects (Multi-material)
+            </h2>
+            <p style="margin: 0; color: var(--text-muted); font-size: 0.875rem">
+              Cálculo de aprovechamiento (Kerf 3mm, Placas 2750x1830mm)
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="runPacking()">
+              🔄 Recalcular Cortes
+            </button>
+            <button class="btn btn-outline" onclick="downloadDXF()">
+              📥 Descargar DXF Total
+            </button>
+          </div>
+        </div>
+        <div id="output"></div>
       </div>
-
-      <div id="output"></div>
     </div>
 
     <script>
@@ -164,33 +212,30 @@
       const BOARD_H = 1830;
       const KERF = 3;
 
-      // Base de datos completa separada por espesores
       const materialsData = {
         "MDF 25mm (Tablero)": [
           { id: "TAB-PRINCIPAL", w: 2596, h: 906, qty: 1 },
-          { id: "TAB-REFUERZO", w: 2596, h: 300, qty: 3 }, // Las 3 tiras sobrantes para dar espesor de 50mm
+          { id: "TAB-REFUERZO", w: 2596, h: 300, qty: 3 },
         ],
         "MDF 18mm (Estructuras y Frentes)": [
           { id: "A-TAPA/BASE", w: 1296, h: 906, qty: 2 },
           { id: "A-LATERAL", w: 888, h: 546, qty: 2 },
           { id: "A-TRASERA", w: 1260, h: 546, qty: 1 },
-          { id: "A-FRENTE-CAJON", w: 1296, h: 80, qty: 7 },
+          { id: "A-FRENTE", w: 1296, h: 80, qty: 7 },
           { id: "B-TAPA/BASE", w: 600, h: 906, qty: 2 },
           { id: "B-LATERAL", w: 888, h: 546, qty: 2 },
           { id: "B-DIVISOR", w: 888, h: 546, qty: 1 },
           { id: "B-ESTANTE", w: 290, h: 564, qty: 2 },
-          { id: "B-FRENTE-GRANDE", w: 596, h: 140, qty: 2 },
-          { id: "B-FRENTE-CHICO", w: 596, h: 60, qty: 3 },
+          { id: "B-FRENTE-GDE", w: 596, h: 140, qty: 2 },
+          { id: "B-FRENTE-CH", w: 596, h: 60, qty: 3 },
         ],
         "MDF 12mm (Cajas de Cajones)": [
-          // Marcos Isla A (Para ocultar correderas y dar rigidez, altura 50mm aprox)
-          { id: "CAJ-A-LATERAL", w: 860, h: 50, qty: 14 },
-          { id: "CAJ-A-FRENTE/ATRAS", w: 1210, h: 50, qty: 14 },
-          // Cajones Isla B (Laterales y contrafrentes)
-          { id: "CAJ-B-LAT-GRANDE", w: 500, h: 120, qty: 4 },
-          { id: "CAJ-B-CONTRA-GRANDE", w: 520, h: 120, qty: 4 },
-          { id: "CAJ-B-LAT-CHICO", w: 500, h: 45, qty: 6 },
-          { id: "CAJ-B-CONTRA-CHICO", w: 520, h: 45, qty: 6 },
+          { id: "CAJ-A-LAT", w: 860, h: 50, qty: 14 },
+          { id: "CAJ-A-FRENTE", w: 1210, h: 50, qty: 14 },
+          { id: "CAJ-B-LAT-GDE", w: 500, h: 120, qty: 4 },
+          { id: "CAJ-B-CONT-GDE", w: 520, h: 120, qty: 4 },
+          { id: "CAJ-B-LAT-CH", w: 500, h: 45, qty: 6 },
+          { id: "CAJ-B-CONT-CH", w: 520, h: 45, qty: 6 },
         ],
         "MDF 5.5mm (Fondos)": [
           { id: "FONDO-A0", w: 1210, h: 860, qty: 7 },
@@ -198,7 +243,7 @@
         ],
       };
 
-      let packedResults = {}; // Almacenará los bins por material
+      let packedResults = {};
 
       class MaxRectsBin {
         constructor(w, h) {
@@ -254,7 +299,6 @@
           }
           if (!bestNode) return null;
           this.usedRects.push(bestNode);
-
           let i = 0;
           while (i < this.freeRects.length) {
             if (this.splitNode(this.freeRects[i], bestNode))
@@ -321,17 +365,13 @@
 
       function runPacking() {
         packedResults = {};
-
-        // Iterar sobre cada categoría de material
         for (const [materialName, parts] of Object.entries(materialsData)) {
           let partsToPack = [];
           parts.forEach((p) => {
             for (let i = 0; i < p.qty; i++)
-              partsToPack.push({ id: `${p.id}`, w: p.w + KERF, h: p.h + KERF });
+              partsToPack.push({ id: p.id, w: p.w + KERF, h: p.h + KERF });
           });
-
           partsToPack.sort((a, b) => b.w * b.h - a.w * a.h);
-
           let bins = [];
           partsToPack.forEach((part) => {
             let placed = false;
@@ -355,10 +395,8 @@
       function renderHTML() {
         const out = document.getElementById("output");
         out.innerHTML = "";
-
         for (const [materialName, bins] of Object.entries(packedResults)) {
-          let matHtml = `<div class="material-section"><h2>${materialName} (Total placas: ${bins.length})</h2>`;
-
+          let matHtml = `<div class="material-section"><div class="material-title">${materialName} (Total placas: ${bins.length})</div>`;
           bins.forEach((bin, index) => {
             let svg = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg">`;
             bin.usedRects.forEach((rect) => {
@@ -366,10 +404,10 @@
                 h = rect.h - KERF;
               svg += `<rect x="${rect.x}" y="${rect.y}" width="${w}" height="${h}" class="part" />
                             <text x="${rect.x + w / 2}" y="${rect.y + h / 2}" class="part-text">${rect.data}</text>
-                            <text x="${rect.x + w / 2}" y="${rect.y + h / 2 + 25}" class="part-text" style="font-size:14px;">${w}x${h}</text>`;
+                            <text x="${rect.x + w / 2}" y="${rect.y + h / 2 + 30}" class="part-sub">${w}x${h}</text>`;
             });
             svg += `</svg>`;
-            matHtml += `<div class="board-container"><div class="board-title">Placa ${index + 1}</div>${svg}</div>`;
+            matHtml += `<div class="board-container"><div class="board-label">Placa ${index + 1}</div>${svg}</div>`;
           });
           matHtml += `</div>`;
           out.innerHTML += matHtml;
@@ -380,14 +418,11 @@
         let dxf = "0\nSECTION\n2\nENTITIES\n";
         const X_OFFSET = BOARD_W + 500;
         const Y_OFFSET_MAT = BOARD_H + 1000;
-
         let matIndex = 0;
         for (const [materialName, bins] of Object.entries(packedResults)) {
           let baseMatY = matIndex * Y_OFFSET_MAT;
-
           bins.forEach((bin, binIndex) => {
             let bx = binIndex * X_OFFSET;
-            // Contorno de placa (Capa según material)
             dxf += createDXFRect(
               bx,
               baseMatY,
@@ -395,7 +430,6 @@
               BOARD_H,
               `PLACA_${materialName.replace(/[^a-zA-Z0-9]/g, "_")}`,
             );
-
             bin.usedRects.forEach((rect) => {
               dxf += createDXFRect(
                 bx + rect.x,
@@ -409,10 +443,12 @@
           matIndex++;
         }
         dxf += "0\nENDSEC\n0\nEOF\n";
-        triggerDownload(
-          "data:text/plain;charset=utf-8," + encodeURIComponent(dxf),
-          "planos-cnc-completos.dxf",
-        );
+        let a = document.createElement("a");
+        a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(dxf);
+        a.download = "planos-cnc-completos.dxf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       }
 
       function createDXFRect(x, y, w, h, layer) {
@@ -429,15 +465,6 @@
           lines += `0\nLINE\n8\n${layer}\n10\n${p1[0]}\n20\n${p1[1]}\n30\n0.0\n11\n${p2[0]}\n21\n${p2[1]}\n31\n0.0\n`;
         }
         return lines;
-      }
-
-      function triggerDownload(uri, filename) {
-        let a = document.createElement("a");
-        a.href = uri;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
       }
 
       window.onload = runPacking;
