@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presupuesto - Mesa de Estudio de Arte</title>
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --border-color: #e2e8f0;
+        --text-color: #0f172a;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --success: #10b981;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+      h1 {
+        text-align: center;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 1rem;
+      }
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        justify-content: flex-end;
+      }
+      button {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background-color: var(--accent-hover);
+      }
+      .btn-success {
+        background-color: var(--success);
+      }
+      .btn-success:hover {
+        background-color: #059669;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+      }
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+      th {
+        background-color: #f1f5f9;
+      }
+      input[type="number"] {
+        width: 100px;
+        padding: 0.25rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .total-row {
+        font-weight: bold;
+        font-size: 1.25rem;
+        background-color: #f1f5f9;
+      }
+      #fileInput {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Presupuesto de Materiales</h1>
+
+      <div class="controls">
+        <button onclick="document.getElementById('fileInput').click()">
+          📂 Importar JSON
+        </button>
+        <input
+          type="file"
+          id="fileInput"
+          accept=".json"
+          onchange="importJSON(event)"
+        />
+        <button class="btn-success" onclick="exportJSON()">
+          💾 Exportar JSON
+        </button>
+        <button onclick="resetData()">🔄 Restaurar Estimados</button>
+      </div>
+
+      <table id="budgetTable">
+        <thead>
+          <tr>
+            <th>Categoría</th>
+            <th>Descripción del Material</th>
+            <th>Cant.</th>
+            <th>Precio Unitario ($)</th>
+            <th class="text-right">Subtotal ($)</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="4" class="text-right">TOTAL ESTIMADO:</td>
+            <td class="text-right" id="grandTotal">$0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <script>
+      // Datos base estimados
+      const defaultData = [
+        {
+          id: "mdf25",
+          cat: "Placas",
+          desc: "MDF 25mm (Tablero) - Plancha 2.75 x 1.83m",
+          qty: 1,
+          price: 65000,
+        },
+        {
+          id: "mdf18",
+          cat: "Placas",
+          desc: "MDF 18mm (Estructura, frentes) - Plancha",
+          qty: 3,
+          price: 48000,
+        },
+        {
+          id: "mdf12",
+          cat: "Placas",
+          desc: "MDF 12mm (Laterales cajones) - Plancha",
+          qty: 2,
+          price: 35000,
+        },
+        {
+          id: "mdf5",
+          cat: "Placas",
+          desc: "MDF 5.5mm (Fondos cajones) - Plancha",
+          qty: 2,
+          price: 18000,
+        },
+        {
+          id: "guia_pesada",
+          cat: "Herrajes",
+          desc: "Corredera Telescópica Pesada 800mm (Par)",
+          qty: 7,
+          price: 22000,
+        },
+        {
+          id: "guia_std",
+          cat: "Herrajes",
+          desc: "Corredera Telescópica 500mm (Par)",
+          qty: 5,
+          price: 6500,
+        },
+        {
+          id: "ruedas",
+          cat: "Herrajes",
+          desc: "Rueda Industrial 75mm con freno",
+          qty: 8,
+          price: 4500,
+        },
+        {
+          id: "perfil_j",
+          cat: "Herrajes",
+          desc: "Perfil Aluminio Manija (Tira 3m)",
+          qty: 3,
+          price: 14000,
+        },
+        {
+          id: "liston",
+          cat: "Madera",
+          desc: 'Listón Pino Finger 1.5 x 3.5" (Metro)',
+          qty: 6,
+          price: 3000,
+        },
+        {
+          id: "varilla",
+          cat: "Madera",
+          desc: "Varillas Pino 5mm (Refuerzos fondos) - (Metro)",
+          qty: 20,
+          price: 800,
+        },
+        {
+          id: "insumos",
+          cat: "Insumos",
+          desc: "Tornillos, Cola, Laca, Tapacantos, Vinilo",
+          qty: 1,
+          price: 75000,
+        },
+      ];
+
+      let budgetData = [];
+
+      // Inicializar la tabla
+      function init() {
+        const savedData = localStorage.getItem("mesaPresupuesto");
+        if (savedData) {
+          budgetData = JSON.parse(savedData);
+        } else {
+          budgetData = JSON.parse(JSON.stringify(defaultData));
+        }
+        renderTable();
+      }
+
+      // Renderizar filas en el HTML
+      function renderTable() {
+        const tbody = document.getElementById("tableBody");
+        tbody.innerHTML = "";
+        let grandTotal = 0;
+
+        budgetData.forEach((item, index) => {
+          const subtotal = item.qty * item.price;
+          grandTotal += subtotal;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                <td>${item.cat}</td>
+                <td>${item.desc}</td>
+                <td>
+                    <input type="number" min="1" step="0.1" value="${item.qty}" 
+                           onchange="updateValue(${index}, 'qty', this.value)">
+                </td>
+                <td>
+                    <input type="number" min="0" step="100" value="${item.price}" 
+                           onchange="updateValue(${index}, 'price', this.value)">
+                </td>
+                <td class="text-right"><strong>$${subtotal.toLocaleString("es-AR")}</strong></td>
+            `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById("grandTotal").innerText =
+          "$" + grandTotal.toLocaleString("es-AR");
+        localStorage.setItem("mesaPresupuesto", JSON.stringify(budgetData));
+      }
+
+      // Actualizar un valor y recalcular
+      function updateValue(index, field, value) {
+        budgetData[index][field] = parseFloat(value) || 0;
+        renderTable();
+      }
+
+      // Exportar a JSON
+      function exportJSON() {
+        const dataStr = JSON.stringify(budgetData, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "presupuesto-mesa-arte.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // Importar desde JSON
+      function importJSON(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              budgetData = JSON.parse(e.target.result);
+              renderTable();
+              alert("Presupuesto importado con éxito.");
+            } catch (error) {
+              alert("Error al leer el archivo JSON.");
+            }
+          };
+          reader.readAsText(file);
+        }
+      }
+
+      // Restaurar datos iniciales
+      function resetData() {
+        if (
+          confirm(
+            "¿Estás seguro de restaurar los precios estimados originales? Se perderán tus cambios no guardados en un JSON.",
+          )
+        ) {
+          budgetData = JSON.parse(JSON.stringify(defaultData));
+          renderTable();
+        }
+      }
+
+      // Arrancar la aplicación
+      window.onload = init;
+    </script>
+  </body>
+</html>
