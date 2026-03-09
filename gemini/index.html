@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planos Técnicos - Mesa de Estudio de Arte</title>
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --line-color: #1e293b;
+        --dim-color: #dc2626;
+        --text-color: #0f172a;
+        --accent: #3b82f6;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+      }
+      h2 {
+        color: var(--line-color);
+        margin-top: 2rem;
+      }
+      .blueprint-card {
+        background: var(--card-bg);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+      }
+      svg {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+        background-color: #fafafa;
+        border: 1px dashed #cbd5e1;
+      }
+      /* SVG Styles */
+      .outline {
+        stroke: var(--line-color);
+        stroke-width: 3;
+        fill: none;
+      }
+      .fill-solid {
+        stroke: var(--line-color);
+        stroke-width: 2;
+        fill: #e2e8f0;
+      }
+      .fill-light {
+        stroke: var(--line-color);
+        stroke-width: 1.5;
+        fill: #f1f5f9;
+      }
+      .dashed {
+        stroke: var(--line-color);
+        stroke-width: 2;
+        stroke-dasharray: 8, 8;
+        fill: none;
+      }
+      .dim-line {
+        stroke: var(--dim-color);
+        stroke-width: 1;
+        fill: none;
+      }
+      .dim-text {
+        fill: var(--dim-color);
+        font-size: 36px;
+        font-family: monospace;
+        text-anchor: middle;
+      }
+      .label-text {
+        fill: var(--text-color);
+        font-size: 42px;
+        font-weight: bold;
+        font-family: sans-serif;
+      }
+      .small-text {
+        fill: var(--text-color);
+        font-size: 24px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Planos Técnicos: Mesa de Trabajo para Artistas</h1>
+
+      <div class="blueprint-card">
+        <h2>1. Planta General (Vista Superior)</h2>
+        <svg viewBox="-200 -200 3200 1400" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="-100" x2="2596" y2="-100" class="dim-line" />
+          <text x="1298" y="-120" class="dim-text">Largo Total: 2596 mm</text>
+          <line x1="-100" y1="0" x2="-100" y2="906" class="dim-line" />
+          <text
+            x="-120"
+            y="453"
+            transform="rotate(-90, -120, 453)"
+            class="dim-text"
+          >
+            Profundidad: 906 mm
+          </text>
+
+          <rect
+            x="0"
+            y="0"
+            width="2596"
+            height="906"
+            class="outline"
+            fill="#f8fafc"
+            fill-opacity="0.8"
+          />
+          <text x="1298" y="453" class="label-text" text-anchor="middle">
+            TABLERO SUPERIOR (MDF 25mm)
+          </text>
+
+          <rect x="0" y="0" width="1296" height="906" class="dashed" />
+          <text x="648" y="550" class="small-text" text-anchor="middle">
+            Isla A (Debajo)
+          </text>
+          <line x1="0" y1="950" x2="1296" y2="950" class="dim-line" />
+          <text x="648" y="990" class="dim-text">1296 mm</text>
+
+          <line x1="1296" y1="950" x2="1996" y2="950" class="dim-line" />
+          <text x="1646" y="990" class="dim-text">700 mm</text>
+
+          <rect x="1996" y="0" width="600" height="906" class="dashed" />
+          <text x="2296" y="550" class="small-text" text-anchor="middle">
+            Isla B (Debajo)
+          </text>
+          <line x1="1996" y1="950" x2="2596" y2="950" class="dim-line" />
+          <text x="2296" y="990" class="dim-text">600 mm</text>
+        </svg>
+      </div>
+
+      <div class="blueprint-card">
+        <h2>2. Vista de Frente General</h2>
+        <svg viewBox="-200 -200 3200 1200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="2596" height="25" class="fill-solid" />
+          <rect x="0" y="25" width="2596" height="25" class="fill-light" />
+          <rect
+            x="300"
+            y="50"
+            width="89"
+            height="13"
+            class="fill-solid"
+            fill="#a16207"
+          />
+          <rect
+            x="2207"
+            y="50"
+            width="89"
+            height="13"
+            class="fill-solid"
+            fill="#a16207"
+          />
+
+          <text x="-20" y="35" class="dim-text" text-anchor="end">
+            50 mm (Tablero)
+          </text>
+          <text x="-20" y="70" class="dim-text" text-anchor="end">
+            25 mm (Luz)
+          </text>
+
+          <rect x="0" y="75" width="1296" height="582" class="fill-solid" />
+          <rect x="0" y="657" width="1296" height="18" class="fill-light" />
+          <line x1="0" y1="158" x2="1296" y2="158" class="outline" />
+          <line x1="0" y1="241" x2="1296" y2="241" class="outline" />
+          <line x1="0" y1="324" x2="1296" y2="324" class="outline" />
+          <line x1="0" y1="407" x2="1296" y2="407" class="outline" />
+          <line x1="0" y1="490" x2="1296" y2="490" class="outline" />
+          <line x1="0" y1="573" x2="1296" y2="573" class="outline" />
+          <text x="648" y="360" class="label-text" text-anchor="middle">
+            ISLA A (Cajonera A0)
+          </text>
+
+          <rect
+            x="100"
+            y="675"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+          <rect
+            x="1156"
+            y="675"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+
+          <rect x="1996" y="75" width="600" height="582" class="fill-solid" />
+          <rect x="1996" y="657" width="600" height="18" class="fill-light" />
+          <text x="2296" y="360" class="label-text" text-anchor="middle">
+            ISLA B
+          </text>
+
+          <rect
+            x="2046"
+            y="675"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+          <rect
+            x="2506"
+            y="675"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+
+          <line x1="2650" y1="0" x2="2650" y2="750" class="dim-line" />
+          <text x="2680" y="375" class="dim-text" text-anchor="start">
+            Total: 750 mm
+          </text>
+        </svg>
+      </div>
+
+      <div class="blueprint-card">
+        <h2>3. Isla B - Vista Lateral Interna (Corte Esquemático)</h2>
+        <svg viewBox="-200 -100 1400 900" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0" width="906" height="582" class="outline" />
+
+          <rect x="580" y="18" width="18" height="546" class="fill-solid" />
+
+          <line x1="0" y1="620" x2="580" y2="620" class="dim-line" />
+          <text x="290" y="660" class="dim-text">Frente: ~580 mm</text>
+          <line x1="598" y1="620" x2="906" y2="620" class="dim-line" />
+          <text x="752" y="660" class="dim-text">Estantes: ~308 mm</text>
+
+          <text x="290" y="-30" class="small-text" text-anchor="middle">
+            Lado Frente (Arte)
+          </text>
+          <rect x="18" y="18" width="562" height="120" class="fill-light" />
+          <text x="290" y="85" class="small-text" text-anchor="middle">
+            Estante Abierto
+          </text>
+          <rect x="18" y="145" width="550" height="130" class="dashed" />
+          <rect x="18" y="282" width="550" height="130" class="dashed" />
+          <rect x="18" y="419" width="550" height="45" class="dashed" />
+          <rect x="18" y="471" width="550" height="45" class="dashed" />
+          <rect x="18" y="523" width="550" height="45" class="dashed" />
+
+          <text x="752" y="-30" class="small-text" text-anchor="middle">
+            Lado Exterior (Estantes)
+          </text>
+          <rect x="598" y="190" width="290" height="18" class="fill-solid" />
+          <rect x="598" y="380" width="290" height="18" class="fill-solid" />
+          <text x="752" y="110" class="small-text" text-anchor="middle">
+            Espacio Útil
+          </text>
+          <text x="752" y="300" class="small-text" text-anchor="middle">
+            Espacio Útil
+          </text>
+          <text x="752" y="490" class="small-text" text-anchor="middle">
+            Espacio Útil
+          </text>
+
+          <rect x="0" y="582" width="906" height="18" class="fill-light" />
+          <rect
+            x="100"
+            y="600"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+          <rect
+            x="766"
+            y="600"
+            width="40"
+            height="75"
+            class="outline"
+            fill="#475569"
+          />
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>
