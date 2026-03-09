@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plan de Armado - Mesa de Arte</title>
+    <title>Plan de Armado Completo - Mesa de Arte</title>
     <style>
       :root {
         --bg: #f8fafc;
@@ -31,9 +31,6 @@
         border-bottom: 4px solid var(--ink);
         padding-bottom: 1rem;
         margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
       }
       .header h1 {
         margin: 0;
@@ -47,28 +44,6 @@
         font-size: 1.2rem;
         font-weight: bold;
         color: var(--gray);
-      }
-
-      .tools-section {
-        display: flex;
-        gap: 2rem;
-        margin-bottom: 3rem;
-        padding: 1rem;
-        background: #f1f5f9;
-        border-radius: 8px;
-        justify-content: center;
-      }
-      .tool {
-        text-align: center;
-        font-weight: bold;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-      }
-      .tool svg {
-        width: 50px;
-        height: 50px;
-        display: block;
-        margin: 0 auto 0.5rem auto;
       }
 
       .step {
@@ -89,6 +64,7 @@
         justify-content: center;
         font-size: 1.8rem;
         font-weight: bold;
+        z-index: 10;
       }
       .step-content {
         border: 2px solid var(--ink);
@@ -98,7 +74,7 @@
       }
       .step-title {
         margin-top: 0;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         text-transform: uppercase;
         border-bottom: 2px solid var(--gray);
         padding-bottom: 0.5rem;
@@ -115,12 +91,12 @@
         font-size: 0.9rem;
       }
 
-      /* SVG Styles */
       .svg-canvas {
         width: 100%;
         height: auto;
         background: #ffffff;
         margin-top: 1.5rem;
+        border: 1px solid #e2e8f0;
       }
       .part {
         fill: #ffffff;
@@ -140,9 +116,6 @@
         stroke-dasharray: 6 6;
         fill: none;
       }
-      .action-arrow {
-        fill: var(--action);
-      }
       .hardware {
         fill: var(--gray);
         stroke: var(--ink);
@@ -154,88 +127,28 @@
         font-weight: bold;
         font-size: 14px;
       }
-      .text-code {
-        fill: var(--ink);
-        font-family: monospace;
-        font-weight: bold;
-        font-size: 16px;
-      }
     </style>
   </head>
   <body>
     <div class="manual-container">
       <div class="header">
-        <div>
-          <h1>MESA DE ARTE</h1>
-          <p>MANUAL DE ENSAMBLAJE</p>
-        </div>
-        <div>
-          <p>REV. 1.0</p>
-        </div>
-      </div>
-
-      <div class="tools-section">
-        <div class="tool">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
-            />
-            <polyline points="14 2 14 8 20 8" />
-          </svg>
-          Cola Vinílica
-        </div>
-        <div class="tool">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <line x1="14.5" y1="10" x2="21" y2="3" />
-            <path
-              d="M14.5 10a2.12 2.12 0 0 1-3 0 2.12 2.12 0 0 1 0-3l7-7a2.12 2.12 0 0 1 3 0 2.12 2.12 0 0 1 0 3l-7 7z"
-            />
-            <path
-              d="M10 14.5l-7 7a2.12 2.12 0 0 0 0 3 2.12 2.12 0 0 0 3 0l7-7"
-            />
-          </svg>
-          Atornillador
-        </div>
-        <div class="tool">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="16" />
-            <line x1="8" y1="12" x2="16" y2="12" />
-          </svg>
-          Tornillos / Tuercas T
-        </div>
+        <h1>MESA DE ARTE - INSTRUCTIVO DE ARMADO</h1>
+        <p>Referencia de piezas según Inventario de Cortes (Artefacto 2)</p>
       </div>
 
       <div class="step">
         <div class="step-number">1</div>
         <div class="step-content">
-          <h2 class="step-title">Preparación de las Bases y Ruedas</h2>
+          <h2 class="step-title">Armado de Carcasas y Ruedas</h2>
           <p>
-            Identificar las bases <span class="part-code">A-BASE</span> y
-            <span class="part-code">B-BASE</span>. Perforar y colocar las
-            tuercas araña desde el lado INTERIOR antes de armar el mueble. Fijar
-            el suplemento y las ruedas por debajo.
+            Clavar las tuercas araña desde el interior de las bases. Atornillar
+            las ruedas por debajo (traspasando el suplemento). Ensamblar los
+            laterales, fondo/divisor y tapa de MDF 18mm para ambas islas.
           </p>
-
-          <svg class="svg-canvas" viewBox="0 0 800 400">
+          <svg class="svg-canvas" viewBox="0 0 800 350">
             <defs>
               <marker
-                id="arrow"
+                id="arr"
                 viewBox="0 0 10 10"
                 refX="5"
                 refY="5"
@@ -243,68 +156,37 @@
                 markerHeight="5"
                 orient="auto-start-reverse"
               >
-                <path d="M 0 0 L 10 5 L 0 10 z" class="action-arrow" />
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
               </marker>
             </defs>
-
-            <path d="M 230 40 L 250 40 L 250 45 L 230 45 Z" class="hardware" />
-            <path d="M 530 40 L 550 40 L 550 45 L 530 45 Z" class="hardware" />
+            <rect x="250" y="200" width="300" height="20" class="part" />
+            <rect x="250" y="220" width="300" height="20" class="part-shade" />
+            <rect x="280" y="270" width="40" height="40" class="hardware" />
+            <rect x="480" y="270" width="40" height="40" class="hardware" />
             <line
-              x1="240"
-              y1="50"
-              x2="240"
-              y2="80"
+              x1="300"
+              y1="260"
+              x2="300"
+              y2="240"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
             <line
-              x1="540"
-              y1="50"
-              x2="540"
-              y2="80"
+              x1="500"
+              y1="260"
+              x2="500"
+              y2="240"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
-            <text x="390" y="45" class="text-label" text-anchor="middle">
-              TUERCAS ARAÑA (DESDE ADENTRO)
-            </text>
 
-            <rect x="150" y="90" width="480" height="30" class="part" />
-            <text x="390" y="110" class="text-code" text-anchor="middle">
-              A-BASE / B-BASE
-            </text>
-
-            <rect x="150" y="150" width="480" height="30" class="part-shade" />
-            <text x="390" y="170" class="text-code" text-anchor="middle">
-              SUPLEMENTO 18mm
-            </text>
-            <line x1="240" y1="130" x2="240" y2="145" class="action-line" />
-            <line x1="540" y1="130" x2="540" y2="145" class="action-line" />
-
-            <rect x="210" y="250" width="60" height="10" class="hardware" />
-            <circle cx="240" cy="300" r="30" class="part" />
-
-            <rect x="510" y="250" width="60" height="10" class="hardware" />
-            <circle cx="540" cy="300" r="30" class="part" />
-
-            <line
-              x1="240"
-              y1="240"
-              x2="240"
-              y2="190"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="540"
-              y1="240"
-              x2="540"
-              y2="190"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <text x="390" y="300" class="text-label" text-anchor="middle">
-              ATORNILLAR DESDE ABAJO
+            <rect x="250" y="80" width="20" height="100" class="part" />
+            <rect x="530" y="80" width="20" height="100" class="part" />
+            <rect x="250" y="40" width="300" height="20" class="part" />
+            <line x1="260" y1="190" x2="260" y2="180" class="action-line" />
+            <line x1="540" y1="190" x2="540" y2="180" class="action-line" />
+            <text x="400" y="140" class="text-label" text-anchor="middle">
+              CARCASA ISLA A / B
             </text>
           </svg>
         </div>
@@ -313,73 +195,88 @@
       <div class="step">
         <div class="step-number">2</div>
         <div class="step-content">
-          <h2 class="step-title">Estructura de las Islas (Carcasas)</h2>
+          <h2 class="step-title">Ensamblaje Cajón A0 (Isla A)</h2>
           <p>
-            Ensamblar los laterales <span class="part-code">A-LATERAL</span> y
-            la trasera <span class="part-code">A-TRASERA</span> sobre la base.
-            Finalmente, colocar el techo <span class="part-code">A-TAPA</span>.
-            Repetir proceso análogo para Isla B.
+            Unir el marco perimetral
+            <span class="part-code">CAJ-A-LATERAL / FRENTE</span> (MDF 12mm).
+            Atornillar el fondo <span class="part-code">FONDO-A0</span> por
+            debajo. Pegar varillas de pino al fondo. Fijar la
+            <strong>Corredera Pesada de 800mm</strong> al lateral del marco
+            12mm, y finalmente aplicar el frente de 18mm.
           </p>
-
-          <svg class="svg-canvas" viewBox="0 0 800 450">
-            <rect x="200" y="40" width="400" height="20" class="part" />
-            <text x="400" y="55" class="text-code" text-anchor="middle">
-              A-TAPA
+          <svg class="svg-canvas" viewBox="0 0 800 350">
+            <rect x="650" y="100" width="20" height="150" class="part" />
+            <text x="660" y="80" class="text-label" text-anchor="middle">
+              A-FRENTE (18mm)
             </text>
             <line
-              x1="220"
-              y1="70"
-              x2="220"
-              y2="100"
+              x1="630"
+              y1="175"
+              x2="590"
+              y2="175"
               class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="580"
-              y1="70"
-              x2="580"
-              y2="100"
-              class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
 
-            <rect x="200" y="110" width="20" height="180" class="part-shade" />
-            <text x="150" y="200" class="text-code" text-anchor="end">
-              A-LATERAL
+            <rect x="200" y="150" width="380" height="50" class="part-shade" />
+            <text x="390" y="140" class="text-label" text-anchor="middle">
+              MARCO 12mm
             </text>
 
-            <rect x="230" y="110" width="340" height="180" class="part" />
-            <text x="400" y="200" class="text-code" text-anchor="middle">
-              A-TRASERA
+            <rect x="200" y="165" width="380" height="20" class="hardware" />
+            <line
+              x1="390"
+              y1="120"
+              x2="390"
+              y2="165"
+              class="action-line"
+              marker-end="url(#arr)"
+            />
+            <text
+              x="390"
+              y="110"
+              class="text-label"
+              text-anchor="middle"
+              fill="#dc2626"
+            >
+              GUÍA PESADA (AL LATERAL)
             </text>
 
-            <rect x="580" y="110" width="20" height="180" class="part-shade" />
-            <text x="650" y="200" class="text-code" text-anchor="start">
-              A-LATERAL
-            </text>
-
-            <line
-              x1="220"
-              y1="300"
-              x2="220"
-              y2="330"
-              class="action-line"
-              marker-end="url(#arrow)"
+            <rect x="200" y="220" width="380" height="10" class="part" />
+            <rect
+              x="280"
+              y="250"
+              width="20"
+              height="15"
+              fill="#fdba74"
+              stroke="#000"
+            />
+            <rect
+              x="480"
+              y="250"
+              width="20"
+              height="15"
+              fill="#fdba74"
+              stroke="#000"
             />
             <line
-              x1="580"
-              y1="300"
-              x2="580"
-              y2="330"
+              x1="390"
+              y1="210"
+              x2="390"
+              y2="200"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
-
-            <rect x="200" y="340" width="400" height="20" class="part" />
-            <rect x="230" y="360" width="40" height="40" class="hardware" />
-            <rect x="530" y="360" width="40" height="40" class="hardware" />
-            <text x="400" y="380" class="text-label" text-anchor="middle">
-              CONJUNTO BASE (PASO 1)
+            <line
+              x1="290"
+              y1="245"
+              x2="290"
+              y2="230"
+              class="action-line"
+              marker-end="url(#arr)"
+            />
+            <text x="390" y="280" class="text-label" text-anchor="middle">
+              FONDO 5.5mm + PINO (POR DEBAJO)
             </text>
           </svg>
         </div>
@@ -388,93 +285,91 @@
       <div class="step">
         <div class="step-number">3</div>
         <div class="step-content">
-          <h2 class="step-title">Armado Cajones A0 (Isla A)</h2>
+          <h2 class="step-title">Ensamblaje Cajón Herramientas (Isla B)</h2>
           <p>
-            Armar el marco perimetral con las piezas de MDF 12mm. Pegar y
-            atornillar por debajo el fondo
-            <span class="part-code">FONDO-A0</span>. Luego, pegar las varillas
-            de pino para evitar el pandeo del papel. Finalmente, fijar el frente
-            <span class="part-code">A-FRENTE-CAJON</span>.
+            Armar la caja <span class="part-code">CAJ-B-LAT / CONT</span> (MDF
+            12mm). Deslizar el <span class="part-code">FONDO-B</span> por la
+            ranura. Pegar varilla de pino en el espacio inferior de 5mm.
+            Atornillar la <strong>Corredera Estándar de 500mm</strong> al
+            lateral. Colocar perfil <span class="part-code">FOX MF18</span> en
+            el frente 18mm y unir a la caja.
           </p>
-
-          <svg class="svg-canvas" viewBox="0 0 800 450">
-            <rect x="350" y="30" width="100" height="20" class="part" />
-            <text x="460" y="45" class="text-code" text-anchor="start">
-              A-FRENTE-CAJON
+          <svg class="svg-canvas" viewBox="0 0 800 350">
+            <rect x="620" y="100" width="20" height="150" class="part" />
+            <path
+              d="M 640 100 L 650 100 L 650 120 L 640 120 Z"
+              fill="#94a3b8"
+              stroke="#000"
+            />
+            <text x="630" y="80" class="text-label" text-anchor="middle">
+              FRENTE 18mm + PERFIL FOX
             </text>
             <line
-              x1="400"
-              y1="60"
-              x2="400"
-              y2="90"
+              x1="600"
+              y1="175"
+              x2="570"
+              y2="175"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
 
-            <rect x="200" y="100" width="400" height="30" class="part-shade" />
-            <text x="400" y="120" class="text-code" text-anchor="middle">
-              MARCO PERIMETRAL MDF 12
+            <rect x="250" y="120" width="300" height="110" class="part-shade" />
+            <rect
+              x="250"
+              y="215"
+              width="300"
+              height="5"
+              fill="#fff"
+              stroke="#fff"
+            />
+            <text x="400" y="110" class="text-label" text-anchor="middle">
+              CAJA 12mm (CON RANURA INFERIOR)
             </text>
 
+            <rect x="250" y="160" width="300" height="15" class="hardware" />
+            <text x="150" y="165" class="text-label" fill="#dc2626">
+              GUÍA STD.
+            </text>
             <line
-              x1="250"
-              y1="140"
+              x1="230"
+              y1="165"
               x2="250"
-              y2="170"
+              y2="165"
               class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="550"
-              y1="140"
-              x2="550"
-              y2="170"
-              class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
 
-            <rect x="180" y="180" width="440" height="10" class="part" />
-            <text x="400" y="210" class="text-code" text-anchor="middle">
-              FONDO-A0 (MDF 5.5)
+            <rect x="50" y="215" width="180" height="5" class="part" />
+            <line
+              x1="240"
+              y1="217"
+              x2="260"
+              y2="217"
+              class="action-line"
+              marker-end="url(#arr)"
+            />
+            <text x="140" y="205" class="text-label" text-anchor="middle">
+              FONDO 5.5mm
             </text>
 
-            <line
-              x1="300"
-              y1="230"
-              x2="300"
-              y2="260"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="500"
-              y1="230"
-              x2="500"
-              y2="260"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-
             <rect
-              x="280"
-              y="270"
-              width="40"
-              height="15"
+              x="400"
+              y="240"
+              width="20"
+              height="10"
               fill="#fdba74"
               stroke="#000"
-              stroke-width="2"
             />
-            <rect
-              x="480"
-              y="270"
-              width="40"
-              height="15"
-              fill="#fdba74"
-              stroke="#000"
-              stroke-width="2"
+            <line
+              x1="410"
+              y1="235"
+              x2="410"
+              y2="225"
+              class="action-line"
+              marker-end="url(#arr)"
             />
-            <text x="400" y="310" class="text-label" text-anchor="middle">
-              VARILLAS ESTRUCTURALES PINO
+            <text x="410" y="265" class="text-label" text-anchor="middle">
+              VARILLA (EN LOS 5mm LIBRES)
             </text>
           </svg>
         </div>
@@ -483,94 +378,53 @@
       <div class="step">
         <div class="step-number">4</div>
         <div class="step-content">
-          <h2 class="step-title">Preparación del Tablero Superior</h2>
+          <h2 class="step-title">Preparación del Tablero</h2>
           <p>
-            Voltear el tablero principal
-            <span class="part-code">TAB-PRINCIPAL</span> hacia abajo. Alinear y
-            pegar las tres tiras <span class="part-code">TAB-REFUERZO</span> a
-            los bordes y al centro, dejando dos ranuras libres de 89mm (3.5").
-            Pegar los listones de pino en esas ranuras.
+            Voltear <span class="part-code">TAB-PRINCIPAL</span> hacia abajo.
+            Pegar las tiras <span class="part-code">TAB-REFUERZO</span> dejando
+            dos canales libres. Insertar y atornillar los listones de pino con
+            sus tarugos pre-instalados.
           </p>
-
-          <svg class="svg-canvas" viewBox="0 0 800 400">
-            <rect x="150" y="50" width="100" height="30" class="part-shade" />
-            <rect x="350" y="50" width="100" height="30" class="part-shade" />
-            <rect x="550" y="50" width="100" height="30" class="part-shade" />
-            <text x="400" y="30" class="text-code" text-anchor="middle">
-              TAB-REFUERZO (X3)
-            </text>
-
-            <line
-              x1="200"
-              y1="90"
-              x2="200"
-              y2="130"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="400"
-              y1="90"
-              x2="400"
-              y2="130"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-            <line
-              x1="600"
-              y1="90"
-              x2="600"
-              y2="130"
-              class="action-line"
-              marker-end="url(#arrow)"
-            />
-
-            <rect x="150" y="140" width="500" height="40" class="part" />
-            <text x="400" y="165" class="text-code" text-anchor="middle">
-              TAB-PRINCIPAL (VISTA INFERIOR)
-            </text>
+          <svg class="svg-canvas" viewBox="0 0 800 250">
+            <rect x="150" y="50" width="500" height="30" class="part" />
+            <rect x="150" y="80" width="100" height="20" class="part-shade" />
+            <rect x="350" y="80" width="100" height="20" class="part-shade" />
+            <rect x="550" y="80" width="100" height="20" class="part-shade" />
 
             <rect
               x="260"
-              y="230"
+              y="130"
               width="80"
-              height="35"
+              height="30"
               fill="#fdba74"
               stroke="#000"
-              stroke-width="2"
             />
             <rect
               x="460"
-              y="230"
+              y="130"
               width="80"
-              height="35"
+              height="30"
               fill="#fdba74"
               stroke="#000"
-              stroke-width="2"
             />
-
-            <rect x="295" y="265" width="10" height="20" class="hardware" />
-            <rect x="495" y="265" width="10" height="20" class="hardware" />
-
             <line
               x1="300"
-              y1="210"
+              y1="120"
               x2="300"
-              y2="170"
+              y2="100"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
             <line
               x1="500"
-              y1="210"
+              y1="120"
               x2="500"
-              y2="170"
+              y2="100"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
             />
-
-            <text x="400" y="320" class="text-label" text-anchor="middle">
-              LISTONES DE PINO (CON TARUGOS PRE-INSTALADOS)
+            <text x="400" y="180" class="text-label" text-anchor="middle">
+              INSERTAR LISTONES DE PINO EN RANURAS
             </text>
           </svg>
         </div>
@@ -579,89 +433,63 @@
       <div class="step">
         <div class="step-number">5</div>
         <div class="step-content">
-          <h2 class="step-title">Ensamble Final (Drop-in)</h2>
+          <h2 class="step-title">Montaje Final (Drop-in)</h2>
           <p>
-            Posicionar Isla A e Isla B a 700mm de separación. Tomar el conjunto
-            del tablero superior y encastrar los tarugos de madera en los
-            orificios perforados en los techos de las islas.
+            Posicionar Isla A e Isla B a 700mm de separación. Insertar los
+            cajones en sus respectivas guías. Por último, apoyar el conjunto del
+            tablero superior encastrando los tarugos en las carcasas.
           </p>
-
-          <svg class="svg-canvas" viewBox="0 0 800 500">
-            <rect x="100" y="40" width="600" height="25" class="part" />
-            <rect x="100" y="65" width="600" height="15" class="part-shade" />
+          <svg class="svg-canvas" viewBox="0 0 800 350">
+            <rect x="150" y="50" width="500" height="20" class="part" />
             <rect
-              x="200"
-              y="65"
-              width="60"
-              height="25"
+              x="220"
+              y="70"
+              width="40"
+              height="20"
               fill="#fdba74"
               stroke="#000"
-              stroke-width="2"
             />
             <rect
               x="540"
-              y="65"
-              width="60"
-              height="25"
+              y="70"
+              width="40"
+              height="20"
               fill="#fdba74"
               stroke="#000"
-              stroke-width="2"
-            />
-            <rect x="225" y="90" width="10" height="20" class="hardware" />
-            <rect x="565" y="90" width="10" height="20" class="hardware" />
-            <text x="400" y="30" class="text-label" text-anchor="middle">
-              CONJUNTO TABLERO TERMINADO
-            </text>
-
-            <line
-              x1="230"
-              y1="120"
-              x2="230"
-              y2="180"
-              class="action-line"
-              marker-end="url(#arrow)"
             />
             <line
-              x1="570"
-              y1="120"
-              x2="570"
-              y2="180"
+              x1="240"
+              y1="100"
+              x2="240"
+              y2="130"
               class="action-line"
-              marker-end="url(#arrow)"
+              marker-end="url(#arr)"
+            />
+            <line
+              x1="560"
+              y1="100"
+              x2="560"
+              y2="130"
+              class="action-line"
+              marker-end="url(#arr)"
             />
 
-            <rect x="100" y="200" width="260" height="200" class="part" />
-            <rect x="130" y="400" width="30" height="30" class="hardware" />
-            <rect x="300" y="400" width="30" height="30" class="hardware" />
-            <text x="230" y="300" class="text-code" text-anchor="middle">
+            <rect x="150" y="150" width="180" height="150" class="part" />
+            <text x="240" y="225" class="text-code" text-anchor="middle">
               ISLA A
             </text>
 
-            <rect x="440" y="200" width="260" height="200" class="part" />
-            <rect x="470" y="400" width="30" height="30" class="hardware" />
-            <rect x="640" y="400" width="30" height="30" class="hardware" />
-            <text x="570" y="300" class="text-code" text-anchor="middle">
+            <rect x="470" y="150" width="180" height="150" class="part" />
+            <text x="560" y="225" class="text-code" text-anchor="middle">
               ISLA B
             </text>
 
-            <line
-              x1="360"
-              y1="350"
-              x2="440"
-              y2="350"
-              stroke="#dc2626"
-              stroke-width="2"
-              marker-start="url(#arrow)"
-              marker-end="url(#arrow)"
-            />
             <text
               x="400"
-              y="340"
+              y="225"
               fill="#dc2626"
-              font-family="monospace"
               font-weight="bold"
-              font-size="14px"
-              text-anchor="middle"
+              font-family="monospace"
             >
               700mm
             </text>
