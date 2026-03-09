@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalles Constructivos - Mesa de Estudio</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --primary: #0f172a;
+        --accent: #3b82f6;
+        --text: #334155;
+        --border: #cbd5e1;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        color: var(--primary);
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 1rem;
+      }
+      .detail-card {
+        background: var(--surface);
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        margin-bottom: 2rem;
+      }
+      .detail-card h2 {
+        color: var(--primary);
+        margin-top: 0;
+      }
+      .description {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+      svg {
+        width: 100%;
+        height: auto;
+        background: #f1f5f9;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+      }
+      /* Material Classes for SVG */
+      .mdf25 {
+        fill: #fcd34d;
+        stroke: #b45309;
+        stroke-width: 2;
+      } /* Tablero principal */
+      .mdf18 {
+        fill: #fde68a;
+        stroke: #b45309;
+        stroke-width: 2;
+      } /* Estructura/Frentes */
+      .mdf12 {
+        fill: #fef08a;
+        stroke: #b45309;
+        stroke-width: 2;
+      } /* Cajas cajones */
+      .mdf5 {
+        fill: #fef9c3;
+        stroke: #b45309;
+        stroke-width: 1.5;
+      } /* Fondos */
+      .pine {
+        fill: #fdba74;
+        stroke: #c2410c;
+        stroke-width: 2;
+      } /* Listones/Varillas */
+      .hardware {
+        fill: #94a3b8;
+        stroke: #475569;
+        stroke-width: 2;
+      } /* Guías/Aluminio */
+      .dowel {
+        fill: #d97706;
+        stroke: #92400e;
+        stroke-width: 2;
+        stroke-dasharray: 4 2;
+      }
+
+      .dim-line {
+        stroke: #dc2626;
+        stroke-width: 1.5;
+        fill: none;
+        marker-end: url(#arrow);
+        marker-start: url(#arrow);
+      }
+      .dim-line-ext {
+        stroke: #dc2626;
+        stroke-width: 1;
+        fill: none;
+        stroke-dasharray: 4 4;
+      }
+      .dim-text {
+        fill: #dc2626;
+        font-size: 14px;
+        font-family: monospace;
+        font-weight: bold;
+        text-anchor: middle;
+      }
+      .label {
+        fill: #0f172a;
+        font-size: 16px;
+        font-weight: bold;
+        font-family: sans-serif;
+      }
+      .sub-label {
+        fill: #475569;
+        font-size: 13px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Planos de Detalles Constructivos</h1>
+
+      <div class="detail-card">
+        <h2>Detalle 1: Ensamble Tablero, Listón y Tarugo</h2>
+        <p class="description">
+          Corte transversal (Vista Frontal). Muestra cómo el listón de pino se
+          aloja en la ranura de 25mm debajo del tablero principal, sobresaliendo
+          13.1mm. El tarugo de madera (cilindro) cruza el espacio vacío de
+          11.9mm restante de la luz (total 25mm) y encastra en el panel superior
+          de la isla.
+        </p>
+
+        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker
+              id="arrow"
+              viewBox="0 0 10 10"
+              refX="5"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
+            </marker>
+          </defs>
+
+          <rect x="100" y="50" width="600" height="25" class="mdf25" />
+          <text x="400" y="68" class="label" text-anchor="middle">
+            MDF 25mm (Tablero Principal)
+          </text>
+
+          <rect x="100" y="75" width="255.5" height="25" class="mdf25" />
+          <rect x="444.5" y="75" width="255.5" height="25" class="mdf25" />
+          <text x="227" y="92" class="sub-label" text-anchor="middle">
+            Subcapa MDF 25mm
+          </text>
+
+          <rect x="355.5" y="75" width="89" height="38.1" class="pine" />
+          <text
+            x="400"
+            y="100"
+            class="sub-label"
+            text-anchor="middle"
+            fill="#fff"
+          >
+            Listón Pino
+          </text>
+
+          <rect x="390" y="90" width="20" height="50" class="dowel" />
+          <text
+            x="400"
+            y="130"
+            class="sub-label"
+            text-anchor="middle"
+            fill="#fff"
+          >
+            Tarugo
+          </text>
+
+          <rect x="100" y="125" width="600" height="18" class="mdf18" />
+          <text x="400" y="139" class="label" text-anchor="middle">
+            MDF 18mm (Panel Superior Isla)
+          </text>
+
+          <line x1="80" y1="100" x2="80" y2="125" class="dim-line" />
+          <line x1="85" y1="100" x2="100" y2="100" class="dim-line-ext" />
+          <line x1="85" y1="125" x2="100" y2="125" class="dim-line-ext" />
+          <text x="70" y="117" class="dim-text" text-anchor="end">
+            Luz: 25mm
+          </text>
+
+          <line x1="460" y1="100" x2="460" y2="113.1" class="dim-line" />
+          <line
+            x1="444.5"
+            y1="113.1"
+            x2="465"
+            y2="113.1"
+            class="dim-line-ext"
+          />
+          <text x="470" y="110" class="dim-text" text-anchor="start">
+            13.1mm
+          </text>
+
+          <line x1="355.5" y1="60" x2="444.5" y2="60" class="dim-line" />
+          <text x="400" y="55" class="dim-text">Ranura: 89mm (3.5")</text>
+        </svg>
+      </div>
+
+      <div class="detail-card">
+        <h2>Detalle 2: Corte Cajón Isla A (Papel A0)</h2>
+        <p class="description">
+          Vista en sección lateral. Muestra el panel lateral de la isla, la guía
+          telescópica pesada, y el ensamble del marco perimetral de MDF 12mm de
+          baja altura unido al fondo de 5.5mm con sus varillas estructurales
+          inferiores.
+        </p>
+
+        <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="20" width="18" height="300" class="mdf18" />
+          <text
+            x="30"
+            y="170"
+            class="label"
+            transform="rotate(-90, 30, 170)"
+            text-anchor="middle"
+          >
+            MDF 18mm (Lateral Gabinete)
+          </text>
+
+          <rect x="68" y="100" width="13" height="50" class="hardware" />
+          <text x="74" y="90" class="sub-label" text-anchor="middle">Guía</text>
+
+          <rect x="81" y="100" width="12" height="50" class="mdf12" />
+          <text x="140" y="120" class="sub-label" text-anchor="start">
+            ← Marco MDF 12mm
+          </text>
+
+          <rect x="81" y="150" width="600" height="5.5" class="mdf5" />
+          <text x="350" y="145" class="label" text-anchor="middle">
+            Fondo MDF 5.5mm (Área Papel A0)
+          </text>
+
+          <rect x="250" y="155.5" width="20" height="15" class="pine" />
+          <rect x="500" y="155.5" width="20" height="15" class="pine" />
+          <text x="260" y="185" class="sub-label" text-anchor="middle">
+            Refuerzo Pino
+          </text>
+
+          <line
+            x1="50"
+            y1="180"
+            x2="700"
+            y2="180"
+            stroke="#94a3b8"
+            stroke-width="1"
+            stroke-dasharray="10 5"
+          />
+          <text x="350" y="195" class="sub-label" text-anchor="middle">
+            Luz (Espacio libre antes del próximo cajón)
+          </text>
+        </svg>
+      </div>
+
+      <div class="detail-card">
+        <h2>Detalle 3: Ensamble Frente y Fondo Isla B</h2>
+        <p class="description">
+          Corte transversal vertical de un cajón de la Isla B. Destaca el perfil
+          tirador de aluminio continuo ocultando el canto superior, y la
+          inserción del fondo de 5.5mm en la ranura a 5mm del borde inferior,
+          dejando espacio justo para pegar la varilla de pino.
+        </p>
+
+        <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+          <rect x="100" y="80" width="18" height="200" class="mdf18" />
+          <text
+            x="80"
+            y="180"
+            class="label"
+            transform="rotate(-90, 80, 180)"
+            text-anchor="middle"
+          >
+            Frente MDF 18mm
+          </text>
+
+          <path
+            d="M 100 80 L 118 80 L 118 100 L 116 100 L 116 84 L 100 84 Z"
+            class="hardware"
+          />
+          <path
+            d="M 118 80 C 125 80 130 85 130 95 L 128 95 C 128 88 123 82 118 82 Z"
+            class="hardware"
+          />
+          <text x="140" y="70" class="sub-label">Perfil Aluminio Tirador</text>
+          <line
+            x1="135"
+            y1="75"
+            x2="115"
+            y2="85"
+            stroke="#475569"
+            stroke-width="1"
+          />
+
+          <rect x="118" y="120" width="12" height="155" class="mdf12" />
+          <text x="140" y="160" class="label">Contrafrente MDF 12mm</text>
+
+          <rect x="118" y="264.5" width="600" height="5.5" class="mdf5" />
+          <text x="400" y="255" class="label" text-anchor="middle">
+            Fondo MDF 5.5mm (Encastrado)
+          </text>
+
+          <rect x="390" y="270" width="20" height="5" class="pine" />
+          <text x="400" y="290" class="sub-label" text-anchor="middle">
+            Varilla Refuerzo (Oculta tras el canto inferior)
+          </text>
+
+          <line x1="110" y1="270" x2="110" y2="275" class="dim-line" />
+          <text x="105" y="276" class="dim-text" text-anchor="end">5mm</text>
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>
