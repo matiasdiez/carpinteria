@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan de Armado - Mesa de Arte</title>
+    <style>
+      :root {
+        --bg: #f8fafc;
+        --paper: #ffffff;
+        --ink: #000000;
+        --action: #dc2626;
+        --gray: #64748b;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        margin: 0;
+        padding: 2rem;
+      }
+      .manual-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--paper);
+        padding: 3rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border: 2px solid var(--ink);
+      }
+      .header {
+        border-bottom: 4px solid var(--ink);
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        font-weight: 900;
+        letter-spacing: -1px;
+      }
+      .header p {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--gray);
+      }
+
+      .tools-section {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 3rem;
+        padding: 1rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+        justify-content: center;
+      }
+      .tool {
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+      }
+      .tool svg {
+        width: 50px;
+        height: 50px;
+        display: block;
+        margin: 0 auto 0.5rem auto;
+      }
+
+      .step {
+        margin-bottom: 4rem;
+        position: relative;
+      }
+      .step-number {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        background: var(--ink);
+        color: var(--paper);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+      }
+      .step-content {
+        border: 2px solid var(--ink);
+        padding: 2rem;
+        padding-top: 3rem;
+        border-radius: 4px;
+      }
+      .step-title {
+        margin-top: 0;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        border-bottom: 2px solid var(--gray);
+        padding-bottom: 0.5rem;
+      }
+
+      .part-code {
+        display: inline-block;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+
+      /* SVG Styles */
+      .svg-canvas {
+        width: 100%;
+        height: auto;
+        background: #ffffff;
+        margin-top: 1.5rem;
+      }
+      .part {
+        fill: #ffffff;
+        stroke: var(--ink);
+        stroke-width: 2.5;
+        stroke-linejoin: round;
+      }
+      .part-shade {
+        fill: #f1f5f9;
+        stroke: var(--ink);
+        stroke-width: 2.5;
+        stroke-linejoin: round;
+      }
+      .action-line {
+        stroke: var(--action);
+        stroke-width: 2;
+        stroke-dasharray: 6 6;
+        fill: none;
+      }
+      .action-arrow {
+        fill: var(--action);
+      }
+      .hardware {
+        fill: var(--gray);
+        stroke: var(--ink);
+        stroke-width: 1.5;
+      }
+      .text-label {
+        fill: var(--ink);
+        font-family: "Helvetica Neue", sans-serif;
+        font-weight: bold;
+        font-size: 14px;
+      }
+      .text-code {
+        fill: var(--ink);
+        font-family: monospace;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="manual-container">
+      <div class="header">
+        <div>
+          <h1>MESA DE ARTE</h1>
+          <p>MANUAL DE ENSAMBLAJE</p>
+        </div>
+        <div>
+          <p>REV. 1.0</p>
+        </div>
+      </div>
+
+      <div class="tools-section">
+        <div class="tool">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+            />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          Cola Vinílica
+        </div>
+        <div class="tool">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="14.5" y1="10" x2="21" y2="3" />
+            <path
+              d="M14.5 10a2.12 2.12 0 0 1-3 0 2.12 2.12 0 0 1 0-3l7-7a2.12 2.12 0 0 1 3 0 2.12 2.12 0 0 1 0 3l-7 7z"
+            />
+            <path
+              d="M10 14.5l-7 7a2.12 2.12 0 0 0 0 3 2.12 2.12 0 0 0 3 0l7-7"
+            />
+          </svg>
+          Atornillador
+        </div>
+        <div class="tool">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          Tornillos / Tuercas T
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h2 class="step-title">Preparación de las Bases y Ruedas</h2>
+          <p>
+            Identificar las bases <span class="part-code">A-BASE</span> y
+            <span class="part-code">B-BASE</span>. Perforar y colocar las
+            tuercas araña desde el lado INTERIOR antes de armar el mueble. Fijar
+            el suplemento y las ruedas por debajo.
+          </p>
+
+          <svg class="svg-canvas" viewBox="0 0 800 400">
+            <defs>
+              <marker
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="5"
+                refY="5"
+                markerWidth="5"
+                markerHeight="5"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" class="action-arrow" />
+              </marker>
+            </defs>
+
+            <path d="M 230 40 L 250 40 L 250 45 L 230 45 Z" class="hardware" />
+            <path d="M 530 40 L 550 40 L 550 45 L 530 45 Z" class="hardware" />
+            <line
+              x1="240"
+              y1="50"
+              x2="240"
+              y2="80"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="540"
+              y1="50"
+              x2="540"
+              y2="80"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <text x="390" y="45" class="text-label" text-anchor="middle">
+              TUERCAS ARAÑA (DESDE ADENTRO)
+            </text>
+
+            <rect x="150" y="90" width="480" height="30" class="part" />
+            <text x="390" y="110" class="text-code" text-anchor="middle">
+              A-BASE / B-BASE
+            </text>
+
+            <rect x="150" y="150" width="480" height="30" class="part-shade" />
+            <text x="390" y="170" class="text-code" text-anchor="middle">
+              SUPLEMENTO 18mm
+            </text>
+            <line x1="240" y1="130" x2="240" y2="145" class="action-line" />
+            <line x1="540" y1="130" x2="540" y2="145" class="action-line" />
+
+            <rect x="210" y="250" width="60" height="10" class="hardware" />
+            <circle cx="240" cy="300" r="30" class="part" />
+
+            <rect x="510" y="250" width="60" height="10" class="hardware" />
+            <circle cx="540" cy="300" r="30" class="part" />
+
+            <line
+              x1="240"
+              y1="240"
+              x2="240"
+              y2="190"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="540"
+              y1="240"
+              x2="540"
+              y2="190"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <text x="390" y="300" class="text-label" text-anchor="middle">
+              ATORNILLAR DESDE ABAJO
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h2 class="step-title">Estructura de las Islas (Carcasas)</h2>
+          <p>
+            Ensamblar los laterales <span class="part-code">A-LATERAL</span> y
+            la trasera <span class="part-code">A-TRASERA</span> sobre la base.
+            Finalmente, colocar el techo <span class="part-code">A-TAPA</span>.
+            Repetir proceso análogo para Isla B.
+          </p>
+
+          <svg class="svg-canvas" viewBox="0 0 800 450">
+            <rect x="200" y="40" width="400" height="20" class="part" />
+            <text x="400" y="55" class="text-code" text-anchor="middle">
+              A-TAPA
+            </text>
+            <line
+              x1="220"
+              y1="70"
+              x2="220"
+              y2="100"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="580"
+              y1="70"
+              x2="580"
+              y2="100"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="200" y="110" width="20" height="180" class="part-shade" />
+            <text x="150" y="200" class="text-code" text-anchor="end">
+              A-LATERAL
+            </text>
+
+            <rect x="230" y="110" width="340" height="180" class="part" />
+            <text x="400" y="200" class="text-code" text-anchor="middle">
+              A-TRASERA
+            </text>
+
+            <rect x="580" y="110" width="20" height="180" class="part-shade" />
+            <text x="650" y="200" class="text-code" text-anchor="start">
+              A-LATERAL
+            </text>
+
+            <line
+              x1="220"
+              y1="300"
+              x2="220"
+              y2="330"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="580"
+              y1="300"
+              x2="580"
+              y2="330"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="200" y="340" width="400" height="20" class="part" />
+            <rect x="230" y="360" width="40" height="40" class="hardware" />
+            <rect x="530" y="360" width="40" height="40" class="hardware" />
+            <text x="400" y="380" class="text-label" text-anchor="middle">
+              CONJUNTO BASE (PASO 1)
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h2 class="step-title">Armado Cajones A0 (Isla A)</h2>
+          <p>
+            Armar el marco perimetral con las piezas de MDF 12mm. Pegar y
+            atornillar por debajo el fondo
+            <span class="part-code">FONDO-A0</span>. Luego, pegar las varillas
+            de pino para evitar el pandeo del papel. Finalmente, fijar el frente
+            <span class="part-code">A-FRENTE-CAJON</span>.
+          </p>
+
+          <svg class="svg-canvas" viewBox="0 0 800 450">
+            <rect x="350" y="30" width="100" height="20" class="part" />
+            <text x="460" y="45" class="text-code" text-anchor="start">
+              A-FRENTE-CAJON
+            </text>
+            <line
+              x1="400"
+              y1="60"
+              x2="400"
+              y2="90"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="200" y="100" width="400" height="30" class="part-shade" />
+            <text x="400" y="120" class="text-code" text-anchor="middle">
+              MARCO PERIMETRAL MDF 12
+            </text>
+
+            <line
+              x1="250"
+              y1="140"
+              x2="250"
+              y2="170"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="550"
+              y1="140"
+              x2="550"
+              y2="170"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="180" y="180" width="440" height="10" class="part" />
+            <text x="400" y="210" class="text-code" text-anchor="middle">
+              FONDO-A0 (MDF 5.5)
+            </text>
+
+            <line
+              x1="300"
+              y1="230"
+              x2="300"
+              y2="260"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="500"
+              y1="230"
+              x2="500"
+              y2="260"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect
+              x="280"
+              y="270"
+              width="40"
+              height="15"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+            <rect
+              x="480"
+              y="270"
+              width="40"
+              height="15"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+            <text x="400" y="310" class="text-label" text-anchor="middle">
+              VARILLAS ESTRUCTURALES PINO
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h2 class="step-title">Preparación del Tablero Superior</h2>
+          <p>
+            Voltear el tablero principal
+            <span class="part-code">TAB-PRINCIPAL</span> hacia abajo. Alinear y
+            pegar las tres tiras <span class="part-code">TAB-REFUERZO</span> a
+            los bordes y al centro, dejando dos ranuras libres de 89mm (3.5").
+            Pegar los listones de pino en esas ranuras.
+          </p>
+
+          <svg class="svg-canvas" viewBox="0 0 800 400">
+            <rect x="150" y="50" width="100" height="30" class="part-shade" />
+            <rect x="350" y="50" width="100" height="30" class="part-shade" />
+            <rect x="550" y="50" width="100" height="30" class="part-shade" />
+            <text x="400" y="30" class="text-code" text-anchor="middle">
+              TAB-REFUERZO (X3)
+            </text>
+
+            <line
+              x1="200"
+              y1="90"
+              x2="200"
+              y2="130"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="400"
+              y1="90"
+              x2="400"
+              y2="130"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="600"
+              y1="90"
+              x2="600"
+              y2="130"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="150" y="140" width="500" height="40" class="part" />
+            <text x="400" y="165" class="text-code" text-anchor="middle">
+              TAB-PRINCIPAL (VISTA INFERIOR)
+            </text>
+
+            <rect
+              x="260"
+              y="230"
+              width="80"
+              height="35"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+            <rect
+              x="460"
+              y="230"
+              width="80"
+              height="35"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+
+            <rect x="295" y="265" width="10" height="20" class="hardware" />
+            <rect x="495" y="265" width="10" height="20" class="hardware" />
+
+            <line
+              x1="300"
+              y1="210"
+              x2="300"
+              y2="170"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="500"
+              y1="210"
+              x2="500"
+              y2="170"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <text x="400" y="320" class="text-label" text-anchor="middle">
+              LISTONES DE PINO (CON TARUGOS PRE-INSTALADOS)
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h2 class="step-title">Ensamble Final (Drop-in)</h2>
+          <p>
+            Posicionar Isla A e Isla B a 700mm de separación. Tomar el conjunto
+            del tablero superior y encastrar los tarugos de madera en los
+            orificios perforados en los techos de las islas.
+          </p>
+
+          <svg class="svg-canvas" viewBox="0 0 800 500">
+            <rect x="100" y="40" width="600" height="25" class="part" />
+            <rect x="100" y="65" width="600" height="15" class="part-shade" />
+            <rect
+              x="200"
+              y="65"
+              width="60"
+              height="25"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+            <rect
+              x="540"
+              y="65"
+              width="60"
+              height="25"
+              fill="#fdba74"
+              stroke="#000"
+              stroke-width="2"
+            />
+            <rect x="225" y="90" width="10" height="20" class="hardware" />
+            <rect x="565" y="90" width="10" height="20" class="hardware" />
+            <text x="400" y="30" class="text-label" text-anchor="middle">
+              CONJUNTO TABLERO TERMINADO
+            </text>
+
+            <line
+              x1="230"
+              y1="120"
+              x2="230"
+              y2="180"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+            <line
+              x1="570"
+              y1="120"
+              x2="570"
+              y2="180"
+              class="action-line"
+              marker-end="url(#arrow)"
+            />
+
+            <rect x="100" y="200" width="260" height="200" class="part" />
+            <rect x="130" y="400" width="30" height="30" class="hardware" />
+            <rect x="300" y="400" width="30" height="30" class="hardware" />
+            <text x="230" y="300" class="text-code" text-anchor="middle">
+              ISLA A
+            </text>
+
+            <rect x="440" y="200" width="260" height="200" class="part" />
+            <rect x="470" y="400" width="30" height="30" class="hardware" />
+            <rect x="640" y="400" width="30" height="30" class="hardware" />
+            <text x="570" y="300" class="text-code" text-anchor="middle">
+              ISLA B
+            </text>
+
+            <line
+              x1="360"
+              y1="350"
+              x2="440"
+              y2="350"
+              stroke="#dc2626"
+              stroke-width="2"
+              marker-start="url(#arrow)"
+              marker-end="url(#arrow)"
+            />
+            <text
+              x="400"
+              y="340"
+              fill="#dc2626"
+              font-family="monospace"
+              font-weight="bold"
+              font-size="14px"
+              text-anchor="middle"
+            >
+              700mm
+            </text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
