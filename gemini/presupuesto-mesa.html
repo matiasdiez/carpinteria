@@ -168,28 +168,62 @@
         box-shadow: 0 0 0 3px var(--primary-bg);
       }
 
+      /* ── Color coding por grosor de MDF ── */
       .badge {
-        background: #f1f5f9;
-        border: 1px solid var(--border);
-        padding: 0.125rem 0.375rem;
-        border-radius: 0.25rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 0.375rem;
         font-family: monospace;
         font-size: 0.75rem;
-        color: var(--text-main);
-        font-weight: bold;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
       }
-      .mat-25 {
-        border-left: 4px solid #fcd34d;
+      /* MDF 25mm → Amber */
+      .badge-25 {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fcd34d;
       }
-      .mat-18 {
-        border-left: 4px solid #fde68a;
+      /* MDF 18mm → Blue */
+      .badge-18 {
+        background: #dbeafe;
+        color: #1e3a8a;
+        border: 1px solid #93c5fd;
       }
-      .mat-12 {
-        border-left: 4px solid #fef08a;
+      /* MDF 12mm → Green */
+      .badge-12 {
+        background: #dcfce7;
+        color: #14532d;
+        border: 1px solid #86efac;
       }
-      .mat-5 {
-        border-left: 4px solid #fef9c3;
+      /* MDF 5.5mm → Violet */
+      .badge-5 {
+        background: #ede9fe;
+        color: #4c1d95;
+        border: 1px solid #c4b5fd;
       }
+      /* Pill de grosor en columna Material */
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .chip-25 { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+      .chip-18 { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
+      .chip-12 { background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
+      .chip-5  { background: #ede9fe; color: #4c1d95; border: 1px solid #c4b5fd; }
+      /* Fila tenue del color correspondiente */
+      .mat-25 { background: #fffbeb; }
+      .mat-18 { background: #eff6ff; }
+      .mat-12 { background: #f0fdf4; }
+      .mat-5  { background: #f5f3ff; }
     </style>
   </head>
   <body>
@@ -284,6 +318,13 @@
           Utilizá estos códigos para etiquetar las piezas salidas de la CNC y
           cruzarlas con el Manual de Armado.
         </p>
+        <!-- Leyenda de colores -->
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+          <span class="chip chip-25">▪ MDF 25mm</span>
+          <span class="chip chip-18">▪ MDF 18mm</span>
+          <span class="chip chip-12">▪ MDF 12mm</span>
+          <span class="chip chip-5">▪ MDF 5.5mm</span>
+        </div>
         <div class="table-container">
           <table>
             <thead>
@@ -297,142 +338,142 @@
             </thead>
             <tbody>
               <tr class="mat-25">
-                <td><span class="badge">TAB-PRINCIPAL</span></td>
+                <td><span class="badge badge-25">TAB-PRINCIPAL</span></td>
                 <td>Tablero principal de la mesa</td>
-                <td>MDF 25mm</td>
+                <td><span class="chip chip-25">MDF 25mm</span></td>
                 <td>2596 x 906</td>
                 <td>1</td>
               </tr>
               <tr class="mat-25">
-                <td><span class="badge">TAB-REFUERZO</span></td>
+                <td><span class="badge badge-25">TAB-REFUERZO</span></td>
                 <td>Tiras de engrose subcapa</td>
-                <td>MDF 25mm</td>
+                <td><span class="chip chip-25">MDF 25mm</span></td>
                 <td>2596 x 300</td>
                 <td>3</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">A-TAPA/BASE</span></td>
+                <td><span class="badge badge-18">A-TAPA/BASE</span></td>
                 <td>Techo y piso Isla A</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>1296 x 906</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">A-LATERAL</span></td>
+                <td><span class="badge badge-18">A-LATERAL</span></td>
                 <td>Lados del gabinete Isla A</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>888 x 546</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">A-TRASERA</span></td>
+                <td><span class="badge badge-18">A-TRASERA</span></td>
                 <td>Fondo estructural Isla A</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>1260 x 546</td>
                 <td>1</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">A-FRENTE-CAJON</span></td>
+                <td><span class="badge badge-18">A-FRENTE-CAJON</span></td>
                 <td>Frentes Overlay Isla A</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>1296 x 80</td>
                 <td>7</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-TAPA/BASE</span></td>
+                <td><span class="badge badge-18">B-TAPA/BASE</span></td>
                 <td>Techo y piso Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>600 x 906</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-LATERAL</span></td>
+                <td><span class="badge badge-18">B-LATERAL</span></td>
                 <td>Lados del gabinete Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>888 x 546</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-DIVISOR</span></td>
+                <td><span class="badge badge-18">B-DIVISOR</span></td>
                 <td>Separador interno Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>888 x 546</td>
                 <td>1</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-ESTANTE</span></td>
+                <td><span class="badge badge-18">B-ESTANTE</span></td>
                 <td>Estantes traseros Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>290 x 564</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-FRENTE-GDE</span></td>
+                <td><span class="badge badge-18">B-FRENTE-GDE</span></td>
                 <td>Frente cajón profundo Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>596 x 140</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge">B-FRENTE-CH</span></td>
+                <td><span class="badge badge-18">B-FRENTE-CH</span></td>
                 <td>Frente cajón chato Isla B</td>
-                <td>MDF 18mm</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>596 x 60</td>
                 <td>3</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-A-LATERAL</span></td>
+                <td><span class="badge badge-12">CAJ-A-LATERAL</span></td>
                 <td>Marco lateral cajón A0</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>860 x 50</td>
                 <td>14</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-A-FRENTE</span></td>
+                <td><span class="badge badge-12">CAJ-A-FRENTE</span></td>
                 <td>Marco frente/atrás cajón A0</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>1210 x 50</td>
                 <td>14</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-B-LAT-GDE</span></td>
+                <td><span class="badge badge-12">CAJ-B-LAT-GDE</span></td>
                 <td>Lado cajón prof. Isla B</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>500 x 120</td>
                 <td>4</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-B-CONT-GDE</span></td>
+                <td><span class="badge badge-12">CAJ-B-CONT-GDE</span></td>
                 <td>Contrafrente cajón prof. Isla B</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>520 x 120</td>
                 <td>4</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-B-LAT-CH</span></td>
+                <td><span class="badge badge-12">CAJ-B-LAT-CH</span></td>
                 <td>Lado cajón chato Isla B</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>500 x 45</td>
                 <td>6</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge">CAJ-B-CONT-CH</span></td>
+                <td><span class="badge badge-12">CAJ-B-CONT-CH</span></td>
                 <td>Contrafrente cajón chato Isla B</td>
-                <td>MDF 12mm</td>
+                <td><span class="chip chip-12">MDF 12mm</span></td>
                 <td>520 x 45</td>
                 <td>6</td>
               </tr>
               <tr class="mat-5">
-                <td><span class="badge">FONDO-A0</span></td>
+                <td><span class="badge badge-5">FONDO-A0</span></td>
                 <td>Fondo cajón Isla A</td>
-                <td>MDF 5.5mm</td>
+                <td><span class="chip chip-5">MDF 5.5mm</span></td>
                 <td>1210 x 860</td>
                 <td>7</td>
               </tr>
               <tr class="mat-5">
-                <td><span class="badge">FONDO-B</span></td>
+                <td><span class="badge badge-5">FONDO-B</span></td>
                 <td>Fondo cajón Isla B</td>
-                <td>MDF 5.5mm</td>
+                <td><span class="chip chip-5">MDF 5.5mm</span></td>
                 <td>530 x 500</td>
                 <td>5</td>
               </tr>
