@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planos CNC Nesting — Mesa de Trabajo para Artistas</title>
+    <meta name="description" content="Generador de planos nesting para CNC. Algoritmo MaxRects BSSF multi-material con kerf 3mm y exportación DXF multicapa." />
+    <link rel="stylesheet" href="../gemini/shared-dark.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+      .page-header { margin-bottom: 2rem; }
+      .page-header h1 { font-size: 1.875rem; font-weight: 800; margin: 0; color: var(--text-main); }
+      .page-header p  { color: var(--text-muted); margin: 0.4rem 0 0; font-size: 1rem; }
+
+      .control-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .control-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-box);
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .control-card label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        display: block;
+        margin-bottom: 0.4rem;
+      }
+      .control-card input, .control-card select {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--input-border);
+        border-radius: 0.375rem;
+        background: var(--input-bg);
+        color: var(--text-main);
+        font-size: 0.95rem;
+        font-family: "Inter", sans-serif;
+      }
+      .control-card .stat-big {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--primary);
+      }
+      .control-card .stat-sub {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .action-bar { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.22rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid;
+        white-space: nowrap;
+      }
+      .badge-25  { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+      .badge-18  { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+      .badge-12  { background: #dcfce7; color: #15803d; border-color: #86efac; }
+      .badge-5   { background: #ede9fe; color: #6d28d9; border-color: #c4b5fd; }
+
+      /* Nesting output */
+      .material-section { margin-bottom: 3rem; }
+      .material-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+      .material-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .efficiency-badge {
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.3rem 0.75rem;
+        border-radius: 999px;
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #86efac;
+      }
+      .efficiency-badge.warn { background:#fef3c7; color:#b45309; border-color:#fcd34d; }
+
+      .board-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.25rem;
+      }
+      .board-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-box);
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+      }
+      .board-label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+      .board-svg { width:100%; height:auto; display:block; border:1px solid var(--border); border-radius:0.375rem; }
+
+      /* Piece colors per material */
+      .fill-25  { fill: #fde68a; stroke: #d97706; stroke-width: 2; }
+      .fill-18  { fill: #bfdbfe; stroke: #2563eb; stroke-width: 2; }
+      .fill-12  { fill: #bbf7d0; stroke: #16a34a; stroke-width: 2; }
+      .fill-55  { fill: #ddd6fe; stroke: #7c3aed; stroke-width: 2; }
+
+      .progress-info {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-box);
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-muted);
+        margin-bottom: 2rem;
+      }
+      .spinner {
+        width: 40px; height: 40px;
+        border: 4px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 1rem;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      @media (max-width: 900px) { .control-grid { grid-template-columns: 1fr 1fr; } }
+      @media (max-width: 600px) { .control-grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a href="index.html" class="navbar-brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        Mesa Artista — C
+      </a>
+      <div class="navbar-right">
+        <div class="navbar-menu">
+          <a href="index.html" class="nav-item">1. Planos</a>
+          <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
+          <a href="planos-cnc.html" class="nav-item active">3. CNC</a>
+          <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+          <a href="plan-armado.html" class="nav-item">5. Armado</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Cambiar modo">
+          <i data-lucide="moon"></i>
+        </button>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-item">1. Planos</a>
+      <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
+      <a href="planos-cnc.html" class="nav-item active">3. CNC</a>
+      <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+      <a href="plan-armado.html" class="nav-item">5. Armado</a>
+    </div>
+
+    <div class="container">
+      <div class="page-header">
+        <h1>Planos CNC — Nesting MaxRects</h1>
+        <p>Algoritmo MaxRects BSSF · Multi-material · Kerf 3mm · Placas 2750×1830mm · Exportación DXF multicapa.</p>
+      </div>
+
+      <!-- Controles -->
+      <div class="control-grid">
+        <div class="control-card">
+          <label>Placa estándar (mm)</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="number" id="sheetW" value="2750" min="500"><span style="color:var(--text-muted);">×</span>
+            <input type="number" id="sheetH" value="1830" min="500">
+          </div>
+        </div>
+        <div class="control-card">
+          <label>Kerf (pasada de fresa, mm)</label>
+          <input type="number" id="kerf" value="3" min="0" max="10">
+        </div>
+        <div class="control-card">
+          <label>Piezas totales en cut list</label>
+          <div class="stat-big">119</div>
+          <div class="stat-sub">Tablero + Isla A + Isla B</div>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn btn-primary" onclick="runNesting()">
+          <i data-lucide="play" style="width:16px;height:16px;"></i> Calcular Nesting
+        </button>
+        <button class="btn btn-outline" id="btnDXF" onclick="exportDXF()" style="display:none;">
+          <i data-lucide="download" style="width:16px;height:16px;"></i> Exportar DXF Multicapa
+        </button>
+        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+          <span class="badge badge-25">MDF 25mm</span>
+          <span class="badge badge-18">MDF 18mm</span>
+          <span class="badge badge-12">MDF 12mm</span>
+          <span class="badge badge-5">MDF 5.5mm</span>
+        </div>
+      </div>
+
+      <!-- Output nesting -->
+      <div id="output"></div>
+
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="footer-logo">
+            <div class="footer-logo-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="footer-logo-name">Mesa Artista — Modelo C</span>
+          </a>
+          <p class="footer-desc">Planos CNC con algoritmo MaxRects BSSF. Multi-material con kerf configurable.</p>
+        </div>
+        <nav class="footer-nav">
+          <p class="footer-nav-heading">Documentos</p>
+          <a href="index.html" class="footer-nav-link">1. Planos técnicos</a>
+          <a href="presupuesto-mesa.html" class="footer-nav-link">2. Presupuesto &amp; Cut List</a>
+          <a href="planos-cnc.html" class="footer-nav-link">3. Planos CNC</a>
+          <a href="detalles-constructivos.html" class="footer-nav-link">4. Detalles constructivos</a>
+          <a href="plan-armado.html" class="footer-nav-link">5. Plan de armado</a>
+        </nav>
+        <div class="footer-info">
+          <p class="footer-info-heading">Algoritmo</p>
+          <p class="footer-tagline">MaxRects Best Short Side Fit (BSSF). Rotación 90° habilitada. Multi-material independiente por grosor.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">Mesa de Trabajo para Artistas — Modelo C &copy; 2026</p>
+      </div>
+    </footer>
+
+    <script>
+    // ═══════════════════════════════════════════════════════════════════
+    // CUT LIST DATA — same pieces as presupuesto-mesa.html
+    // Each piece: { code, desc, w, h, qty, mat }
+    // mat: '25' | '18' | '12' | '5'
+    // ═══════════════════════════════════════════════════════════════════
+    const PIECES_RAW = [
+      // ── Tablero Superior (MDF 25) ─────────────────────────────────────
+      // T-01: tablero principal. T-02/03/04: 3 sub-capas de igual largo debajo del tablero.
+      { code:'T-01', desc:'Tablero principal',        w:2625, h:930,  qty:1, mat:'25' },
+      { code:'T-02', desc:'Sub-capa frente',          w:2625, h:170,  qty:1, mat:'25' },
+      { code:'T-03', desc:'Sub-capa media',           w:2625, h:170,  qty:1, mat:'25' },
+      { code:'T-04', desc:'Sub-capa trasera',         w:2625, h:170,  qty:1, mat:'25' },
+      // ── Isla A Carcasa (MDF 18) ─────────────────────────────────────────
+      // Cadena ancho: papel 1189 + 2×25 holgura + 2×12 MDF + 2×13 corredera + 2×18 lateral = 1325mm ext.
+      // Interior carcasa: 1289mm ancho × 912mm prof (ext 930 - 18 paredTrasera = 912)
+      { code:'A-01', desc:'Lateral carcasa IslaA',      w:930,  h:675,  qty:2, mat:'18' },
+      { code:'A-02', desc:'Techo carcasa IslaA',         w:1289, h:930,  qty:1, mat:'18' },
+      { code:'A-03', desc:'Piso carcasa IslaA',          w:1289, h:930,  qty:1, mat:'18' },
+      { code:'A-04', desc:'Zócalo fr./fondo IslaA',      w:1289, h:82,   qty:2, mat:'18' },
+      { code:'A-05', desc:'Zócalo lados IslaA',          w:930,  h:82,   qty:2, mat:'18' },
+      { code:'A-06', desc:'Panel trasero IslaA',         w:1289, h:675,  qty:1, mat:'18' },
+      // Frentes Full-Overlay: 1325mm (exterior isla) × 80mm alto × 7 frentes
+      { code:'AF-01',desc:'Frente cajón #1 IslaA',       w:1325, h:80,   qty:1, mat:'18' },
+      { code:'AF-02',desc:'Frentes cajón #2–6 IslaA',    w:1325, h:80,   qty:5, mat:'18' },
+      { code:'AF-03',desc:'Frente cajón #7 IslaA',       w:1325, h:80,   qty:1, mat:'18' },
+      // ── Isla A Cajas (MDF 12) ────────────────────────────────────────────
+      // Interior útil: 1239mm ancho × 891mm prof (papel + 25mm/lado holgura)
+      // Caja exterior: frente/atrás = 1239mm, laterales = 903mm (891+12 atrás), fondo = 1239×891
+      { code:'AC-01',desc:'Frente int. caja IslaA',      w:1239, h:60,   qty:7, mat:'12' },
+      { code:'AC-02',desc:'Atrás int. caja IslaA',       w:1239, h:60,   qty:7, mat:'12' },
+      { code:'AC-03',desc:'Lateral int. caja IslaA',     w:891,  h:60,   qty:14,mat:'12' },
+      // ── Isla A Fondos (MDF 5.5) ──────────────────────────────────────────
+      { code:'AC-04',desc:'Fondo caja IslaA 1239×891',   w:1239, h:891,  qty:7, mat:'5'  },
+      // ── Isla B Carcasa (MDF 18) ─────────────────────────────────────────
+      // Misma profundidad que Isla A: 930mm exterior
+      { code:'B-01', desc:'Lateral carcasa IslaB',       w:930,  h:675,  qty:2, mat:'18' },
+      { code:'B-02', desc:'Techo carcasa IslaB',         w:564,  h:930,  qty:1, mat:'18' },
+      { code:'B-03', desc:'Piso carcasa IslaB',          w:564,  h:930,  qty:1, mat:'18' },
+      { code:'B-04', desc:'Estante fijo IslaB',          w:564,  h:930,  qty:1, mat:'18' },
+      { code:'B-05', desc:'Panel trasero IslaB',         w:564,  h:675,  qty:1, mat:'18' },
+      { code:'B-06', desc:'Estante ext. IslaB',          w:564,  h:300,  qty:3, mat:'18' },
+      { code:'B-07', desc:'Zócalo fr./fondo IslaB',      w:564,  h:82,   qty:2, mat:'18' },
+      { code:'B-08', desc:'Zócalo lados IslaB',          w:930,  h:82,   qty:2, mat:'18' },
+      { code:'BF-01',desc:'Frente cajón prof. IslaB',    w:600,  h:140,  qty:2, mat:'18' },
+      { code:'BF-02',desc:'Frente cajón chato IslaB',    w:600,  h:60,   qty:3, mat:'18' },
+      // ── Isla B Cajas prof. (MDF 12) ───────────────────────────────────
+      { code:'BC-01',desc:'Frente int. caja prof. B',    w:540,  h:120,  qty:2, mat:'12' },
+      { code:'BC-02',desc:'Atrás int. caja prof. B',     w:540,  h:120,  qty:2, mat:'12' },
+      { code:'BC-03',desc:'Lateral int. caja prof. B',   w:880,  h:120,  qty:4, mat:'12' },
+      // ── Isla B Cajas chatas (MDF 12) ──────────────────────────────────
+      { code:'BC-05',desc:'Frente int. caja chata B',    w:540,  h:50,   qty:3, mat:'12' },
+      { code:'BC-06',desc:'Atrás int. caja chata B',     w:540,  h:50,   qty:3, mat:'12' },
+      { code:'BC-07',desc:'Lateral int. caja chata B',   w:880,  h:50,   qty:6, mat:'12' },
+      // ── Fondos Isla B (MDF 5.5) ────────────────────────────────────────
+      { code:'BC-04',desc:'Fondo caja prof. IslaB',      w:540,  h:880,  qty:2, mat:'5'  },
+      { code:'BC-08',desc:'Fondo caja chata IslaB',      w:540,  h:880,  qty:3, mat:'5'  },
+    ];
+
+
+    // ═══════════════════════════════════════════════════════════════════
+    // MaxRects BSSF (Best Short Side Fit) algorithm
+    // ═══════════════════════════════════════════════════════════════════
+    class MaxRects {
+      constructor(W, H) {
+        this.W = W;
+        this.H = H;
+        this.freeRects = [{ x:0, y:0, w:W, h:H }];
+        this.placed = [];
+      }
+
+      // Try to insert a piece (w×h, can rotate). Returns placed rect or null.
+      insert(pw, ph, code, desc, wNet, hNet) {
+        let best = null, bestScore = Infinity, bestRotated = false;
+        for (const fr of this.freeRects) {
+          // Normal orientation
+          if (pw <= fr.w && ph <= fr.h) {
+            const score = Math.min(fr.w - pw, fr.h - ph);
+            if (score < bestScore) { bestScore = score; best = fr; bestRotated = false; }
+          }
+          // Rotated 90°
+          if (ph <= fr.w && pw <= fr.h) {
+            const score = Math.min(fr.w - ph, fr.h - pw);
+            if (score < bestScore) { bestScore = score; best = fr; bestRotated = true; }
+          }
+        }
+        if (!best) return null;
+
+        const rw = bestRotated ? ph : pw;
+        const rh = bestRotated ? pw : ph;
+        const placed = { x: best.x, y: best.y, w: rw, h: rh, code, desc, wNet: wNet||rw, hNet: hNet||rh, rotated: bestRotated };
+        this.placed.push(placed);
+        this._splitFreeRects(placed);
+        this._pruneRects();
+        return placed;
+      }
+
+      _splitFreeRects(used) {
+        const newFree = [];
+        for (const fr of this.freeRects) {
+          if (!this._intersects(used, fr)) { newFree.push(fr); continue; }
+          // Left
+          if (used.x > fr.x)
+            newFree.push({ x: fr.x, y: fr.y, w: used.x - fr.x, h: fr.h });
+          // Right
+          if (used.x + used.w < fr.x + fr.w)
+            newFree.push({ x: used.x + used.w, y: fr.y, w: (fr.x + fr.w) - (used.x + used.w), h: fr.h });
+          // Top
+          if (used.y > fr.y)
+            newFree.push({ x: fr.x, y: fr.y, w: fr.w, h: used.y - fr.y });
+          // Bottom
+          if (used.y + used.h < fr.y + fr.h)
+            newFree.push({ x: fr.x, y: used.y + used.h, w: fr.w, h: (fr.y + fr.h) - (used.y + used.h) });
+        }
+        this.freeRects = newFree;
+      }
+
+      _pruneRects() {
+        const keep = [];
+        for (let i = 0; i < this.freeRects.length; i++) {
+          let dominated = false;
+          for (let j = 0; j < this.freeRects.length; j++) {
+            if (i === j) continue;
+            const a = this.freeRects[i], b = this.freeRects[j];
+            if (b.x <= a.x && b.y <= a.y && b.x+b.w >= a.x+a.w && b.y+b.h >= a.y+a.h) {
+              dominated = true; break;
+            }
+          }
+          if (!dominated) keep.push(this.freeRects[i]);
+        }
+        this.freeRects = keep;
+      }
+
+      _intersects(a, b) {
+        return !(a.x + a.w <= b.x || b.x + b.w <= a.x || a.y + a.h <= b.y || b.y + b.h <= a.y);
+      }
+
+      usedArea() {
+        return this.placed.reduce((s, p) => s + p.w * p.h, 0);
+      }
+
+      efficiency() {
+        return ((this.usedArea() / (this.W * this.H)) * 100).toFixed(1);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // NESTING RUNNER
+    // ═══════════════════════════════════════════════════════════════════
+    let nestingResult = null;
+
+    function runNesting() {
+      const SW   = parseInt(document.getElementById('sheetW').value) || 2750;
+      const SH   = parseInt(document.getElementById('sheetH').value) || 1830;
+      const kerf = parseInt(document.getElementById('kerf').value)   || 3;
+
+      // Show spinner
+      document.getElementById('output').innerHTML = `
+        <div class="progress-info">
+          <div class="spinner"></div>
+          <p>Calculando nesting MaxRects BSSF...</p>
+        </div>`;
+
+      // Run async to allow render
+      setTimeout(() => {
+        // Group pieces by material, expand qty, add kerf
+        const groups = { '25': [], '18': [], '12': [], '5': [] };
+        for (const raw of PIECES_RAW) {
+          for (let i = 0; i < raw.qty; i++) {
+            groups[raw.mat].push({
+              w: raw.w + kerf,
+              h: raw.h + kerf,
+              wNet: raw.w,
+              hNet: raw.h,
+              code: raw.code,
+              desc: raw.desc
+            });
+          }
+        }
+
+        nestingResult = {};
+
+        const matConfig = {
+          '25': { label:'MDF 25 mm', badgeClass:'badge-25', fillClass:'fill-25', layerName:'MDF_25mm' },
+          '18': { label:'MDF 18 mm', badgeClass:'badge-18', fillClass:'fill-18', layerName:'MDF_18mm' },
+          '12': { label:'MDF 12 mm', badgeClass:'badge-12', fillClass:'fill-12', layerName:'MDF_12mm' },
+          '5':  { label:'MDF 5.5 mm',badgeClass:'badge-5',  fillClass:'fill-55', layerName:'MDF_55mm' },
+        };
+
+        let html = '';
+        for (const [matKey, cfg] of Object.entries(matConfig)) {
+          const pieces = groups[matKey];
+          if (!pieces.length) continue;
+
+          // Sort pieces descending by area for better packing
+          pieces.sort((a,b) => (b.w*b.h) - (a.w*a.h));
+
+          const sheets = [];
+          let remaining = [...pieces];
+
+          while (remaining.length > 0) {
+            const mr = new MaxRects(SW, SH);
+            const notFit = [];
+            for (const p of remaining) {
+              const r = mr.insert(p.w, p.h, p.code, p.desc, p.wNet, p.hNet);
+              if (!r) notFit.push(p);
+            }
+            // If nothing was placed, force-place first piece to avoid infinite loop
+            if (mr.placed.length === 0 && remaining.length > 0) {
+              const p = remaining[0];
+              mr.placed.push({ x:0, y:0, w:Math.min(p.w,SW), h:Math.min(p.h,SH), code:p.code, desc:p.desc });
+              notFit.splice(0, 0, ...remaining.slice(1));
+            }
+            sheets.push(mr);
+            remaining = notFit;
+          }
+
+          nestingResult[matKey] = { sheets, cfg, SW, SH };
+
+          // Build SVG boards
+          const scale = 310 / Math.max(SW, SH); // fit 310px
+          const svgW = Math.round(SW * scale);
+          const svgH = Math.round(SH * scale);
+
+          let boardsHtml = '';
+          sheets.forEach((mr, idx) => {
+            const eff = parseFloat(mr.efficiency());
+            const effClass = eff >= 70 ? '' : 'warn';
+            let rects = '';
+            mr.placed.forEach(p => {
+              const rx = Math.round(p.x * scale);
+              const ry = Math.round(p.y * scale);
+              const rw = Math.round(p.w * scale);
+              const rh = Math.round(p.h * scale);
+              rects += `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" class="${cfg.fillClass}" rx="1"/>
+              <text x="${rx+rw/2}" y="${ry+rh/2-4}" text-anchor="middle" font-size="${Math.max(5,Math.min(10,rw/4))}" fill="#334155" font-family="monospace" font-weight="700">${p.code}</text>
+              <text x="${rx+rw/2}" y="${ry+rh/2+8}" text-anchor="middle" font-size="${Math.max(4,Math.min(8,rw/6))}" fill="#64748b" font-family="sans-serif">${p.wNet}×${p.hNet}</text>`;
+            });
+            boardsHtml += `
+              <div class="board-card">
+                <div class="board-label">Placa ${idx+1} — ${mr.placed.length} piezas &nbsp;
+                  <span class="efficiency-badge ${effClass}">${eff}% eficiencia</span>
+                </div>
+                <svg class="board-svg" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="${svgW}" height="${svgH}" fill="#e0f2fe" rx="2"/>
+                  ${rects}
+                </svg>
+              </div>`;
+          });
+
+          const totalEff = sheets.reduce((s,m) => s + parseFloat(m.efficiency()), 0) / sheets.length;
+          html += `
+            <div class="material-section">
+              <div class="material-header">
+                <div class="material-title">
+                  <span class="badge ${cfg.badgeClass}">${cfg.label}</span>
+                  <span>${sheets.length} placa${sheets.length > 1 ? 's' : ''} necesaria${sheets.length > 1 ? 's' : ''} · ${pieces.length} piezas</span>
+                </div>
+                <span class="efficiency-badge ${totalEff < 70 ? 'warn' : ''}">Efic. media: ${totalEff.toFixed(1)}%</span>
+              </div>
+              <div class="board-grid">${boardsHtml}</div>
+            </div>`;
+        }
+
+        document.getElementById('output').innerHTML = html;
+        document.getElementById('btnDXF').style.display = '';
+        lucide.createIcons();
+      }, 60);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // DXF EXPORT — ASCII DXF 2D with layers per material
+    // ═══════════════════════════════════════════════════════════════════
+    function exportDXF() {
+      if (!nestingResult) return;
+
+      const SW = parseInt(document.getElementById('sheetW').value) || 2750;
+      const SH = parseInt(document.getElementById('sheetH').value) || 1830;
+
+      let dxf = '0\nSECTION\n2\nHEADER\n9\n$ACADVER\n1\nAC1009\n0\nENDSEC\n';
+      dxf += '0\nSECTION\n2\nTABLES\n0\nTABLE\n2\nLAYER\n70\n10\n';
+
+      const colors = { '25': 2, '18': 5, '12': 3, '5': 6 }; // DXF colors: yellow, blue, green, magenta
+
+      for (const [matKey, data] of Object.entries(nestingResult)) {
+        data.sheets.forEach((_, idx) => {
+          dxf += `0\nLAYER\n2\n${data.cfg.layerName}_Placa${idx+1}\n70\n0\n62\n${colors[matKey]}\n6\nCONTINUOUS\n`;
+        });
+      }
+      dxf += '0\nENDTAB\n0\nENDSEC\n';
+      dxf += '0\nSECTION\n2\nENTITIES\n';
+
+      for (const [matKey, data] of Object.entries(nestingResult)) {
+        data.sheets.forEach((mr, sheetIdx) => {
+          const layerName = `${data.cfg.layerName}_Placa${sheetIdx+1}`;
+          const offsetX = sheetIdx * (SW + 200); // offset each sheet
+
+          // Sheet border
+          dxf += rectDXF(offsetX, 0, SW, SH, layerName);
+
+          // Placed pieces
+          mr.placed.forEach(p => {
+            dxf += rectDXF(offsetX + p.x, p.y, p.w, p.h, layerName);
+            // Center text
+            const cx = offsetX + p.x + p.w/2;
+            const cy = p.y + p.h/2;
+            dxf += `0\nTEXT\n8\n${layerName}\n10\n${cx.toFixed(2)}\n20\n${cy.toFixed(2)}\n30\n0.0\n40\n25\n1\n${p.code}\n`;
+          });
+        });
+      }
+
+      dxf += '0\nENDSEC\n0\nEOF\n';
+
+      const blob = new Blob([dxf], { type: 'application/dxf' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'nesting-mesa-c.dxf';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function rectDXF(x, y, w, h, layer) {
+      // DXF LWPOLYLINE (closed rectangle, Y inverted for DXF)
+      return `0\nLWPOLYLINE\n8\n${layer}\n90\n4\n70\n1\n` +
+        `10\n${x.toFixed(2)}\n20\n${(-y).toFixed(2)}\n` +
+        `10\n${(x+w).toFixed(2)}\n20\n${(-y).toFixed(2)}\n` +
+        `10\n${(x+w).toFixed(2)}\n20\n${(-(y+h)).toFixed(2)}\n` +
+        `10\n${x.toFixed(2)}\n20\n${(-(y+h)).toFixed(2)}\n`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // Dark mode + hamburger
+    // ═══════════════════════════════════════════════════════════════════
+    const html = document.documentElement;
+    const btn  = document.getElementById('themeToggle');
+    const icon = btn.querySelector('i');
+    function applyTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('mc-theme', theme);
+      icon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+      lucide.createIcons();
+    }
+    applyTheme(localStorage.getItem('mc-theme') || 'light');
+    btn.addEventListener('click', () => applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+    document.getElementById('navHamburger').addEventListener('click', function() {
+      this.classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+    });
+    lucide.createIcons();
+
+    // Auto-run nesting on load
+    window.addEventListener('load', () => setTimeout(runNesting, 200));
+    </script>
+  </body>
+</html>
