@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manual de Armado - Mesa de Arte</title>
+    <link rel="stylesheet" href="shared-dark.css" />
     <style>
       /* Variables FlyonUI */
       :root {
@@ -236,26 +237,32 @@
 
     <nav class="navbar">
       <a href="#" class="navbar-brand">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
         EstudioArte
       </a>
-      <div class="navbar-menu">
-        <a href="index.html" class="nav-item">1. Planos</a>
-        <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
-        <a href="planos-cnc.html" class="nav-item">3. CNC</a>
-        <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
-        <a href="plan-armado.html" class="nav-item active">5. Armado</a>
+      <div class="navbar-right">
+        <div class="navbar-menu">
+          <a href="index.html" class="nav-item">1. Planos</a>
+          <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
+          <a href="planos-cnc.html" class="nav-item">3. CNC</a>
+          <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+          <a href="plan-armado.html" class="nav-item active">5. Armado</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Cambiar modo" aria-label="Toggle dark mode">🌙</button>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-item">1. Planos</a>
+      <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
+      <a href="planos-cnc.html" class="nav-item">3. CNC</a>
+      <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+      <a href="plan-armado.html" class="nav-item active">5. Armado</a>
+    </div>
 
     <div class="container">
       <div style="margin-bottom: 3rem; text-align: center">
@@ -300,7 +307,7 @@
           ruedas desde abajo atornillando la placa metálica.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 400">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 400">
           <rect x="200" y="160" width="400" height="20" class="part" />
           <text x="400" y="150" class="text-label" text-anchor="middle">
             A-BASE / B-BASE (MDF 18)
@@ -389,7 +396,7 @@
           atornillando el techo.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 400">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 400">
           <rect x="250" y="40" width="300" height="20" class="part" />
           <line
             x1="280"
@@ -480,7 +487,7 @@
           alturas superiores.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 350">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 350">
           <rect x="150" y="50" width="40" height="250" class="part-shade" />
           <text
             x="130"
@@ -560,7 +567,7 @@
           5.5mm por debajo, añadiendo las varillas de pino.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 400">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 400">
           <rect x="250" y="100" width="300" height="20" class="part-shade" />
           <rect x="250" y="280" width="300" height="20" class="part-shade" />
           <text x="400" y="90" class="text-sub" text-anchor="middle">
@@ -683,7 +690,7 @@
           caja de 12mm para ocultar el estante divisor.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 350">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 350">
           <rect x="600" y="50" width="30" height="250" class="part" />
           <text x="660" y="175" class="text-label" text-anchor="middle">
             FRENTE 18mm
@@ -774,7 +781,7 @@
           carcasas.
         </p>
 
-        <svg class="svg-canvas" viewBox="0 0 800 400">
+        <svg class="svg-canvas blueprint-svg" viewBox="0 0 800 400">
           <rect x="150" y="50" width="500" height="25" class="part" />
           <rect x="150" y="75" width="100" height="25" class="part-shade" />
           <rect x="350" y="75" width="100" height="25" class="part-shade" />
@@ -877,5 +884,88 @@
         </svg>
       </div>
     </div>
+
+    <script>
+      (function() {
+        var saved = localStorage.getItem('geminiTheme') || 'light';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+      })();
+      document.getElementById('themeToggle').addEventListener('click', function() {
+        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        var next = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        this.textContent = next === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('geminiTheme', next);
+      });
+      var ham = document.getElementById('navHamburger');
+      var mob = document.getElementById('mobileMenu');
+      ham.addEventListener('click', function() {
+        ham.classList.toggle('open');
+        mob.classList.toggle('open');
+      });
+    </script>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="../index.html" class="footer-logo">
+            <div class="footer-logo-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <span class="footer-logo-name">EstudioArte</span>
+          </a>
+          <p class="footer-desc">Documentación técnica de carpintería para la Mesa de Arte: planos, detalles constructivos, plan de corte CNC y manual de armado.</p>
+          <hr class="footer-divider" />
+          <div class="footer-socials">
+            <a href="https://github.com" class="footer-social-link" title="GitHub" aria-label="GitHub">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" title="Planos" aria-label="Planos">
+              <svg viewBox="0 0 24 24"><path d="M5 5.5A3.5 3.5 0 0 1 8.5 2H12v7H8.5A3.5 3.5 0 0 1 5 5.5zM12 2h3.5a3.5 3.5 0 1 1 0 7H12V2zM12 12.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0zM5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 0 1-7 0zM5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z"/></svg>
+            </a>
+            <a href="#" class="footer-social-link" title="Exportar PDF" aria-label="Exportar">
+              <svg viewBox="0 0 24 24"><path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 13h8v1H8v-1zm0 3h5v1H8v-1z"/></svg>
+            </a>
+          </div>
+        </div>
+        <nav class="footer-nav">
+          <h3 class="footer-nav-heading">Gemini</h3>
+          <a href="index.html" class="footer-nav-link">1. Planos Generales</a>
+          <a href="presupuesto-mesa.html" class="footer-nav-link">2. Presupuesto</a>
+          <a href="planos-cnc.html" class="footer-nav-link">3. Nesting CNC</a>
+          <a href="detalles-constructivos.html" class="footer-nav-link">4. Detalles Constructivos</a>
+          <a href="plan-armado.html" class="footer-nav-link">5. Manual de Armado</a>
+        </nav>
+        <nav class="footer-nav">
+          <h3 class="footer-nav-heading">Modelos</h3>
+          <a href="../modelo_a/index.html" class="footer-nav-link">Modelo A — Planos</a>
+          <a href="../modelo_a/detalles-constructivos.html" class="footer-nav-link">Modelo A — Detalles</a>
+          <a href="../modelo_a/plan-de-cortes-presupuesto.html" class="footer-nav-link">Modelo A — Presupuesto</a>
+          <a href="../modelo_a/plan-de-cortes-CNC.html" class="footer-nav-link">Modelo A — CNC</a>
+          <a href="../modelo_b/index.html" class="footer-nav-link">Modelo B — Planos</a>
+          <a href="../modelo_b/detalles-constructivos-RevD.html" class="footer-nav-link">Modelo B — Detalles</a>
+          <a href="../modelo_b/presupuesto-RevD.html" class="footer-nav-link">Modelo B — Presupuesto</a>
+          <a href="../modelo_b/plan-de-cortes-CNC-RevD.html" class="footer-nav-link">Modelo B — CNC</a>
+        </nav>
+        <div class="footer-info">
+          <div>
+            <h3 class="footer-info-heading">Sobre el proyecto</h3>
+            <p class="footer-tagline">Mesa de Arte multipropósito con sistema de cajones isla y correderas pesadas. Documentación técnica generada con IA para taller de carpintería de precisión.</p>
+          </div>
+          <div class="footer-badges">
+            <span class="footer-badge">🪵 MDF 18 / 25mm</span>
+            <span class="footer-badge">⚙️ CNC Ready</span>
+            <span class="footer-badge">📐 Planos técnicos</span>
+            <span class="footer-badge">🔩 Full Overlay</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">©2025 <a href="../index.html">EstudioArte</a> &mdash; Mesa de Arte. Documentación técnica de carpintería.</p>
+      </div>
+    </footer>
+
   </body>
 </html>
