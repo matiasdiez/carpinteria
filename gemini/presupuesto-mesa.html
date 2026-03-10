@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Presupuesto e Inventario - Mesa de Arte</title>
+    <title>Inventario y Presupuesto - Mesa Arte</title>
     <style>
+      /* Variables FlyonUI */
       :root {
         --bg-body: #f8fafc;
         --bg-surface: #ffffff;
@@ -13,12 +14,10 @@
         --text-muted: #64748b;
         --primary: #2563eb;
         --primary-hover: #1d4ed8;
-        --primary-bg: #eff6ff;
-        --success: #10b981;
         --radius-box: 1rem;
         --radius-btn: 0.5rem;
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
+
       body {
         font-family: ui-sans-serif, system-ui, sans-serif;
         background: var(--bg-body);
@@ -27,6 +26,7 @@
         padding: 0;
       }
 
+      /* Navbar */
       .navbar {
         position: sticky;
         top: 0;
@@ -36,7 +36,6 @@
         border-bottom: 1px solid var(--border);
         padding: 0.75rem 2rem;
         display: flex;
-        align-items: center;
         justify-content: space-between;
       }
       .navbar-brand {
@@ -66,11 +65,12 @@
         color: var(--text-main);
       }
       .nav-item.active {
-        background: var(--primary-bg);
+        background: #eff6ff;
         color: var(--primary);
         font-weight: 600;
       }
 
+      /* Layout */
       .container {
         max-width: 1200px;
         margin: 2rem auto;
@@ -80,17 +80,17 @@
         background: var(--bg-surface);
         border: 1px solid var(--border);
         border-radius: var(--radius-box);
-        box-shadow: var(--shadow-sm);
         padding: 2rem;
         margin-bottom: 2rem;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
       .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
         border-bottom: 1px solid var(--border);
         padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
       }
       .card-title {
         font-size: 1.25rem;
@@ -98,34 +98,7 @@
         margin: 0;
       }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: var(--radius-btn);
-        border: none;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      .btn-outline {
-        background: transparent;
-        border: 1px solid var(--border);
-        color: var(--text-main);
-      }
-      .btn-outline:hover {
-        background: #f1f5f9;
-      }
-      .btn-primary {
-        background: var(--primary);
-        color: white;
-      }
-      .btn-primary:hover {
-        background: var(--primary-hover);
-      }
-
+      /* Tablas */
       .table-container {
         overflow-x: auto;
         border: 1px solid var(--border);
@@ -148,31 +121,43 @@
         padding: 0.75rem 1rem;
         border-bottom: 1px solid var(--border);
       }
-      tr:last-child td {
-        border-bottom: none;
-      }
-      .text-right {
-        text-align: right;
-      }
 
+      /* Componentes */
+      .badge {
+        background: #1e293b;
+        color: white;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+        font-family: monospace;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+      .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--border);
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
       input[type="number"] {
         width: 100px;
         padding: 0.375rem 0.5rem;
         border: 1px solid var(--border);
         border-radius: 0.375rem;
-        outline: none;
-        transition: 0.2s;
-      }
-      input[type="number"]:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--primary-bg);
       }
 
-      /* ── Color coding por grosor de MDF ── */
+      /* ── Código de color por grosor de MDF (estilo FlyonUI badge) ── */
       .badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
         padding: 0.2rem 0.55rem;
         border-radius: 0.375rem;
         font-family: monospace;
@@ -187,67 +172,36 @@
         color: #92400e;
         border: 1px solid #fcd34d;
       }
-      /* MDF 18mm → Blue */
+      /* MDF 18mm → Azul */
       .badge-18 {
         background: #dbeafe;
         color: #1e3a8a;
         border: 1px solid #93c5fd;
       }
-      /* MDF 12mm → Green */
+      /* MDF 12mm → Verde */
       .badge-12 {
         background: #dcfce7;
         color: #14532d;
         border: 1px solid #86efac;
       }
-      /* MDF 5.5mm → Violet */
+      /* MDF 5.5mm → Violeta */
       .badge-5 {
         background: #ede9fe;
         color: #4c1d95;
         border: 1px solid #c4b5fd;
       }
-      /* Pill de grosor en columna Material */
-      .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        padding: 0.15rem 0.5rem;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 600;
+      /* Insumos / Metal → Gris */
+      .badge-ins {
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #94a3b8;
       }
-      .chip-25 {
-        background: #fef3c7;
-        color: #92400e;
-        border: 1px solid #fcd34d;
-      }
-      .chip-18 {
-        background: #dbeafe;
-        color: #1e3a8a;
-        border: 1px solid #93c5fd;
-      }
-      .chip-12 {
-        background: #dcfce7;
-        color: #14532d;
-        border: 1px solid #86efac;
-      }
-      .chip-5 {
-        background: #ede9fe;
-        color: #4c1d95;
-        border: 1px solid #c4b5fd;
-      }
-      /* Fila tenue del color correspondiente */
-      .mat-25 {
-        background: #fffbeb;
-      }
-      .mat-18 {
-        background: #eff6ff;
-      }
-      .mat-12 {
-        background: #f0fdf4;
-      }
-      .mat-5 {
-        background: #f5f3ff;
-      }
+      /* Fondo tenue de fila por material */
+      .mat-25 { background: #fffbeb; }
+      .mat-18 { background: #eff6ff; }
+      .mat-12 { background: #f0fdf4; }
+      .mat-5  { background: #f5f3ff; }
+      .mat-ins { background: #f8fafc; }
     </style>
   </head>
   <body>
@@ -267,12 +221,12 @@
         EstudioArte
       </a>
       <div class="navbar-menu">
-        <a href="index.html" class="nav-item">1. Planos</a>
+        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
         <a href="presupuesto-mesa.html" class="nav-item active"
-          >2. Presupuesto</a
+          >2. Presupuesto / Cortes</a
         >
-        <a href="planos-cnc.html" class="nav-item">3. CNC</a>
-        <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+        <a href="planos-cnc.html" class="nav-item">3. CNC Nesting</a>
+        <a href="detalles-rigurosos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
     </nav>
@@ -295,7 +249,15 @@
             >
               📂 Importar JSON
             </button>
-            <button class="btn btn-primary" onclick="exportJSON()">
+            <button
+              class="btn btn-outline"
+              style="
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+              "
+              onclick="exportJSON()"
+            >
               💾 Exportar JSON
             </button>
           </div>
@@ -308,54 +270,30 @@
                 <th>Descripción</th>
                 <th>Cant.</th>
                 <th>P. Unitario ($)</th>
-                <th class="text-right">Subtotal ($)</th>
+                <th style="text-align: right">Subtotal ($)</th>
               </tr>
             </thead>
             <tbody id="tableBody"></tbody>
-            <tfoot>
-              <tr style="background: #f8fafc; font-weight: 600">
-                <td colspan="4" class="text-right">TOTAL ESTIMADO:</td>
-                <td
-                  class="text-right"
-                  id="grandTotal"
-                  style="color: var(--primary); font-size: 1.125rem"
-                >
-                  $0.00
-                </td>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title">2. Inventario de Cortes (Cut List)</h2>
+          <h2 class="card-title">
+            2. Inventario de Cortes y Herrajes Definitivo
+          </h2>
         </div>
         <p
           style="
             color: var(--text-muted);
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
           "
         >
-          Utilizá estos códigos para etiquetar las piezas salidas de la CNC y
-          cruzarlas con el Manual de Armado.
+          Piezas corregidas para profundidad 930mm, encastres estructurales
+          cruzados y sistema de tacos para ruedas.
         </p>
-        <!-- Leyenda de colores -->
-        <div
-          style="
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.25rem;
-          "
-        >
-          <span class="chip chip-25">▪ MDF 25mm</span>
-          <span class="chip chip-18">▪ MDF 18mm</span>
-          <span class="chip chip-12">▪ MDF 12mm</span>
-          <span class="chip chip-5">▪ MDF 5.5mm</span>
-        </div>
         <div class="table-container">
           <table>
             <thead>
@@ -370,150 +308,168 @@
             <tbody>
               <tr class="mat-25">
                 <td><span class="badge badge-25">TAB-PRINCIPAL</span></td>
-                <td>Tablero principal de la mesa</td>
-                <td><span class="chip chip-25">MDF 25mm</span></td>
-                <td>2596 x 906</td>
+                <td>Tablero de mesa</td>
+                <td>MDF 25mm</td>
+                <td>2596 x 930</td>
                 <td>1</td>
               </tr>
               <tr class="mat-25">
                 <td><span class="badge badge-25">TAB-REFUERZO</span></td>
-                <td>Tiras de engrose subcapa</td>
-                <td><span class="chip chip-25">MDF 25mm</span></td>
+                <td>Engrose tablero</td>
+                <td>MDF 25mm</td>
                 <td>2596 x 300</td>
                 <td>3</td>
               </tr>
+
               <tr class="mat-18">
                 <td><span class="badge badge-18">A-TAPA/BASE</span></td>
-                <td>Techo y piso Isla A</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>1296 x 906</td>
+                <td>Techo/Piso Isla A</td>
+                <td>MDF 18mm</td>
+                <td>1296 x 930</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">A-LATERAL</span></td>
-                <td>Lados del gabinete Isla A</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>888 x 546</td>
+                <td>Laterales Isla A</td>
+                <td>MDF 18mm</td>
+                <td>912 x 546</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">A-TRASERA</span></td>
                 <td>Fondo estructural Isla A</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
+                <td>MDF 18mm</td>
                 <td>1260 x 546</td>
                 <td>1</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge badge-18">A-FRENTE-CAJON</span></td>
-                <td>Frentes Overlay Isla A</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
+                <td><span class="badge badge-18">A-FRENTE</span></td>
+                <td>Frentes de Cajón A0</td>
+                <td>MDF 18mm</td>
                 <td>1296 x 80</td>
                 <td>7</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">B-TAPA/BASE</span></td>
-                <td>Techo y piso Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>600 x 906</td>
+                <td>Techo/Piso Isla B</td>
+                <td>MDF 18mm</td>
+                <td>600 x 930</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">B-LATERAL</span></td>
-                <td>Lados del gabinete Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>888 x 546</td>
+                <td>Laterales Isla B</td>
+                <td>MDF 18mm</td>
+                <td>912 x 546</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge badge-18">B-EST-FRENTE</span></td>
-                <td>Estante superior (piso del hueco) Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>564 x 580</td>
+                <td><span class="badge badge-18">B-DIVISOR</span></td>
+                <td>Divisor central B</td>
+                <td>MDF 18mm</td>
+                <td>564 x 546</td>
                 <td>1</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge badge-18">B-DIVISOR</span></td>
-                <td>Separador interno Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>888 x 546</td>
+                <td><span class="badge badge-18">B-EST-FRENTE</span></td>
+                <td>Piso de hueco abierto B</td>
+                <td>MDF 18mm</td>
+                <td>564 x 565</td>
                 <td>1</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">B-ESTANTE</span></td>
-                <td>Estantes traseros Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>290 x 564</td>
+                <td>Estantes traseros B</td>
+                <td>MDF 18mm</td>
+                <td>564 x 329</td>
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge badge-18">B-FRENTE-GDE</span></td>
-                <td>Frente cajón profundo Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>596 x 140</td>
-                <td>2</td>
+                <td><span class="badge badge-18">TACOS-RUEDAS</span></td>
+                <td>Anclajes para base</td>
+                <td>MDF 18mm</td>
+                <td>120 x 120</td>
+                <td>16</td>
               </tr>
-              <tr class="mat-18">
-                <td><span class="badge badge-18">B-FRENTE-CH</span></td>
-                <td>Frente cajón chato Isla B</td>
-                <td><span class="chip chip-18">MDF 18mm</span></td>
-                <td>596 x 60</td>
-                <td>3</td>
-              </tr>
+
               <tr class="mat-12">
-                <td><span class="badge badge-12">CAJ-A-LATERAL</span></td>
-                <td>Marco lateral cajón A0</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
-                <td>860 x 50</td>
+                <td><span class="badge badge-12">CAJ-A-LAT</span></td>
+                <td>Lateral caja A0 (Envuelve al frente)</td>
+                <td>MDF 12mm</td>
+                <td>879 x 50</td>
                 <td>14</td>
               </tr>
               <tr class="mat-12">
                 <td><span class="badge badge-12">CAJ-A-FRENTE</span></td>
-                <td>Marco frente/atrás cajón A0</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
+                <td>Frente/Trasera caja A0 (Va por dentro)</td>
+                <td>MDF 12mm</td>
                 <td>1210 x 50</td>
                 <td>14</td>
               </tr>
               <tr class="mat-12">
                 <td><span class="badge badge-12">CAJ-B-LAT-GDE</span></td>
-                <td>Lado cajón prof. Isla B</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
-                <td>500 x 120</td>
+                <td>Lat. cajón prof B</td>
+                <td>MDF 12mm</td>
+                <td>550 x 120</td>
                 <td>4</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge badge-12">CAJ-B-CONT-GDE</span></td>
-                <td>Contrafrente cajón prof. Isla B</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
-                <td>520 x 120</td>
+                <td><span class="badge badge-12">CAJ-B-CON-GDE</span></td>
+                <td>Contra. cajón prof B</td>
+                <td>MDF 12mm</td>
+                <td>514 x 120</td>
                 <td>4</td>
               </tr>
               <tr class="mat-12">
                 <td><span class="badge badge-12">CAJ-B-LAT-CH</span></td>
-                <td>Lado cajón chato Isla B</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
-                <td>500 x 45</td>
+                <td>Lat. cajón chato B</td>
+                <td>MDF 12mm</td>
+                <td>550 x 45</td>
                 <td>6</td>
               </tr>
               <tr class="mat-12">
-                <td><span class="badge badge-12">CAJ-B-CONT-CH</span></td>
-                <td>Contrafrente cajón chato Isla B</td>
-                <td><span class="chip chip-12">MDF 12mm</span></td>
-                <td>520 x 45</td>
+                <td><span class="badge badge-12">CAJ-B-CON-CH</span></td>
+                <td>Contra. cajón chato B</td>
+                <td>MDF 12mm</td>
+                <td>514 x 45</td>
                 <td>6</td>
               </tr>
+
               <tr class="mat-5">
                 <td><span class="badge badge-5">FONDO-A0</span></td>
                 <td>Fondo cajón Isla A</td>
-                <td><span class="chip chip-5">MDF 5.5mm</span></td>
-                <td>1210 x 860</td>
+                <td>MDF 5.5mm</td>
+                <td>1210 x 879</td>
                 <td>7</td>
               </tr>
               <tr class="mat-5">
                 <td><span class="badge badge-5">FONDO-B</span></td>
                 <td>Fondo cajón Isla B</td>
-                <td><span class="chip chip-5">MDF 5.5mm</span></td>
-                <td>530 x 500</td>
+                <td>MDF 5.5mm</td>
+                <td>528 x 540</td>
                 <td>5</td>
+              </tr>
+
+              <tr class="mat-ins">
+                <td><span class="badge badge-ins">SPAX-4x40</span></td>
+                <td>Tornillos ensamble MDF (Evita apertura)</td>
+                <td>Metal</td>
+                <td>4 x 40 mm</td>
+                <td>300</td>
+              </tr>
+              <tr class="mat-ins">
+                <td><span class="badge badge-ins">FIX-3.5x16</span></td>
+                <td>Tornillos correderas</td>
+                <td>Metal</td>
+                <td>3.5 x 16 mm</td>
+                <td>200</td>
+              </tr>
+              <tr class="mat-ins">
+                <td><span class="badge badge-ins">COLA-VINIL</span></td>
+                <td>Adhesivo Titebond/Fortex</td>
+                <td>Líquido</td>
+                <td>1 Litro</td>
+                <td>1</td>
               </tr>
             </tbody>
           </table>
@@ -522,12 +478,13 @@
     </div>
 
     <script>
+      // Datos Base Completos
       const defaultData = [
         { cat: "Placas", desc: "MDF 25mm (Tablero)", qty: 1, price: 65000 },
         {
           cat: "Placas",
-          desc: "MDF 18mm (Estructura/Frentes)",
-          qty: 3,
+          desc: "MDF 18mm (Estructura/Frentes/Tacos)",
+          qty: 4,
           price: 48000,
         },
         {
@@ -536,97 +493,149 @@
           qty: 2,
           price: 35000,
         },
-        {
-          cat: "Placas",
-          desc: "MDF 5.5mm (Fondos cajones)",
-          qty: 2,
-          price: 18000,
-        },
+        { cat: "Placas", desc: "MDF 5.5mm (Fondos)", qty: 2, price: 18000 },
         {
           cat: "Herrajes",
-          desc: "Corredera Telescópica Pesada 800mm",
+          desc: "Guía Telescópica Pesada 800mm",
           qty: 7,
           price: 25000,
         },
         {
           cat: "Herrajes",
-          desc: "Corredera Telescópica Std 500mm",
+          desc: "Guía Telescópica Std 500mm",
           qty: 5,
           price: 6500,
         },
         { cat: "Herrajes", desc: "Rueda Industrial 75mm", qty: 8, price: 4500 },
         {
           cat: "Herrajes",
-          desc: "Perfil Aluminio Fox MF18 (Tira 3m)",
+          desc: "Perfil Aluminio Fox MF18 3m",
           qty: 3,
           price: 14000,
         },
         {
-          cat: "Madera",
-          desc: 'Listón Pino Finger 1.5x3.5" (Metro)',
-          qty: 6,
-          price: 3000,
-        },
-        {
-          cat: "Madera",
-          desc: "Varillas Pino 5mm (Refuerzos) - (Metro)",
-          qty: 20,
-          price: 800,
+          cat: "Insumos",
+          desc: "Tornillos Spax 4x40mm (Caja 300u)",
+          qty: 1,
+          price: 12000,
         },
         {
           cat: "Insumos",
-          desc: "Tornillos, Tuercas Araña M8, Cola",
+          desc: "Tornillos Fix 3.5x16mm (Caja 200u)",
           qty: 1,
-          price: 75000,
+          price: 4500,
+        },
+        {
+          cat: "Insumos",
+          desc: "Cola Vinílica Titebond Original",
+          qty: 1,
+          price: 18000,
+        },
+        {
+          cat: "Insumos",
+          desc: "Tuercas Araña M8 + Pernos",
+          qty: 32,
+          price: 250,
         },
       ];
+
       let budgetData = [];
+
+      // Inicialización
       function init() {
-        const saved = localStorage.getItem("mesaPresupuestoVFINAL");
-        budgetData = saved
-          ? JSON.parse(saved)
-          : JSON.parse(JSON.stringify(defaultData));
+        const savedData = localStorage.getItem("mesaPresupuestoVFINAL");
+        if (savedData) {
+          budgetData = JSON.parse(savedData);
+        } else {
+          budgetData = JSON.parse(JSON.stringify(defaultData));
+        }
         renderTable();
       }
+
+      // Renderizar Tabla
       function renderTable() {
         const tbody = document.getElementById("tableBody");
         tbody.innerHTML = "";
-        let total = 0;
-        budgetData.forEach((item, i) => {
-          const sub = item.qty * item.price;
-          total += sub;
-          tbody.innerHTML += `<tr><td>${item.cat}</td><td>${item.desc}</td><td><input type="number" step="1" value="${item.qty}" onchange="update(${i}, 'qty', this.value)"></td><td><input type="number" step="100" value="${item.price}" onchange="update(${i}, 'price', this.value)"></td><td class="text-right"><strong>$${sub.toLocaleString("es-AR")}</strong></td></tr>`;
+        let grandTotal = 0;
+
+        budgetData.forEach((item, index) => {
+          const subtotal = item.qty * item.price;
+          grandTotal += subtotal;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                <td>${item.cat}</td>
+                <td>${item.desc}</td>
+                <td>
+                    <input type="number" step="1" value="${item.qty}" 
+                           onchange="updateValue(${index}, 'qty', this.value)">
+                </td>
+                <td>
+                    <input type="number" step="100" value="${item.price}" 
+                           onchange="updateValue(${index}, 'price', this.value)">
+                </td>
+                <td style="text-align:right; font-weight:600;">
+                    $${subtotal.toLocaleString("es-AR")}
+                </td>
+            `;
+          tbody.appendChild(tr);
         });
-        document.getElementById("grandTotal").innerText =
-          "$" + total.toLocaleString("es-AR");
+
+        // Fila de Total
+        const totalRow = document.createElement("tr");
+        totalRow.style.backgroundColor = "#f1f5f9";
+        totalRow.style.fontWeight = "700";
+        totalRow.innerHTML = `
+            <td colspan="4" style="text-align:right;">TOTAL:</td>
+            <td style="text-align:right; color:var(--primary); font-size:1.125rem;">
+                $${grandTotal.toLocaleString("es-AR")}
+            </td>
+        `;
+        tbody.appendChild(totalRow);
+
         localStorage.setItem(
           "mesaPresupuestoVFINAL",
           JSON.stringify(budgetData),
         );
       }
-      function update(i, field, val) {
-        budgetData[i][field] = parseFloat(val) || 0;
+
+      // Actualizar Valor
+      function updateValue(index, field, value) {
+        budgetData[index][field] = parseFloat(value) || 0;
         renderTable();
       }
+
+      // Exportar a JSON
       function exportJSON() {
-        const blob = new Blob([JSON.stringify(budgetData, null, 2)], {
-          type: "application/json",
-        });
+        const dataStr = JSON.stringify(budgetData, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "presupuesto.json";
+        a.download = "presupuesto-mesa-arte.json";
         a.click();
         URL.revokeObjectURL(url);
       }
-      function importJSON(e) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          budgetData = JSON.parse(ev.target.result);
-          renderTable();
-        };
-        reader.readAsText(e.target.files[0]);
+
+      // Importar desde JSON
+      function importJSON(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            try {
+              budgetData = JSON.parse(e.target.result);
+              renderTable();
+              alert("Presupuesto importado con éxito.");
+            } catch (error) {
+              alert("Error al leer el archivo JSON.");
+            }
+          };
+          reader.readAsText(file);
+        }
       }
+
+      // Arrancar la app
       window.onload = init;
     </script>
   </body>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CNC Nesting - Mesa de Arte</title>
     <style>
+      /* Base FlyonUI Variables */
       :root {
         --bg-body: #f8fafc;
         --bg-surface: #ffffff;
@@ -12,18 +13,20 @@
         --text-main: #0f172a;
         --text-muted: #64748b;
         --primary: #2563eb;
+        --primary-hover: #1d4ed8;
         --radius-box: 1rem;
         --radius-btn: 0.5rem;
         --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
       }
+
       body {
         font-family: ui-sans-serif, system-ui, sans-serif;
         background: var(--bg-body);
         color: var(--text-main);
         margin: 0;
-        padding: 0;
       }
 
+      /* Navbar */
       .navbar {
         position: sticky;
         top: 0;
@@ -33,8 +36,8 @@
         border-bottom: 1px solid var(--border);
         padding: 0.75rem 2rem;
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
       }
       .navbar-brand {
         font-size: 1.125rem;
@@ -68,6 +71,7 @@
         font-weight: 600;
       }
 
+      /* Layout & Cards */
       .container {
         max-width: 1200px;
         margin: 2rem auto;
@@ -81,58 +85,83 @@
         margin-bottom: 2rem;
         box-shadow: var(--shadow-sm);
       }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Buttons */
       .btn {
-        display: inline-flex;
         padding: 0.5rem 1rem;
         border-radius: var(--radius-btn);
         border: none;
         cursor: pointer;
-        font-weight: 500;
+        font-weight: 600;
         transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
       }
       .btn-primary {
         background: var(--primary);
         color: white;
       }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
       .btn-outline {
         background: transparent;
         border: 1px solid var(--border);
         color: var(--text-main);
-        margin-left: 0.5rem;
+      }
+      .btn-outline:hover {
+        background: #f1f5f9;
+      }
+      .button-group {
+        display: flex;
+        gap: 0.75rem;
       }
 
+      /* SVG Styling */
       .material-section {
-        margin-bottom: 3rem;
+        margin-bottom: 4rem;
       }
       .material-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: var(--text-main);
-        border-bottom: 2px solid var(--border);
-        padding-bottom: 0.5rem;
-      }
-
-      .board-container {
+        font-size: 1.25rem;
+        font-weight: 700;
         margin-bottom: 1.5rem;
+        color: var(--text-main);
+      }
+      .board-container {
+        margin-bottom: 2rem;
       }
       .board-label {
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 600;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         color: var(--text-muted);
       }
+
       svg {
         border: 2px solid var(--border);
-        border-radius: 0.25rem;
+        border-radius: 0.5rem;
         background: #f8fafc;
         width: 100%;
         height: auto;
+        box-shadow: var(--shadow-sm);
       }
       .part {
         fill: #dbeafe;
         stroke: #3b82f6;
         stroke-width: 2;
+        transition: fill 0.2s;
+      }
+      .part:hover {
+        fill: #bfdbfe;
       }
       .part-text {
         fill: #1e3a8a;
@@ -159,163 +188,104 @@
           fill="none"
           stroke="currentColor"
           stroke-width="2"
-          style="border: none; background: transparent; margin: 0"
+          style="
+            border: none;
+            background: transparent;
+            margin: 0;
+            box-shadow: none;
+          "
         >
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
         EstudioArte
       </a>
       <div class="navbar-menu">
-        <a href="index.html" class="nav-item">1. Planos</a>
+        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
         <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
-        <a href="planos-cnc.html" class="nav-item active">3. CNC</a>
-        <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
+        <a href="planos-cnc.html" class="nav-item active">3. CNC Nesting</a>
+        <a href="detalles-rigurosos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
     </nav>
 
     <div class="container">
       <div class="card">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-          "
-        >
+        <div class="card-header">
           <div>
-            <h2 style="margin: 0; font-size: 1.25rem">
+            <h2 style="margin: 0; font-size: 1.5rem">
               Nesting CNC MaxRects (Multi-material)
             </h2>
-            <p style="margin: 0; color: var(--text-muted); font-size: 0.875rem">
-              Cálculo de aprovechamiento (Kerf 3mm, Placas 2750x1830mm)
+            <p
+              style="
+                margin: 0;
+                margin-top: 0.5rem;
+                color: var(--text-muted);
+                font-size: 1rem;
+              "
+            >
+              Geometría corregida para profundidad 930mm. Kerf de sierra: 3mm.
             </p>
           </div>
-          <div>
+          <div class="button-group">
             <button class="btn btn-primary" onclick="runPacking()">
-              🔄 Recalcular Cortes
+              🔄 Calcular Cortes
             </button>
             <button class="btn btn-outline" onclick="downloadDXF()">
-              📥 Descargar DXF Total
+              📥 Descargar DXF
+            </button>
+            <button class="btn btn-outline" onclick="downloadSVG()">
+              📥 Descargar SVG
             </button>
           </div>
         </div>
-        <!-- Leyenda de colores por grosor -->
-        <div
-          style="
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin: 1rem 0 0.5rem;
-          "
-        >
-          <span
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 0.3rem;
-              padding: 0.15rem 0.6rem;
-              border-radius: 999px;
-              font-size: 0.8rem;
-              font-weight: 600;
-              background: #fef3c7;
-              color: #92400e;
-              border: 1px solid #fcd34d;
-            "
-            >▪ MDF 25mm</span
-          >
-          <span
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 0.3rem;
-              padding: 0.15rem 0.6rem;
-              border-radius: 999px;
-              font-size: 0.8rem;
-              font-weight: 600;
-              background: #dbeafe;
-              color: #1e3a8a;
-              border: 1px solid #93c5fd;
-            "
-            >▪ MDF 18mm</span
-          >
-          <span
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 0.3rem;
-              padding: 0.15rem 0.6rem;
-              border-radius: 999px;
-              font-size: 0.8rem;
-              font-weight: 600;
-              background: #dcfce7;
-              color: #14532d;
-              border: 1px solid #86efac;
-            "
-            >▪ MDF 12mm</span
-          >
-          <span
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 0.3rem;
-              padding: 0.15rem 0.6rem;
-              border-radius: 999px;
-              font-size: 0.8rem;
-              font-weight: 600;
-              background: #ede9fe;
-              color: #4c1d95;
-              border: 1px solid #c4b5fd;
-            "
-            >▪ MDF 5.5mm</span
-          >
-        </div>
+
         <div id="output"></div>
       </div>
     </div>
 
     <script>
+      // --- PARÁMETROS GENERALES ---
       const BOARD_W = 2750;
       const BOARD_H = 1830;
       const KERF = 3;
 
+      // --- BASE DE DATOS DE PIEZAS (CORREGIDA) ---
       const materialsData = {
         "MDF 25mm (Tablero)": [
-          { id: "TAB-PRINCIPAL", w: 2596, h: 906, qty: 1 },
+          { id: "TAB-PRINCIPAL", w: 2596, h: 930, qty: 1 },
           { id: "TAB-REFUERZO", w: 2596, h: 300, qty: 3 },
         ],
-        "MDF 18mm (Estructuras y Frentes)": [
-          { id: "A-TAPA/BASE", w: 1296, h: 906, qty: 2 },
-          { id: "A-LATERAL", w: 888, h: 546, qty: 2 },
+        "MDF 18mm (Estructura y Frentes)": [
+          { id: "A-TAPA/BASE", w: 1296, h: 930, qty: 2 },
+          { id: "A-LATERAL", w: 912, h: 546, qty: 2 },
           { id: "A-TRASERA", w: 1260, h: 546, qty: 1 },
           { id: "A-FRENTE", w: 1296, h: 80, qty: 7 },
-          { id: "B-TAPA/BASE", w: 600, h: 906, qty: 2 },
-          { id: "B-LATERAL", w: 888, h: 546, qty: 2 },
-          { id: "B-DIVISOR", w: 888, h: 546, qty: 1 },
-          { id: "B-ESTANTE", w: 290, h: 564, qty: 2 },
-          { id: "B-EST-FRENTE", w: 564, h: 580, qty: 1 }, // <--- NUEVA PIEZA AGREGADA AQUÍ
+          { id: "B-TAPA/BASE", w: 600, h: 930, qty: 2 },
+          { id: "B-LATERAL", w: 912, h: 546, qty: 2 },
+          { id: "B-DIVISOR", w: 564, h: 546, qty: 1 },
+          { id: "B-EST-FRENTE", w: 564, h: 565, qty: 1 },
+          { id: "B-ESTANTE", w: 564, h: 329, qty: 2 },
           { id: "B-FRENTE-GDE", w: 596, h: 140, qty: 2 },
           { id: "B-FRENTE-CH", w: 596, h: 60, qty: 3 },
+          { id: "TACO-RUEDA", w: 120, h: 120, qty: 16 },
         ],
-        "MDF 12mm (Cajas de Cajones)": [
-          { id: "CAJ-A-LAT", w: 860, h: 50, qty: 14 },
+        "MDF 12mm (Cajas Interiores)": [
+          { id: "CAJ-A-LAT", w: 879, h: 50, qty: 14 },
           { id: "CAJ-A-FRENTE", w: 1210, h: 50, qty: 14 },
-          { id: "CAJ-B-LAT-GDE", w: 500, h: 120, qty: 4 },
-          { id: "CAJ-B-CONT-GDE", w: 520, h: 120, qty: 4 },
-          { id: "CAJ-B-LAT-CH", w: 500, h: 45, qty: 6 },
-          { id: "CAJ-B-CONT-CH", w: 520, h: 45, qty: 6 },
+          { id: "CAJ-B-LAT-GDE", w: 550, h: 120, qty: 4 },
+          { id: "CAJ-B-CON-GDE", w: 514, h: 120, qty: 4 },
+          { id: "CAJ-B-LAT-CH", w: 550, h: 45, qty: 6 },
+          { id: "CAJ-B-CON-CH", w: 514, h: 45, qty: 6 },
         ],
         "MDF 5.5mm (Fondos)": [
-          { id: "FONDO-A0", w: 1210, h: 860, qty: 7 },
-          { id: "FONDO-B", w: 530, h: 500, qty: 5 },
+          { id: "FONDO-A0", w: 1210, h: 879, qty: 7 },
+          { id: "FONDO-B", w: 528, h: 540, qty: 5 },
         ],
       };
 
       let packedResults = {};
 
+      // --- ALGORITMO MAXRECTS (BSSF) ---
       class MaxRectsBin {
         constructor(w, h) {
           this.w = w;
@@ -323,12 +293,16 @@
           this.freeRects = [{ x: 0, y: 0, w: w, h: h }];
           this.usedRects = [];
         }
+
         insert(w, h, data) {
-          let bestNode = null,
-            bestShortFit = Infinity,
-            bestLongFit = Infinity;
+          let bestNode = null;
+          let bestShortFit = Infinity;
+          let bestLongFit = Infinity;
+
           for (let i = 0; i < this.freeRects.length; i++) {
             let fr = this.freeRects[i];
+
+            // Prueba sin rotar
             if (fr.w >= w && fr.h >= h) {
               let shortFit = Math.min(fr.w - w, fr.h - h);
               let longFit = Math.max(fr.w - w, fr.h - h);
@@ -336,18 +310,13 @@
                 shortFit < bestShortFit ||
                 (shortFit === bestShortFit && longFit < bestLongFit)
               ) {
-                bestNode = {
-                  x: fr.x,
-                  y: fr.y,
-                  w: w,
-                  h: h,
-                  data: data,
-                  rot: false,
-                };
+                bestNode = { x: fr.x, y: fr.y, w: w, h: h, data: data };
                 bestShortFit = shortFit;
                 bestLongFit = longFit;
               }
             }
+
+            // Prueba rotado
             if (fr.w >= h && fr.h >= w) {
               let shortFit = Math.min(fr.w - h, fr.h - w);
               let longFit = Math.max(fr.w - h, fr.h - w);
@@ -355,76 +324,90 @@
                 shortFit < bestShortFit ||
                 (shortFit === bestShortFit && longFit < bestLongFit)
               ) {
-                bestNode = {
-                  x: fr.x,
-                  y: fr.y,
-                  w: h,
-                  h: w,
-                  data: data,
-                  rot: true,
-                };
+                bestNode = { x: fr.x, y: fr.y, w: h, h: w, data: data };
                 bestShortFit = shortFit;
                 bestLongFit = longFit;
               }
             }
           }
+
           if (!bestNode) return null;
+
           this.usedRects.push(bestNode);
+
           let i = 0;
           while (i < this.freeRects.length) {
-            if (this.splitNode(this.freeRects[i], bestNode))
+            if (this.splitNode(this.freeRects[i], bestNode)) {
               this.freeRects.splice(i, 1);
-            else i++;
+            } else {
+              i++;
+            }
           }
-          this.prune();
+
+          this.pruneFreeList();
           return bestNode;
         }
-        splitNode(free, used) {
+
+        splitNode(freeNode, usedNode) {
+          // Verifica si hay intersección
           if (
-            used.x >= free.x + free.w ||
-            used.x + used.w <= free.x ||
-            used.y >= free.y + free.h ||
-            used.y + used.h <= free.y
-          )
+            usedNode.x >= freeNode.x + freeNode.w ||
+            usedNode.x + usedNode.w <= freeNode.x ||
+            usedNode.y >= freeNode.y + freeNode.h ||
+            usedNode.y + usedNode.h <= freeNode.y
+          ) {
             return false;
-          if (used.y > free.y && used.y < free.y + free.h)
-            this.freeRects.push({ ...free, h: used.y - free.y });
-          if (used.y + used.h < free.y + free.h)
+          }
+
+          // Nuevo nodo arriba
+          if (usedNode.y > freeNode.y && usedNode.y < freeNode.y + freeNode.h) {
+            this.freeRects.push({ ...freeNode, h: usedNode.y - freeNode.y });
+          }
+          // Nuevo nodo abajo
+          if (usedNode.y + usedNode.h < freeNode.y + freeNode.h) {
             this.freeRects.push({
-              ...free,
-              y: used.y + used.h,
-              h: free.y + free.h - (used.y + used.h),
+              ...freeNode,
+              y: usedNode.y + usedNode.h,
+              h: freeNode.y + freeNode.h - (usedNode.y + usedNode.h),
             });
-          if (used.x > free.x && used.x < free.x + free.w)
-            this.freeRects.push({ ...free, w: used.x - free.x });
-          if (used.x + used.w < free.x + free.w)
+          }
+          // Nuevo nodo a la izquierda
+          if (usedNode.x > freeNode.x && usedNode.x < freeNode.x + freeNode.w) {
+            this.freeRects.push({ ...freeNode, w: usedNode.x - freeNode.x });
+          }
+          // Nuevo nodo a la derecha
+          if (usedNode.x + usedNode.w < freeNode.x + freeNode.w) {
             this.freeRects.push({
-              ...free,
-              x: used.x + used.w,
-              w: free.x + free.w - (used.x + used.w),
+              ...freeNode,
+              x: usedNode.x + usedNode.w,
+              w: freeNode.x + freeNode.w - (usedNode.x + usedNode.w),
             });
+          }
+
           return true;
         }
-        prune() {
+
+        pruneFreeList() {
+          // Elimina rectángulos redundantes o contenidos en otros
           for (let i = 0; i < this.freeRects.length; i++) {
             for (let j = i + 1; j < this.freeRects.length; j++) {
-              let rI = this.freeRects[i],
-                rJ = this.freeRects[j];
+              let rectI = this.freeRects[i];
+              let rectJ = this.freeRects[j];
               if (
-                rI.x >= rJ.x &&
-                rI.y >= rJ.y &&
-                rI.x + rI.w <= rJ.x + rJ.w &&
-                rI.y + rI.h <= rJ.y + rJ.h
+                rectI.x >= rectJ.x &&
+                rectI.y >= rectJ.y &&
+                rectI.x + rectI.w <= rectJ.x + rectJ.w &&
+                rectI.y + rectI.h <= rectJ.y + rectJ.h
               ) {
                 this.freeRects.splice(i, 1);
                 i--;
                 break;
               }
               if (
-                rJ.x >= rI.x &&
-                rJ.y >= rI.y &&
-                rJ.x + rJ.w <= rI.x + rI.w &&
-                rJ.y + rJ.h <= rI.y + rI.h
+                rectJ.x >= rectI.x &&
+                rectJ.y >= rectI.y &&
+                rectJ.x + rectJ.w <= rectI.x + rectI.w &&
+                rectJ.y + rectJ.h <= rectI.y + rectI.h
               ) {
                 this.freeRects.splice(j, 1);
                 j--;
@@ -434,16 +417,28 @@
         }
       }
 
+      // --- EJECUCIÓN PRINCIPAL ---
       function runPacking() {
         packedResults = {};
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = "";
+
         for (const [materialName, parts] of Object.entries(materialsData)) {
           let partsToPack = [];
+
+          // Expandir cantidades y sumar el Kerf (espesor de sierra)
           parts.forEach((p) => {
-            for (let i = 0; i < p.qty; i++)
+            for (let i = 0; i < p.qty; i++) {
               partsToPack.push({ id: p.id, w: p.w + KERF, h: p.h + KERF });
+            }
           });
+
+          // Ordenar por área descendente para un mejor empaquetado heurístico
           partsToPack.sort((a, b) => b.w * b.h - a.w * a.h);
+
           let bins = [];
+
+          // Proceso de inserción
           partsToPack.forEach((part) => {
             let placed = false;
             for (let i = 0; i < bins.length; i++) {
@@ -452,76 +447,93 @@
                 break;
               }
             }
+            // Si no cabe en las placas existentes, crear una nueva
             if (!placed) {
               let newBin = new MaxRectsBin(BOARD_W, BOARD_H);
               newBin.insert(part.w, part.h, part.id);
               bins.push(newBin);
             }
           });
+
           packedResults[materialName] = bins;
-        }
-        renderHTML();
-      }
 
-      /* Paleta por grosor de MDF */
-      const MAT_COLORS = {
-        25: { fill: "#fef3c7", stroke: "#d97706", text: "#92400e" },
-        18: { fill: "#dbeafe", stroke: "#3b82f6", text: "#1e3a8a" },
-        12: { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d" },
-        5: { fill: "#ede9fe", stroke: "#8b5cf6", text: "#4c1d95" },
-      };
-      function getMatKey(materialName) {
-        if (materialName.includes("25")) return "25";
-        if (materialName.includes("18")) return "18";
-        if (materialName.includes("12")) return "12";
-        return "5";
-      }
-
-      function renderHTML() {
-        const out = document.getElementById("output");
-        out.innerHTML = "";
-        for (const [materialName, bins] of Object.entries(packedResults)) {
+          // Paleta de colores por grosor (igual que presupuesto-mesa.html)
+          const MAT_COLORS = {
+            "25": { fill: "#fef3c7", stroke: "#d97706", text: "#92400e", bg: "#fffbeb" },
+            "18": { fill: "#dbeafe", stroke: "#3b82f6", text: "#1e3a8a", bg: "#eff6ff" },
+            "12": { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d", bg: "#f0fdf4" },
+            "5":  { fill: "#ede9fe", stroke: "#8b5cf6", text: "#4c1d95", bg: "#f5f3ff" },
+          };
+          function getMatKey(name) {
+            if (name.includes("25")) return "25";
+            if (name.includes("18")) return "18";
+            if (name.includes("12")) return "12";
+            return "5";
+          }
           const pal = MAT_COLORS[getMatKey(materialName)];
-          let matHtml = `<div class="material-section">
-            <div class="material-title" style="border-left:4px solid ${pal.stroke}; padding-left:0.6rem;">${materialName} <span style="font-size:0.8rem;font-weight:400;color:${pal.text};background:${pal.fill};border:1px solid ${pal.stroke};border-radius:999px;padding:0.1rem 0.5rem;margin-left:0.5rem;">${bins.length} placa${bins.length > 1 ? "s" : ""}</span></div>`;
+
+          // Renderizar HTML para este material
+          let materialHtml = `<div class="material-section">
+            <h3 class="material-title" style="border-left:4px solid ${pal.stroke}; padding-left:0.6rem;">
+              ${materialName}
+              <span style="font-size:0.8rem;font-weight:500;color:${pal.text};background:${pal.fill};border:1px solid ${pal.stroke};border-radius:999px;padding:0.1rem 0.6rem;margin-left:0.5rem;">${bins.length} placa${bins.length > 1 ? "s" : ""}</span>
+            </h3>`;
+
           bins.forEach((bin, index) => {
-            let svg = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg" style="background:#f9fafb;border-radius:6px;">`;
-            /* fondo de placa */
-            svg += `<rect x="0" y="0" width="${BOARD_W}" height="${BOARD_H}" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="6"/>`;
+            let svgContent = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg">`;
+            // Fondo de placa
+            svgContent += `<rect x="0" y="0" width="${BOARD_W}" height="${BOARD_H}" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="8" stroke-opacity="0.4"/>`;
+
             bin.usedRects.forEach((rect) => {
-              let w = rect.w - KERF,
-                h = rect.h - KERF;
-              svg += `<rect x="${rect.x}" y="${rect.y}" width="${w}" height="${h}" fill="${pal.fill}" stroke="${pal.stroke}" stroke-width="4" rx="6"/>
-                      <text x="${rect.x + w / 2}" y="${rect.y + h / 2}" class="part-text" fill="${pal.text}">${rect.data}</text>
-                      <text x="${rect.x + w / 2}" y="${rect.y + h / 2 + 30}" class="part-sub" fill="${pal.text}" opacity="0.7">${w}x${h}</text>`;
+              let finalW = rect.w - KERF;
+              let finalH = rect.h - KERF;
+              svgContent += `
+                <rect x="${rect.x}" y="${rect.y}" width="${finalW}" height="${finalH}" fill="${pal.fill}" stroke="${pal.stroke}" stroke-width="4" rx="6"/>
+                <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2}" class="part-text" fill="${pal.text}">${rect.data}</text>
+                <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2 + 25}" class="part-sub" fill="${pal.text}" opacity="0.75">${finalW} x ${finalH}</text>
+              `;
             });
-            svg += `</svg>`;
-            matHtml += `<div class="board-container"><div class="board-label">Placa ${index + 1}</div>${svg}</div>`;
+
+            svgContent += `</svg>`;
+            materialHtml += `<div class="board-container">
+              <div class="board-label">Placa ${index + 1}</div>
+              ${svgContent}
+            </div>`;
           });
-          matHtml += `</div>`;
-          out.innerHTML += matHtml;
+
+          materialHtml += `</div>`;
+          outputDiv.innerHTML += materialHtml;
         }
       }
 
+      // --- FUNCIONES DE DESCARGA ---
       function downloadDXF() {
         let dxf = "0\nSECTION\n2\nENTITIES\n";
-        const X_OFFSET = BOARD_W + 500;
-        const Y_OFFSET_MAT = BOARD_H + 1000;
+        const X_OFFSET_PER_BOARD = BOARD_W + 500;
+        const Y_OFFSET_PER_MATERIAL = BOARD_H + 1000;
+
         let matIndex = 0;
+
         for (const [materialName, bins] of Object.entries(packedResults)) {
-          let baseMatY = matIndex * Y_OFFSET_MAT;
+          let baseMatY = matIndex * Y_OFFSET_PER_MATERIAL;
+          let safeLayerName = materialName.replace(/[^a-zA-Z0-9]/g, "_");
+
           bins.forEach((bin, binIndex) => {
-            let bx = binIndex * X_OFFSET;
-            dxf += createDXFRect(
-              bx,
+            let boardOffsetX = binIndex * X_OFFSET_PER_BOARD;
+
+            // Contorno de la placa
+            dxf += createDXFRectangle(
+              boardOffsetX,
               baseMatY,
               BOARD_W,
               BOARD_H,
-              `PLACA_${materialName.replace(/[^a-zA-Z0-9]/g, "_")}`,
+              `PLACA_${safeLayerName}`,
             );
+
+            // Cortes internos
             bin.usedRects.forEach((rect) => {
-              dxf += createDXFRect(
-                bx + rect.x,
+              dxf += createDXFRectangle(
+                boardOffsetX + rect.x,
                 baseMatY + rect.y,
                 rect.w - KERF,
                 rect.h - KERF,
@@ -531,31 +543,88 @@
           });
           matIndex++;
         }
+
         dxf += "0\nENDSEC\n0\nEOF\n";
-        let a = document.createElement("a");
-        a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(dxf);
-        a.download = "planos-cnc-completos.dxf";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+
+        triggerDownload(
+          "data:text/plain;charset=utf-8," + encodeURIComponent(dxf),
+          "planos-cnc-completos.dxf",
+        );
       }
 
-      function createDXFRect(x, y, w, h, layer) {
+      function createDXFRectangle(x, y, w, h, layer) {
         let lines = "";
-        const pts = [
+        const points = [
           [x, y],
           [x + w, y],
           [x + w, y + h],
           [x, y + h],
         ];
         for (let i = 0; i < 4; i++) {
-          let p1 = pts[i],
-            p2 = pts[(i + 1) % 4];
+          let p1 = points[i];
+          let p2 = points[(i + 1) % 4];
           lines += `0\nLINE\n8\n${layer}\n10\n${p1[0]}\n20\n${p1[1]}\n30\n0.0\n11\n${p2[0]}\n21\n${p2[1]}\n31\n0.0\n`;
         }
         return lines;
       }
 
+      function downloadSVG() {
+        const SPACING = 300;
+        let totalWidth = 0;
+        let totalHeight = 0;
+
+        // Calcular dimensiones totales del lienzo
+        let matIndex = 0;
+        for (const [materialName, bins] of Object.entries(packedResults)) {
+          let rowWidth = bins.length * (BOARD_W + SPACING);
+          if (rowWidth > totalWidth) totalWidth = rowWidth;
+          matIndex++;
+        }
+        totalHeight = matIndex * (BOARD_H + SPACING);
+
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}">`;
+
+        let currentY = 0;
+        for (const [materialName, bins] of Object.entries(packedResults)) {
+          // Etiqueta del material
+          svg += `<text x="0" y="${currentY + 100}" font-family="sans-serif" font-size="100" font-weight="bold" fill="#0f172a">${materialName}</text>`;
+
+          bins.forEach((bin, binIndex) => {
+            let currentX = binIndex * (BOARD_W + SPACING);
+            let boardY = currentY + 200;
+
+            // Fondo de la placa
+            svg += `<rect x="${currentX}" y="${boardY}" width="${BOARD_W}" height="${BOARD_H}" fill="#f8fafc" stroke="#94a3b8" stroke-width="10"/>`;
+
+            // Piezas
+            bin.usedRects.forEach((rect) => {
+              let finalW = rect.w - KERF;
+              let finalH = rect.h - KERF;
+              svg += `<rect x="${currentX + rect.x}" y="${boardY + rect.y}" width="${finalW}" height="${finalH}" fill="#dbeafe" stroke="#3b82f6" stroke-width="4"/>`;
+              svg += `<text x="${currentX + rect.x + finalW / 2}" y="${boardY + rect.y + finalH / 2}" font-family="monospace" font-size="32" font-weight="bold" fill="#1e3a8a" text-anchor="middle">${rect.data}</text>`;
+              svg += `<text x="${currentX + rect.x + finalW / 2}" y="${boardY + rect.y + finalH / 2 + 40}" font-family="sans-serif" font-size="24" fill="#1e3a8a" text-anchor="middle">${finalW}x${finalH}</text>`;
+            });
+          });
+          currentY += BOARD_H + SPACING + 300;
+        }
+        svg += `</svg>`;
+
+        triggerDownload(
+          "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
+          "planos-cnc-completos.svg",
+        );
+      }
+
+      function triggerDownload(dataUri, filename) {
+        let a = document.createElement("a");
+        a.href = dataUri;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      // Inicializar cálculo al cargar la página
       window.onload = runPacking;
     </script>
   </body>
