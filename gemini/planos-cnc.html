@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nesting de Cortes CNC - Mesa de Arte</title>
+    <title>Planos de Corte CNC - Mesa de Arte</title>
     <style>
       /* Base FlyonUI Variables */
       :root {
@@ -158,7 +158,7 @@
         transition: fill 0.2s;
       }
       .part:hover {
-        fill: #bfdbfe !important; /* Resalte al pasar el mouse */
+        fill: #bfdbfe !important;
       }
       .part-text {
         font-size: 24px;
@@ -200,7 +200,7 @@
           >2. Presupuesto / Cortes</a
         >
         <a href="planos-cnc.html" class="nav-item active"
-          >3. Nesting de Cortes</a
+          >3. Planos de Corte CNC</a
         >
         <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
@@ -212,7 +212,7 @@
         <div class="card-header">
           <div>
             <h2 style="margin: 0; font-size: 1.5rem">
-              Nesting CNC MaxRects (Multi-material)
+              Planos de Corte CNC MaxRects (Multi-material)
             </h2>
             <p
               style="
@@ -222,8 +222,8 @@
                 font-size: 1rem;
               "
             >
-              Geometría optimizada. TAB-REFUERZO ajustado a 295mm. Kerf de
-              sierra: 3mm.
+              Algoritmo multi-heurística. Zócalos perimetrales integrados. Kerf
+              de sierra: 3mm.
             </p>
           </div>
           <div class="button-group">
@@ -253,13 +253,15 @@
       const materialsData = {
         "MDF 25mm (Tablero)": [
           { id: "TAB-PRINCIPAL", w: 2596, h: 930, qty: 1 },
-          { id: "TAB-REFUERZO", w: 2596, h: 295, qty: 3 }, // Ajustado para entrar en 1 placa
+          { id: "TAB-REFUERZO", w: 2596, h: 295, qty: 3 },
         ],
         "MDF 18mm (Estructura y Frentes)": [
           { id: "A-TAPA/BASE", w: 1296, h: 930, qty: 2 },
           { id: "A-LATERAL", w: 912, h: 546, qty: 2 },
           { id: "A-TRASERA", w: 1260, h: 546, qty: 1 },
           { id: "A-FRENTE", w: 1296, h: 80, qty: 7 },
+          { id: "A-ZOCALO-FR/TR", w: 1296, h: 120, qty: 2 },
+          { id: "A-ZOCALO-LAT", w: 690, h: 50, qty: 2 },
           { id: "B-TAPA/BASE", w: 600, h: 930, qty: 2 },
           { id: "B-LATERAL", w: 912, h: 546, qty: 2 },
           { id: "B-DIVISOR", w: 564, h: 546, qty: 1 },
@@ -267,7 +269,8 @@
           { id: "B-ESTANTE", w: 564, h: 329, qty: 2 },
           { id: "B-FRENTE-GDE", w: 596, h: 140, qty: 2 },
           { id: "B-FRENTE-CH", w: 596, h: 60, qty: 3 },
-          { id: "TACO-RUEDA", w: 120, h: 120, qty: 16 },
+          { id: "B-ZOCALO-FR/TR", w: 600, h: 120, qty: 2 },
+          { id: "B-ZOCALO-LAT", w: 690, h: 50, qty: 2 },
           { id: "PLANTILLA-A", w: 860, h: 80, qty: 1 },
           { id: "PLANTILLA-B", w: 500, h: 140, qty: 1 },
         ],
@@ -287,7 +290,7 @@
 
       let packedResults = {};
 
-      // --- ALGORITMO MAXRECTS (BSSF) ---
+      // --- ALGORITMO MAXRECTS ---
       class MaxRectsBin {
         constructor(w, h) {
           this.w = w;
@@ -304,7 +307,7 @@
           for (let i = 0; i < this.freeRects.length; i++) {
             let fr = this.freeRects[i];
 
-            // Prueba sin rotar
+            // Orientación Original
             if (fr.w >= w && fr.h >= h) {
               let shortFit = Math.min(fr.w - w, fr.h - h);
               let longFit = Math.max(fr.w - w, fr.h - h);
@@ -318,7 +321,7 @@
               }
             }
 
-            // Prueba rotado
+            // Orientación Rotada
             if (fr.w >= h && fr.h >= w) {
               let shortFit = Math.min(fr.w - h, fr.h - w);
               let longFit = Math.max(fr.w - h, fr.h - w);
@@ -410,45 +413,69 @@
         }
       }
 
-      // --- EJECUCIÓN PRINCIPAL ---
+      // --- EJECUCIÓN PRINCIPAL CON MULTI-HEURÍSTICA ---
       function runPacking() {
         packedResults = {};
         const outputDiv = document.getElementById("output");
         outputDiv.innerHTML = "";
 
         for (const [materialName, parts] of Object.entries(materialsData)) {
-          let partsToPack = [];
+          let basePartsToPack = [];
 
           parts.forEach((p) => {
             for (let i = 0; i < p.qty; i++) {
-              partsToPack.push({ id: p.id, w: p.w + KERF, h: p.h + KERF });
+              basePartsToPack.push({ id: p.id, w: p.w + KERF, h: p.h + KERF });
             }
           });
 
-          // ORDENAMIENTO OPTIMIZADO: Prioriza primero la dimensión más larga absoluta de la pieza
-          // Esto evita que tiras muy largas queden para el final y fuercen abrir placas nuevas.
-          partsToPack.sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
+          // Probamos 4 métodos de ordenamiento y nos quedamos con el que gaste menos placas.
+          let bestBinsResult = null;
+          let bestBinCount = Infinity;
 
-          let bins = [];
+          const heuristics = [
+            (a, b) => b.w * b.h - a.w * a.h, // Por Área
+            (a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h), // Por Lado Más Largo
+            (a, b) => b.w + b.h - (a.w + a.h), // Por Perímetro
+            (a, b) => {
+              // Híbrido: Lado mayor primero, si empatan, por área.
+              let maxA = Math.max(a.w, a.h),
+                maxB = Math.max(b.w, b.h);
+              if (maxB !== maxA) return maxB - maxA;
+              return b.w * b.h - a.w * a.h;
+            },
+          ];
 
-          partsToPack.forEach((part) => {
-            let placed = false;
-            for (let i = 0; i < bins.length; i++) {
-              if (bins[i].insert(part.w, part.h, part.id)) {
-                placed = true;
-                break;
+          for (let hIndex = 0; hIndex < heuristics.length; hIndex++) {
+            let currentPartsToPack = JSON.parse(
+              JSON.stringify(basePartsToPack),
+            );
+            currentPartsToPack.sort(heuristics[hIndex]);
+
+            let currentBins = [];
+            currentPartsToPack.forEach((part) => {
+              let placed = false;
+              for (let i = 0; i < currentBins.length; i++) {
+                if (currentBins[i].insert(part.w, part.h, part.id)) {
+                  placed = true;
+                  break;
+                }
               }
-            }
-            if (!placed) {
-              let newBin = new MaxRectsBin(BOARD_W, BOARD_H);
-              newBin.insert(part.w, part.h, part.id);
-              bins.push(newBin);
-            }
-          });
+              if (!placed) {
+                let newBin = new MaxRectsBin(BOARD_W, BOARD_H);
+                newBin.insert(part.w, part.h, part.id);
+                currentBins.push(newBin);
+              }
+            });
 
-          packedResults[materialName] = bins;
+            if (currentBins.length < bestBinCount) {
+              bestBinCount = currentBins.length;
+              bestBinsResult = currentBins;
+            }
+          }
 
-          // Paleta de colores idéntica a tu código
+          packedResults[materialName] = bestBinsResult;
+
+          // Paleta de colores
           const MAT_COLORS = {
             25: {
               fill: "#fef3c7",
@@ -487,10 +514,10 @@
           let materialHtml = `<div class="material-section">
             <h3 class="material-title" style="border-left:4px solid ${pal.stroke}; padding-left:0.6rem;">
               ${materialName}
-              <span style="font-size:0.8rem;font-weight:500;color:${pal.text};background:${pal.fill};border:1px solid ${pal.stroke};border-radius:999px;padding:0.1rem 0.6rem;margin-left:0.5rem;">${bins.length} placa${bins.length > 1 ? "s" : ""}</span>
+              <span style="font-size:0.8rem;font-weight:500;color:${pal.text};background:${pal.fill};border:1px solid ${pal.stroke};border-radius:999px;padding:0.1rem 0.6rem;margin-left:0.5rem;">${bestBinsResult.length} placa${bestBinsResult.length > 1 ? "s" : ""}</span>
             </h3>`;
 
-          bins.forEach((bin, index) => {
+          bestBinsResult.forEach((bin, index) => {
             let svgContent = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg">`;
             svgContent += `<rect x="0" y="0" width="${BOARD_W}" height="${BOARD_H}" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="8" stroke-opacity="0.4"/>`;
 
@@ -516,7 +543,7 @@
         }
       }
 
-      // --- FUNCIONES DE DESCARGA RESTAURADAS ---
+      // --- FUNCIONES DE DESCARGA ---
       function downloadDXF() {
         let dxf = "0\nSECTION\n2\nENTITIES\n";
         const X_OFFSET_PER_BOARD = BOARD_W + 500;
@@ -530,7 +557,6 @@
           bins.forEach((bin, binIndex) => {
             let boardOffsetX = binIndex * X_OFFSET_PER_BOARD;
 
-            // Contorno de la placa
             dxf += createDXFRectangle(
               boardOffsetX,
               baseMatY,
@@ -539,7 +565,6 @@
               `PLACA_${safeLayerName}`,
             );
 
-            // Cortes de piezas
             bin.usedRects.forEach((rect) => {
               dxf += createDXFRectangle(
                 boardOffsetX + rect.x,

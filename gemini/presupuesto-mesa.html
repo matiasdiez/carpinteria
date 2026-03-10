@@ -227,7 +227,7 @@
         <a href="presupuesto-mesa.html" class="nav-item active"
           >2. Presupuesto / Cortes</a
         >
-        <a href="planos-cnc.html" class="nav-item">3. Nesting de Cortes</a>
+        <a href="planos-cnc.html" class="nav-item">3. Planos de Corte CNC</a>
         <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
@@ -293,8 +293,8 @@
             margin-bottom: 1.5rem;
           "
         >
-          Matemática optimizada: Engroses de tablero reducidos a 295mm para usar
-          una sola placa. Plantillas incluidas.
+          Zócalo perimetral estético incluido. Matemática adaptada a 930mm de
+          profundidad.
         </p>
         <div class="table-container">
           <table>
@@ -317,7 +317,7 @@
               </tr>
               <tr class="mat-25">
                 <td><span class="badge badge-25">TAB-REFUERZO</span></td>
-                <td>Engrose tablero (Ajustado p/ 1 placa)</td>
+                <td>Engrose tablero</td>
                 <td>MDF 25mm</td>
                 <td>2596 x 295</td>
                 <td>3</td>
@@ -351,6 +351,22 @@
                 <td>1296 x 80</td>
                 <td>7</td>
               </tr>
+
+              <tr class="mat-18">
+                <td><span class="badge badge-18">A-ZOCALO-FR/TR</span></td>
+                <td>Zócalo frente y atrás Isla A (Soporta ruedas)</td>
+                <td>MDF 18mm</td>
+                <td>1296 x 120</td>
+                <td>2</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">A-ZOCALO-LAT</span></td>
+                <td>Zócalo lateral Isla A (Estético)</td>
+                <td>MDF 18mm</td>
+                <td>690 x 50</td>
+                <td>2</td>
+              </tr>
+
               <tr class="mat-18">
                 <td><span class="badge badge-18">B-TAPA/BASE</span></td>
                 <td>Techo/Piso Isla B</td>
@@ -400,13 +416,22 @@
                 <td>596 x 60</td>
                 <td>3</td>
               </tr>
+
               <tr class="mat-18">
-                <td><span class="badge badge-18">TACO-RUEDA</span></td>
-                <td>Anclajes para base</td>
+                <td><span class="badge badge-18">B-ZOCALO-FR/TR</span></td>
+                <td>Zócalo frente y atrás Isla B (Soporta ruedas)</td>
                 <td>MDF 18mm</td>
-                <td>120 x 120</td>
-                <td>16</td>
+                <td>600 x 120</td>
+                <td>2</td>
               </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">B-ZOCALO-LAT</span></td>
+                <td>Zócalo lateral Isla B (Estético)</td>
+                <td>MDF 18mm</td>
+                <td>690 x 50</td>
+                <td>2</td>
+              </tr>
+
               <tr class="mat-18">
                 <td><span class="badge badge-18">PLANTILLA-A</span></td>
                 <td>Escantillón correderas (Isla A)</td>
@@ -512,8 +537,8 @@
         { cat: "Placas", desc: "MDF 25mm (Tablero)", qty: 1, price: 65000 },
         {
           cat: "Placas",
-          desc: "MDF 18mm (Estr/Frentes/Plantillas)",
-          qty: 3,
+          desc: "MDF 18mm (Estructura/Zócalos/Frentes)",
+          qty: 2,
           price: 48000,
         },
         {
