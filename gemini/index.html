@@ -111,7 +111,7 @@
         border-radius: var(--radius-btn);
         background-color: #fafafa;
         margin-bottom: 2rem;
-        overflow: visible;
+        overflow: visible; /* Clave para que no se corten las cotas marginales */
       }
       .cut {
         stroke: var(--text-main);
@@ -136,7 +136,7 @@
         fill: none;
       }
 
-      /* Estilos de Cotas y Textos */
+      /* Estilos de Cotas y Punteros */
       .dim-line {
         stroke: #dc2626;
         stroke-width: 2.5;
@@ -146,6 +146,12 @@
         stroke: #dc2626;
         stroke-width: 3.5;
       }
+      .pointer-line {
+        stroke: #dc2626;
+        stroke-width: 2;
+        fill: none;
+        stroke-dasharray: 6 4;
+      }
       .dim-text {
         fill: #dc2626;
         font-size: 32px;
@@ -153,8 +159,21 @@
         font-weight: bold;
         text-anchor: middle;
       }
+      .dim-text-left {
+        fill: #dc2626;
+        font-size: 32px;
+        font-family: monospace;
+        font-weight: bold;
+        text-anchor: start;
+      }
+      .dim-text-right {
+        fill: #dc2626;
+        font-size: 32px;
+        font-family: monospace;
+        font-weight: bold;
+        text-anchor: end;
+      }
 
-      /* Cotas Internas (Verde) */
       .dim-internal {
         fill: #059669;
         font-size: 28px;
@@ -220,10 +239,12 @@
       <div class="card">
         <div class="card-header">
           <div>
-            <h1 class="card-title">Lámina 1: Conjunto General</h1>
+            <h1 class="card-title">
+              Lámina 1: Conjunto General (Mesa Completa)
+            </h1>
             <p class="card-desc">
-              Planta General y Vista Frontal. Profundidad corregida a 930mm.
-              Estructura de zócalos incluída.
+              Cotización externa e interna. Uso de flechas de referencia para
+              evitar superposición.
             </p>
           </div>
         </div>
@@ -241,6 +262,7 @@
             >
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626" />
             </marker>
+            <circle id="dot" cx="5" cy="5" r="4" fill="#dc2626" />
           </defs>
 
           <text x="1298" y="-250" class="label-svg" text-anchor="middle">
@@ -340,7 +362,7 @@
           <line x1="1996" y1="930" x2="1996" y2="1100" class="proj-line" />
         </svg>
 
-        <svg viewBox="-400 -300 3400 1300" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="-400 -300 4200 1300" xmlns="http://www.w3.org/2000/svg">
           <text x="1298" y="-150" class="label-svg" text-anchor="middle">
             VISTA FRONTAL (CONJUNTO ARMADO)
           </text>
@@ -363,45 +385,22 @@
             ALTURA TOTAL: 750 mm
           </text>
 
-          <line x1="2650" y1="0" x2="2650" y2="25" class="dim-line" />
-          <text x="2680" y="20" class="dim-text" text-anchor="start">
-            25 (Tablero Principal)
-          </text>
-
-          <line x1="2650" y1="25" x2="2650" y2="50" class="dim-line" />
-          <text x="2680" y="45" class="dim-text" text-anchor="start">
-            25 (Subcapa Tablero)
-          </text>
-
-          <line x1="2650" y1="50" x2="2650" y2="75" class="dim-line" />
-          <text x="2680" y="70" class="dim-text" text-anchor="start">
-            25 (Luz Libre / Listones)
-          </text>
-
           <line
-            x1="2650"
-            y1="75"
-            x2="2650"
-            y2="657"
-            class="dim-line"
-            marker-start="url(#arr)"
-            marker-end="url(#arr)"
-          />
-          <text x="2680" y="366" class="dim-text" text-anchor="start">
-            582 (Carcasa Gabinete)
-          </text>
-
-          <line
-            x1="2650"
-            y1="657"
-            x2="2650"
+            x1="-120"
+            y1="675"
+            x2="-120"
             y2="750"
             class="dim-line"
             marker-start="url(#arr)"
             marker-end="url(#arr)"
           />
-          <text x="2680" y="715" class="dim-text" text-anchor="start">
-            93 (Zócalo 18 + Rueda 75)
+          <text
+            x="-160"
+            y="725"
+            class="dim-text"
+            transform="rotate(-90, -160, 725)"
+          >
+            LUZ: 75
           </text>
 
           <rect
@@ -439,16 +438,6 @@
 
           <rect x="0" y="75" width="1296" height="582" class="view" />
           <rect x="0" y="657" width="1296" height="18" class="cut" />
-          <text
-            x="648"
-            y="672"
-            font-family="sans-serif"
-            font-size="12"
-            fill="#ffffff"
-            text-anchor="middle"
-          >
-            A-ZOCALO-FR
-          </text>
           <rect x="150" y="675" width="60" height="75" class="view" />
           <rect x="1086" y="675" width="60" height="75" class="view" />
           <text x="648" y="360" class="label-svg" text-anchor="middle">
@@ -462,6 +451,49 @@
           <text x="2296" y="360" class="label-svg" text-anchor="middle">
             ISLA B
           </text>
+
+          <path
+            d="M 2596 12.5 L 2750 -80 L 2850 -80"
+            class="pointer-line"
+            marker-start="url(#dot)"
+          />
+          <text x="2870" y="-70" class="dim-text-left">
+            25mm (Tablero Princ.)
+          </text>
+
+          <path
+            d="M 2596 37.5 L 2750 0 L 2850 0"
+            class="pointer-line"
+            marker-start="url(#dot)"
+          />
+          <text x="2870" y="10" class="dim-text-left">25mm (Subcapa)</text>
+
+          <path
+            d="M 2596 62.5 L 2750 80 L 2850 80"
+            class="pointer-line"
+            marker-start="url(#dot)"
+          />
+          <text x="2870" y="90" class="dim-text-left">25mm (Luz Listones)</text>
+
+          <line
+            x1="2850"
+            y1="75"
+            x2="2850"
+            y2="657"
+            class="dim-line"
+            marker-start="url(#arr)"
+            marker-end="url(#arr)"
+          />
+          <text x="2880" y="366" class="dim-text-left">582mm (Gabinete)</text>
+          <line x1="2596" y1="75" x2="2850" y2="75" class="proj-line" />
+          <line x1="2596" y1="657" x2="2850" y2="657" class="proj-line" />
+
+          <path
+            d="M 2596 666 L 2750 780 L 2850 780"
+            class="pointer-line"
+            marker-start="url(#dot)"
+          />
+          <text x="2870" y="790" class="dim-text-left">18mm (Zócalo Base)</text>
         </svg>
       </div>
 
@@ -470,8 +502,8 @@
           <div>
             <h1 class="card-title">Lámina 2: Despiece Isla A (Cajonera A0)</h1>
             <p class="card-desc">
-              Dimensiones internas vitales, profundidad corregida, cajas
-              interiores y zócalo inferior de 120mm.
+              Cadena de cotas estructurales (espesores y huecos útiles) y
+              detalle de frentes.
             </p>
           </div>
         </div>
@@ -499,6 +531,7 @@
             >
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669" />
             </marker>
+            <circle id="dot2" cx="5" cy="5" r="4" fill="#dc2626" />
           </defs>
 
           <line x1="0" y1="0" x2="2800" y2="0" class="proj-line" />
@@ -517,7 +550,7 @@
             marker-start="url(#arr2)"
             marker-end="url(#arr2)"
           />
-          <text x="648" y="-100" class="dim-text">ANCHO EXTERIOR: 1296 mm</text>
+          <text x="648" y="-100" class="dim-text">ANCHO EXT: 1296 mm</text>
 
           <line
             x1="-120"
@@ -583,6 +616,20 @@
           <rect x="0" y="415" width="1296" height="80" class="view" />
           <rect x="0" y="498" width="1296" height="80" class="view" />
 
+          <path
+            d="M 1296 40 L 1400 -20 L 1450 -20"
+            class="pointer-line"
+            marker-start="url(#dot2)"
+          />
+          <text x="1460" y="-10" class="dim-text-left">FRENTE: 80mm</text>
+
+          <path
+            d="M 1296 81.5 L 1400 30 L 1450 30"
+            class="pointer-line"
+            marker-start="url(#dot2)"
+          />
+          <text x="1460" y="40" class="dim-text-left">LUZ: 3mm</text>
+
           <rect x="0" y="582" width="1296" height="18" class="cut" />
           <rect x="150" y="600" width="60" height="75" class="view" />
           <rect x="1086" y="600" width="60" height="75" class="view" />
@@ -605,6 +652,17 @@
           </text>
 
           <line
+            x1="1782"
+            y1="-30"
+            x2="1800"
+            y2="-30"
+            class="dim-line"
+            marker-start="url(#arr2)"
+            marker-end="url(#arr2)"
+          />
+          <text x="1750" y="-20" class="dim-text-right">18 (Frente)</text>
+
+          <line
             x1="1800"
             y1="-30"
             x2="2694"
@@ -617,9 +675,19 @@
             HUECO INTERIOR: 894 mm
           </text>
 
+          <line
+            x1="2694"
+            y1="-30"
+            x2="2712"
+            y2="-30"
+            class="dim-line"
+            marker-start="url(#arr2)"
+            marker-end="url(#arr2)"
+          />
+          <text x="2740" y="-20" class="dim-text-left">18 (Trasera)</text>
+
           <rect x="1800" y="0" width="912" height="18" class="cut" />
           <rect x="1800" y="564" width="912" height="18" class="cut" />
-
           <rect x="2694" y="18" width="18" height="546" class="cut" />
 
           <rect x="1782" y="0" width="18" height="80" class="cut" />
@@ -664,35 +732,15 @@
             CAJA PROFUNDIDAD: 879 mm
           </text>
 
-          <line
-            x1="2679"
-            y1="150"
-            x2="2694"
-            y2="150"
-            class="line-internal"
-            marker-start="url(#arrInt)"
-            marker-end="url(#arrInt)"
+          <path
+            d="M 2686 120 L 2730 180 L 2800 180"
+            class="pointer-line"
+            marker-start="url(#dot2)"
           />
-          <text x="2686" y="180" class="dim-internal" text-anchor="start">
-            LUZ: 15mm
-          </text>
+          <text x="2820" y="190" class="dim-text-left">LUZ FONDO: 15mm</text>
 
           <rect x="1800" y="582" width="120" height="18" class="cut" />
           <rect x="2592" y="582" width="120" height="18" class="cut" />
-
-          <line
-            x1="1800"
-            y1="610"
-            x2="1920"
-            y2="610"
-            class="dim-line"
-            marker-start="url(#arr2)"
-            marker-end="url(#arr2)"
-          />
-          <text x="1860" y="635" class="dim-text" style="font-size: 24px">
-            ZÓCALO 120
-          </text>
-
           <rect x="1830" y="600" width="60" height="75" class="view" />
           <rect x="2622" y="600" width="60" height="75" class="view" />
         </svg>
@@ -705,12 +753,12 @@
               Lámina 3: Despiece Isla B (Herramientas y Estantes)
             </h1>
             <p class="card-desc">
-              Corte lateral ilustrando la división en X=565mm, las cajas de
-              550mm, el estante oculto Full-Overlay y los zócalos.
+              Cotas detalladas de todos los frentes y cadena de profundidad
+              exacta con espesores de placa.
             </p>
           </div>
         </div>
-        <svg viewBox="-400 -300 2800 1400" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="-400 -300 3200 1400" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <marker
               id="arr3"
@@ -734,6 +782,7 @@
             >
               <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669" />
             </marker>
+            <circle id="dot3" cx="5" cy="5" r="4" fill="#dc2626" />
           </defs>
 
           <line x1="0" y1="0" x2="2000" y2="0" class="proj-line" />
@@ -752,7 +801,7 @@
             marker-start="url(#arr3)"
             marker-end="url(#arr3)"
           />
-          <text x="300" y="-100" class="dim-text">ANCHO EXTERIOR: 600 mm</text>
+          <text x="300" y="-100" class="dim-text">ANCHO EXT: 600 mm</text>
 
           <line
             x1="18"
@@ -764,22 +813,6 @@
             marker-end="url(#arrInt2)"
           />
           <text x="300" y="-40" class="dim-internal">HUECO LIBRE: 564 mm</text>
-          <line
-            x1="18"
-            y1="0"
-            x2="18"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
-          <line
-            x1="582"
-            y1="0"
-            x2="582"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
 
           <line
             x1="-120"
@@ -809,122 +842,126 @@
           />
 
           <rect x="18" y="18" width="564" height="127" class="view" />
-          <text x="300" y="85" class="sub-label" text-anchor="middle">
-            HUECO ABIERTO
-          </text>
-
           <rect x="0" y="145" width="600" height="140" class="view" />
           <rect x="0" y="288" width="600" height="140" class="view" />
           <rect x="0" y="431" width="600" height="60" class="view" />
           <rect x="0" y="494" width="600" height="60" class="view" />
           <rect x="0" y="557" width="600" height="25" class="view" />
 
-          <rect x="18" y="145" width="564" height="18" class="hidden-line" />
-          <text x="300" y="158" class="dim-internal" style="font-size: 14px">
-            ESTANTE OCULTO
+          <path
+            d="M 600 81.5 L 680 81.5"
+            class="pointer-line"
+            marker-start="url(#dot3)"
+          />
+          <text x="700" y="90" class="dim-text-left">
+            127mm (Hueco Abierto)
           </text>
 
-          <line
-            x1="640"
-            y1="145"
-            x2="640"
-            y2="285"
-            class="dim-line"
-            marker-start="url(#arr3)"
-            marker-end="url(#arr3)"
+          <path
+            d="M 600 215 L 680 215"
+            class="pointer-line"
+            marker-start="url(#dot3)"
           />
-          <text x="670" y="225" class="dim-text" text-anchor="start">
-            FRENTE: 140
+          <text x="700" y="225" class="dim-text-left">
+            140mm (Cajón Profundo)
+          </text>
+
+          <path
+            d="M 600 461 L 680 461"
+            class="pointer-line"
+            marker-start="url(#dot3)"
+          />
+          <text x="700" y="471" class="dim-text-left">60mm (Cajón Chato)</text>
+
+          <path
+            d="M 600 570 L 680 570"
+            class="pointer-line"
+            marker-start="url(#dot3)"
+          />
+          <text x="700" y="580" class="dim-text-left">
+            25mm (Frente Cierre)
           </text>
 
           <rect x="0" y="582" width="600" height="18" class="cut" />
           <rect x="100" y="600" width="60" height="75" class="view" />
           <rect x="440" y="600" width="60" height="75" class="view" />
 
-          <text x="1553" y="-160" class="label-svg" text-anchor="middle">
+          <text x="1753" y="-160" class="label-svg" text-anchor="middle">
             CORTE LATERAL (INTERIOR)
           </text>
 
           <line
-            x1="1082"
+            x1="1282"
             y1="-80"
-            x2="2012"
+            x2="2212"
             y2="-80"
             class="dim-line"
             marker-start="url(#arr3)"
             marker-end="url(#arr3)"
           />
-          <text x="1547" y="-100" class="dim-text">
+          <text x="1747" y="-100" class="dim-text">
             PROFUNDIDAD TOTAL: 930 mm
           </text>
 
-          <rect x="1100" y="0" width="912" height="18" class="cut" />
-          <rect x="1100" y="564" width="912" height="18" class="cut" />
-          <rect x="1665" y="18" width="18" height="546" class="cut" />
+          <line
+            x1="1282"
+            y1="-30"
+            x2="1300"
+            y2="-30"
+            class="dim-line"
+            marker-start="url(#arr3)"
+            marker-end="url(#arr3)"
+          />
+          <text x="1250" y="-20" class="dim-text-right">18 (Frente)</text>
 
           <line
-            x1="1100"
+            x1="1300"
             y1="-30"
-            x2="1665"
+            x2="1865"
             y2="-30"
             class="line-internal"
             marker-start="url(#arrInt2)"
             marker-end="url(#arrInt2)"
           />
-          <text x="1382" y="-40" class="dim-internal">FRENTE ÚTIL: 565 mm</text>
-          <line
-            x1="1100"
-            y1="0"
-            x2="1100"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
-          <line
-            x1="1665"
-            y1="18"
-            x2="1665"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
+          <text x="1582" y="-40" class="dim-internal">FRENTE: 565 mm</text>
 
           <line
-            x1="1683"
+            x1="1865"
             y1="-30"
-            x2="2012"
+            x2="1883"
+            y2="-30"
+            class="dim-line"
+            marker-start="url(#arr3)"
+            marker-end="url(#arr3)"
+          />
+          <text x="1874" y="-50" class="dim-text" style="font-size: 20px">
+            18 (Div)
+          </text>
+
+          <line
+            x1="1883"
+            y1="-30"
+            x2="2212"
             y2="-30"
             class="line-internal"
             marker-start="url(#arrInt2)"
             marker-end="url(#arrInt2)"
           />
-          <text x="1847" y="-40" class="dim-internal">
+          <text x="2047" y="-40" class="dim-internal">
             ESTANTE TRASERO: 329 mm
           </text>
-          <line
-            x1="1683"
-            y1="18"
-            x2="1683"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
-          <line
-            x1="2012"
-            y1="0"
-            x2="2012"
-            y2="-40"
-            stroke="#059669"
-            stroke-width="1.5"
-          />
 
-          <rect x="1082" y="145" width="18" height="140" class="cut" />
-          <rect x="1082" y="288" width="18" height="140" class="cut" />
+          <rect x="1300" y="0" width="912" height="18" class="cut" />
+          <rect x="1300" y="564" width="912" height="18" class="cut" />
+          <rect x="1865" y="18" width="18" height="546" class="cut" />
 
-          <rect x="1100" y="145" width="565" height="18" class="cut" />
+          <rect x="1282" y="145" width="18" height="140" class="cut" />
+          <rect x="1282" y="288" width="18" height="140" class="cut" />
+
+          <rect x="1300" y="145" width="565" height="18" class="cut" />
 
           <rect
-            x="1100"
+            x="1300"
             y="165"
             width="550"
             height="120"
@@ -932,7 +969,7 @@
             fill="#fef08a"
           />
           <rect
-            x="1100"
+            x="1300"
             y="308"
             width="550"
             height="120"
@@ -941,37 +978,39 @@
           />
 
           <line
-            x1="1100"
+            x1="1300"
             y1="200"
-            x2="1650"
+            x2="1850"
             y2="200"
             class="line-internal"
             marker-start="url(#arrInt2)"
             marker-end="url(#arrInt2)"
           />
-          <text x="1375" y="230" class="dim-internal">
+          <text x="1575" y="230" class="dim-internal">
             CAJA PROFUNDIDAD: 550 mm
           </text>
 
-          <line x1="1650" y1="165" x2="1665" y2="165" class="line-internal" />
-          <text
-            x="1657"
-            y="190"
-            class="dim-internal"
-            text-anchor="start"
-            font-size="20"
-          >
-            15 LUZ
-          </text>
+          <rect x="1883" y="200" width="329" height="18" class="cut" />
+          <rect x="1883" y="380" width="329" height="18" class="cut" />
 
-          <rect x="1683" y="200" width="329" height="18" class="cut" />
-          <rect x="1683" y="380" width="329" height="18" class="cut" />
+          <path
+            d="M 2212 109 L 2300 109"
+            class="pointer-line"
+            marker-start="url(#dot3)"
+          />
+          <text x="2320" y="119" class="dim-text-left">182mm (Libre)</text>
 
-          <rect x="1100" y="582" width="120" height="18" class="cut" />
-          <rect x="1892" y="582" width="120" height="18" class="cut" />
+          <path
+            d="M 2212 290 L 2300 290"
+            class="pointer-line"
+            marker-start="url(#dot3)"
+          />
+          <text x="2320" y="300" class="dim-text-left">162mm (Libre)</text>
 
-          <rect x="1130" y="600" width="60" height="75" class="view" />
-          <rect x="1922" y="600" width="60" height="75" class="view" />
+          <rect x="1300" y="582" width="120" height="18" class="cut" />
+          <rect x="2092" y="582" width="120" height="18" class="cut" />
+          <rect x="1330" y="600" width="60" height="75" class="view" />
+          <rect x="2122" y="600" width="60" height="75" class="view" />
         </svg>
       </div>
     </div>
