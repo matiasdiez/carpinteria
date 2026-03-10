@@ -290,7 +290,7 @@
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              SUBCAPA 25mm (295mm de ancho)
+              SUBCAPA 25mm (295mm ancho)
             </text>
 
             <rect x="180" y="80" width="140" height="46" class="solid-pine" />
@@ -394,7 +394,7 @@
 
         <div class="card">
           <h3 class="card-title">
-            4.2 Cajón Isla A: Marco 12mm y Fondo (Corte Lateral)
+            4.2 Cajón Isla A: Marco 12mm y Fondo (Corte Frontal)
           </h3>
           <svg viewBox="0 0 500 350">
             <rect x="40" y="30" width="22" height="280" class="hatch-mdf" />
@@ -417,7 +417,7 @@
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              GUÍA
+              GUÍA 13mm
             </text>
 
             <rect x="78" y="100" width="14" height="60" class="solid-mdf" />
@@ -588,106 +588,103 @@
         </div>
 
         <div class="card">
-          <h3 class="card-title">4.4 Escantillón (Plantilla CNC) para Guías</h3>
+          <h3 class="card-title">
+            4.4 Uso de Plantilla para Guías (Elevación Lateral Interior)
+          </h3>
           <svg viewBox="0 0 500 350">
-            <rect x="50" y="50" width="30" height="280" class="hatch-mdf" />
-            <text
-              x="65"
-              y="190"
-              class="label-text"
-              transform="rotate(-90, 65, 190)"
-              text-anchor="middle"
-              filter="url(#bg-text)"
-            >
-              LATERAL ISLA (MDF 18)
-            </text>
-
-            <rect x="50" y="300" width="400" height="30" class="hatch-mdf" />
+            <rect x="0" y="0" width="500" height="350" fill="#f8fafc" />
             <text
               x="250"
-              y="320"
+              y="30"
+              class="label-text"
+              text-anchor="middle"
+              fill="#94a3b8"
+            >
+              CARA INTERIOR LATERAL GABINETE
+            </text>
+
+            <rect x="0" y="280" width="500" height="70" class="hatch-mdf" />
+            <line
+              x1="0"
+              y1="280"
+              x2="500"
+              y2="280"
+              stroke="#0f172a"
+              stroke-width="2"
+            />
+            <text
+              x="250"
+              y="315"
               class="label-text"
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              PISO DEL MUEBLE
+              PISO DEL GABINETE (MDF 18)
             </text>
 
             <rect
-              x="80"
-              y="180"
-              width="100"
+              x="50"
+              y="160"
+              width="250"
               height="120"
-              fill="#f1f5f9"
-              stroke="#94a3b8"
-              stroke-width="3"
-              stroke-dasharray="8 8"
+              fill="#e0f2fe"
+              stroke="#3b82f6"
+              stroke-width="2"
+              stroke-dasharray="4 4"
             />
             <text
-              x="130"
-              y="240"
+              x="175"
+              y="210"
               class="label-text"
               text-anchor="middle"
-              fill="#2563eb"
+              fill="#1d4ed8"
               filter="url(#bg-text)"
             >
               PLANTILLA CNC
             </text>
             <text
-              x="130"
-              y="260"
+              x="175"
+              y="230"
               class="sub-text"
               text-anchor="middle"
-              fill="#2563eb"
+              fill="#1d4ed8"
               filter="url(#bg-text)"
             >
-              (Ver Placa MDF 18)
+              Apoyada sobre el piso
             </text>
 
-            <rect x="80" y="150" width="300" height="30" class="metal" />
+            <rect x="50" y="130" width="350" height="30" class="metal" />
+            <circle cx="80" cy="145" r="4" fill="#333" />
+            <circle cx="200" cy="145" r="4" fill="#333" />
+            <circle cx="350" cy="145" r="4" fill="#333" />
             <text
-              x="250"
-              y="170"
+              x="225"
+              y="150"
               class="label-text"
               text-anchor="middle"
+              fill="#0f172a"
               filter="url(#bg-text)"
             >
-              CORREDERA PESADA
-            </text>
-
-            <circle cx="100" cy="165" r="4" fill="#334155" />
-            <circle cx="250" cy="165" r="4" fill="#334155" />
-            <circle cx="360" cy="165" r="4" fill="#334155" />
-
-            <line
-              x1="360"
-              y1="165"
-              x2="390"
-              y2="120"
-              stroke="#64748b"
-              stroke-width="1.5"
-            />
-            <text x="390" y="115" class="sub-text" filter="url(#bg-text)">
-              Tornillo Fix 3.5x16
+              CORREDERA PESADA APOYADA
             </text>
 
             <text
-              x="220"
-              y="230"
+              x="340"
+              y="200"
               class="sub-text"
               font-weight="bold"
               filter="url(#bg-text)"
             >
               *MÉTODO DE TRABAJO:
             </text>
-            <text x="220" y="250" class="sub-text" filter="url(#bg-text)">
-              Usar la plantilla cortada por la CNC.
+            <text x="340" y="220" class="sub-text" filter="url(#bg-text)">
+              1. Apoyar plantilla en piso.
             </text>
-            <text x="220" y="270" class="sub-text" filter="url(#bg-text)">
-              Apoyarla en el piso, posar la guía encima
+            <text x="340" y="240" class="sub-text" filter="url(#bg-text)">
+              2. Posar la guía encima.
             </text>
-            <text x="220" y="290" class="sub-text" filter="url(#bg-text)">
-              y atornillar. Evita medir a mano y errores.
+            <text x="340" y="260" class="sub-text" filter="url(#bg-text)">
+              3. Atornillar. Cero errores.
             </text>
           </svg>
         </div>
@@ -696,7 +693,7 @@
       <div class="grid-2">
         <div class="card">
           <h3 class="card-title">
-            4.5 Tolerancia Corredera Pesada (Vista Superior Corregida)
+            4.5 Tolerancia Corredera Pesada (Vista Superior Planta)
           </h3>
           <svg viewBox="0 0 500 350">
             <rect x="100" y="50" width="36" height="250" class="hatch-mdf" />
@@ -804,10 +801,10 @@
               *VISTA SUPERIOR (PLANTA):
             </text>
             <text x="230" y="170" class="sub-text" filter="url(#bg-text)">
-              La corredera corre PARALELA entre
+              La corredera se instala PARALELA
             </text>
             <text x="230" y="190" class="sub-text" filter="url(#bg-text)">
-              ambos laterales dentro de un
+              entre ambos laterales, respetando
             </text>
             <text
               x="230"
@@ -817,7 +814,7 @@
               font-weight="bold"
               filter="url(#bg-text)"
             >
-              espacio estricto de 13.0 mm.
+              la luz técnica estricta de 13.0 mm.
             </text>
           </svg>
         </div>
@@ -905,7 +902,7 @@
 
       <div class="grid-2">
         <div class="card">
-          <h3 class="card-title">4.7 Encastre Fondo Isla B (Vista Lateral)</h3>
+          <h3 class="card-title">4.7 Encastre Fondo Isla B (Corte Frontal)</h3>
           <svg viewBox="0 0 500 350">
             <rect x="100" y="50" width="30" height="250" class="hatch-mdf" />
             <text
