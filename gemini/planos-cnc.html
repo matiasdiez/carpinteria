@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Planos de Corte CNC - Mesa de Arte</title>
     <link rel="stylesheet" href="shared-dark.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
       /* Base FlyonUI Variables */
       :root {
@@ -190,7 +191,7 @@
           <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
           <a href="plan-armado.html" class="nav-item">5. Armado</a>
         </div>
-        <button class="theme-toggle" id="themeToggle" title="Cambiar modo" aria-label="Toggle dark mode">🌙</button>
+        <button class="theme-toggle" id="themeToggle" title="Cambiar modo" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
         <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
           <span></span><span></span><span></span>
         </button>
@@ -651,17 +652,22 @@
       window.onload = runPacking;
 
       // Theme & Mobile Menu
+      function setThemeIcon(theme) {
+        var btn = document.getElementById('themeToggle');
+        btn.innerHTML = theme === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
+        if (window.lucide) lucide.createIcons();
+      }
       (function() {
         var saved = localStorage.getItem('geminiTheme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('themeToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+        document.addEventListener('DOMContentLoaded', function() { setThemeIcon(saved); });
       })();
       document.getElementById('themeToggle').addEventListener('click', function() {
         var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         var next = isDark ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        this.textContent = next === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('geminiTheme', next);
+        setThemeIcon(next);
         runPacking(); // re-render CNC with new theme
       });
       var ham = document.getElementById('navHamburger');
