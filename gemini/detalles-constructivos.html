@@ -102,7 +102,7 @@
       }
       .card-title {
         font-size: 1.125rem;
-        font-weight: 600;
+        font-weight: 700;
         margin: 0 0 1rem 0;
         border-left: 4px solid var(--primary);
         padding-left: 0.75rem;
@@ -233,7 +233,7 @@
       <div class="navbar-menu">
         <a href="index.html" class="nav-item">1. Planos</a>
         <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
-        <a href="planos-cnc.html" class="nav-item">3. CNC</a>
+        <a href="planos-cnc.html" class="nav-item">3. CNC Nesting</a>
         <a href="detalles-constructivos.html" class="nav-item active"
           >4. Detalles</a
         >
@@ -290,7 +290,7 @@
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              SUBCAPA 25mm
+              SUBCAPA 25mm (295mm de ancho)
             </text>
 
             <rect x="180" y="80" width="140" height="46" class="solid-pine" />
@@ -303,6 +303,7 @@
             >
               LISTÓN PINO 1.5"
             </text>
+
             <rect
               x="235"
               y="126"
@@ -320,7 +321,7 @@
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              TARUGO
+              TARUGO DE MADERA
             </text>
 
             <rect x="50" y="146" width="400" height="22" class="hatch-mdf" />
@@ -418,6 +419,7 @@
             >
               GUÍA
             </text>
+
             <rect x="78" y="100" width="14" height="60" class="solid-mdf" />
             <text
               x="145"
@@ -439,6 +441,7 @@
             >
               FONDO A0 (MDF 5.5)
             </text>
+
             <rect x="250" y="167" width="25" height="18" class="solid-pine" />
             <rect x="420" y="167" width="25" height="18" class="solid-pine" />
             <text
@@ -585,9 +588,7 @@
         </div>
 
         <div class="card">
-          <h3 class="card-title">
-            4.4 Escantillón (Plantilla) para Instalación de Guías
-          </h3>
+          <h3 class="card-title">4.4 Escantillón (Plantilla CNC) para Guías</h3>
           <svg viewBox="0 0 500 350">
             <rect x="50" y="50" width="30" height="280" class="hatch-mdf" />
             <text
@@ -619,8 +620,8 @@
               height="120"
               fill="#f1f5f9"
               stroke="#94a3b8"
-              stroke-width="2"
-              stroke-dasharray="6 6"
+              stroke-width="3"
+              stroke-dasharray="8 8"
             />
             <text
               x="130"
@@ -630,7 +631,7 @@
               fill="#2563eb"
               filter="url(#bg-text)"
             >
-              PLANTILLA
+              PLANTILLA CNC
             </text>
             <text
               x="130"
@@ -640,7 +641,7 @@
               fill="#2563eb"
               filter="url(#bg-text)"
             >
-              MDF Sobrante
+              (Ver Placa MDF 18)
             </text>
 
             <rect x="80" y="150" width="300" height="30" class="metal" />
@@ -680,13 +681,13 @@
               *MÉTODO DE TRABAJO:
             </text>
             <text x="220" y="250" class="sub-text" filter="url(#bg-text)">
-              Cortar un taco de MDF con la medida exacta
+              Usar la plantilla cortada por la CNC.
             </text>
             <text x="220" y="270" class="sub-text" filter="url(#bg-text)">
-              de la altura del primer cajón. Apoyar la guía
+              Apoyarla en el piso, posar la guía encima
             </text>
             <text x="220" y="290" class="sub-text" filter="url(#bg-text)">
-              sobre el taco y atornillar sin medir a mano.
+              y atornillar. Evita medir a mano y errores.
             </text>
           </svg>
         </div>
@@ -695,98 +696,128 @@
       <div class="grid-2">
         <div class="card">
           <h3 class="card-title">
-            4.5 Tolerancia Corredera Pesada (Vista Superior)
+            4.5 Tolerancia Corredera Pesada (Vista Superior Corregida)
           </h3>
           <svg viewBox="0 0 500 350">
-            <rect x="50" y="100" width="80" height="150" class="hatch-mdf" />
+            <rect x="100" y="50" width="36" height="250" class="hatch-mdf" />
             <text
-              x="90"
+              x="80"
               y="175"
               class="label-text"
-              transform="rotate(-90, 90, 175)"
+              transform="rotate(-90, 80, 175)"
               text-anchor="middle"
               filter="url(#bg-text)"
             >
               LATERAL ISLA (MDF 18)
             </text>
 
-            <rect x="130" y="110" width="5" height="130" class="metal" />
-            <rect x="135" y="120" width="5" height="110" class="metal" />
-            <rect x="140" y="130" width="3" height="90" class="metal" />
+            <rect x="136" y="80" width="26" height="190" class="metal" />
+            <line
+              x1="145"
+              y1="80"
+              x2="145"
+              y2="270"
+              stroke="#475569"
+              stroke-width="1.5"
+            />
+            <line
+              x1="153"
+              y1="80"
+              x2="153"
+              y2="270"
+              stroke="#475569"
+              stroke-width="1.5"
+            />
 
-            <rect x="143" y="120" width="60" height="110" class="solid-mdf" />
+            <rect x="162" y="65" width="24" height="220" class="solid-mdf" />
             <text
-              x="173"
+              x="200"
               y="175"
               class="label-text"
-              transform="rotate(-90, 173, 175)"
+              transform="rotate(-90, 200, 175)"
               text-anchor="middle"
               filter="url(#bg-text)"
             >
-              CAJÓN (MDF 12)
+              LATERAL CAJÓN (MDF 12)
             </text>
 
             <line
-              x1="50"
-              y1="80"
-              x2="130"
-              y2="80"
+              x1="100"
+              y1="30"
+              x2="136"
+              y2="30"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
-            <text
-              x="90"
-              y="70"
-              class="dim-text"
-              text-anchor="middle"
-              filter="url(#bg-text)"
-            >
+            <text x="118" y="20" class="dim-text" filter="url(#bg-text)">
               18
             </text>
+
             <line
-              x1="130"
-              y1="80"
-              x2="143"
-              y2="80"
+              x1="136"
+              y1="30"
+              x2="162"
+              y2="30"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
             <text
-              x="136"
-              y="65"
+              x="149"
+              y="15"
               class="dim-text"
-              text-anchor="middle"
               fill="#991b1b"
               filter="url(#bg-text)"
             >
-              13 (CRÍTICO)
+              13
             </text>
             <line
-              x1="143"
-              y1="80"
-              x2="203"
-              y2="80"
+              x1="149"
+              y1="30"
+              x2="149"
+              y2="60"
+              stroke="#991b1b"
+              stroke-dasharray="2 2"
+            />
+
+            <line
+              x1="162"
+              y1="30"
+              x2="186"
+              y2="30"
               class="dim-line"
               marker-start="url(#arrow)"
               marker-end="url(#arrow)"
             />
-            <text
-              x="173"
-              y="70"
-              class="dim-text"
-              text-anchor="middle"
-              filter="url(#bg-text)"
-            >
+            <text x="174" y="20" class="dim-text" filter="url(#bg-text)">
               12
             </text>
 
-            <text x="250" y="150" class="sub-text" filter="url(#bg-text)">
-              *La guía requiere entre 12.7 y 13.0 mm.
+            <text
+              x="230"
+              y="150"
+              class="sub-text"
+              font-weight="bold"
+              filter="url(#bg-text)"
+            >
+              *VISTA SUPERIOR (PLANTA):
             </text>
-            <text x="250" y="170" class="sub-text" filter="url(#bg-text)">
-              Si la luz es menor, los balines se traban.
+            <text x="230" y="170" class="sub-text" filter="url(#bg-text)">
+              La corredera corre PARALELA entre
+            </text>
+            <text x="230" y="190" class="sub-text" filter="url(#bg-text)">
+              ambos laterales dentro de un
+            </text>
+            <text
+              x="230"
+              y="210"
+              class="sub-text"
+              fill="#dc2626"
+              font-weight="bold"
+              filter="url(#bg-text)"
+            >
+              espacio estricto de 13.0 mm.
             </text>
           </svg>
         </div>
@@ -859,7 +890,7 @@
               text-anchor="start"
               filter="url(#bg-text)"
             >
-              LUZ: 3mm (Holgura estándar)
+              LUZ: 3mm
             </text>
 
             <text x="50" y="250" class="sub-text" filter="url(#bg-text)">
@@ -874,9 +905,7 @@
 
       <div class="grid-2">
         <div class="card">
-          <h3 class="card-title">
-            4.7 Encastre Fondo Isla B y Varilla (Vista Lateral)
-          </h3>
+          <h3 class="card-title">4.7 Encastre Fondo Isla B (Vista Lateral)</h3>
           <svg viewBox="0 0 500 350">
             <rect x="100" y="50" width="30" height="250" class="hatch-mdf" />
             <text
@@ -933,25 +962,12 @@
             >
               MARGEN: 5mm
             </text>
-
-            <text x="140" y="100" class="sub-text" filter="url(#bg-text)">
-              *La ranura va separada 5mm del
-            </text>
-            <text x="140" y="120" class="sub-text" filter="url(#bg-text)">
-              borde inferior. Justo el espacio
-            </text>
-            <text x="140" y="140" class="sub-text" filter="url(#bg-text)">
-              para pegar la varilla de 5mm y que
-            </text>
-            <text x="140" y="160" class="sub-text" filter="url(#bg-text)">
-              quede a ras de la placa de 12mm.
-            </text>
           </svg>
         </div>
 
         <div class="card">
           <h3 class="card-title">
-            4.8 Anclaje Estructural Rueda (Con Tacos de 120x120)
+            4.8 Anclaje Rueda a Zócalo Perimetral (Corte Lateral)
           </h3>
           <svg viewBox="0 0 500 350">
             <rect x="50" y="50" width="350" height="30" class="hatch-mdf" />
@@ -965,15 +981,16 @@
               PISO GABINETE (MDF 18)
             </text>
 
-            <rect x="110" y="80" width="160" height="30" class="hatch-mdf" />
+            <rect x="80" y="80" width="240" height="30" class="hatch-mdf" />
             <text
-              x="190"
+              x="200"
               y="100"
               class="label-text"
               text-anchor="middle"
+              fill="#1e3a8a"
               filter="url(#bg-text)"
             >
-              TACO RUEDA (120mm)
+              ZÓCALO BASE (MDF 18 x 120mm)
             </text>
 
             <rect x="130" y="110" width="120" height="8" class="metal" />
@@ -1017,6 +1034,7 @@
               stroke="#333"
               stroke-width="1"
             />
+
             <path d="M 170 118 L 210 118 L 200 180 L 180 180 Z" class="metal" />
             <circle
               cx="190"
@@ -1027,17 +1045,17 @@
               stroke-width="3"
             />
 
-            <text x="280" y="140" class="sub-text" filter="url(#bg-text)">
-              1. Encolar y atornillar el Taco
+            <text x="330" y="140" class="sub-text" filter="url(#bg-text)">
+              El Zócalo de 120mm cruza
             </text>
-            <text x="280" y="160" class="sub-text" filter="url(#bg-text)">
-              al Piso del Gabinete.
+            <text x="330" y="160" class="sub-text" filter="url(#bg-text)">
+              todo el ancho del mueble,
             </text>
-            <text x="280" y="180" class="sub-text" filter="url(#bg-text)">
-              2. Perforar pasante Ø8mm.
+            <text x="330" y="180" class="sub-text" filter="url(#bg-text)">
+              dando firmeza estructural
             </text>
-            <text x="280" y="200" class="sub-text" filter="url(#bg-text)">
-              3. Clavar tuerca T por dentro.
+            <text x="330" y="200" class="sub-text" filter="url(#bg-text)">
+              a la rueda y mejor estética.
             </text>
           </svg>
         </div>
@@ -1045,7 +1063,7 @@
 
       <div class="card card-full">
         <h3 class="card-title">
-          4.9 Encuentro Full Overlay (Corte Lateral Isla B)
+          4.9 Encuentro Full Overlay (Corte Lateral Isla B - Estante Oculto)
         </h3>
         <svg viewBox="0 0 1000 400" style="background: #ffffff; border: none">
           <rect x="150" y="50" width="36" height="280" class="hatch-mdf" />
@@ -1068,7 +1086,7 @@
             text-anchor="middle"
             filter="url(#bg-text)"
           >
-            ESTANTE FIJO DIVISOR HUECO (MDF 18)
+            ESTANTE FIJO DEL HUECO (MDF 18)
           </text>
 
           <rect x="186" y="90" width="36" height="240" class="solid-mdf" />
@@ -1177,7 +1195,7 @@
             caja interior de MDF 12 para lograr el Full Overlay.
           </text>
           <text x="600" y="215" class="sub-text" filter="url(#bg-text)">
-            - Esto oculta el estante divisor desde el exterior.
+            - Esto oculta el canto del estante divisor desde el frente.
           </text>
           <text x="600" y="235" class="sub-text" filter="url(#bg-text)">
             - El diseño deja 2mm libres entre el borde superior
