@@ -59,7 +59,7 @@
       .container {
         position: relative;
         z-index: 1;
-        max-width: 720px;
+        max-width: 980px;
         width: 100%;
         padding: 40px 28px 60px;
         display: flex;
@@ -118,7 +118,7 @@
       /* ── Model cards ── */
       .models {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 20px;
         width: 100%;
         margin-bottom: 44px;
@@ -246,7 +246,7 @@
         color: rgba(74, 158, 205, 0.55);
       }
 
-      @media (max-width: 560px) {
+      @media (max-width: 768px) {
         .models {
           grid-template-columns: 1fr;
         }
@@ -301,6 +301,19 @@
           </p>
           <div class="model-footer">
             <span class="model-badge">Rev. D · Marzo 2026</span>
+            <span class="model-arrow">&rarr;</span>
+          </div>
+        </a>
+
+        <!-- Gemini -->
+        <a href="gemini/index.html" class="model-card" id="gemini">
+          <div class="model-label">Configuración</div>
+          <div class="model-name">Gemini</div>
+          <p class="model-desc">
+            Sistema Dos Islas Rev. B. Isla A con Flat File Cabinet A0 y Isla B con cajones + estantes abiertos. Tablero MDF 25mm.
+          </p>
+          <div class="model-footer">
+            <span class="model-badge">Rev. B · Marzo 2026</span>
             <span class="model-arrow">&rarr;</span>
           </div>
         </a>
