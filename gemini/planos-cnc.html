@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CNC Nesting - Mesa de Arte</title>
+    <title>Nesting de Cortes CNC - Mesa de Arte</title>
     <style>
       /* Base FlyonUI Variables */
       :root {
@@ -155,23 +155,18 @@
         box-shadow: var(--shadow-sm);
       }
       .part {
-        fill: #dbeafe;
-        stroke: #3b82f6;
-        stroke-width: 2;
         transition: fill 0.2s;
       }
       .part:hover {
-        fill: #bfdbfe;
+        fill: #bfdbfe !important; /* Resalte al pasar el mouse */
       }
       .part-text {
-        fill: #1e3a8a;
         font-size: 24px;
         font-family: monospace;
         text-anchor: middle;
         font-weight: bold;
       }
       .part-sub {
-        fill: #1e3a8a;
         font-size: 16px;
         font-family: sans-serif;
         text-anchor: middle;
@@ -200,9 +195,13 @@
         EstudioArte
       </a>
       <div class="navbar-menu">
-        <a href="index.html" class="nav-item">1. Planos</a>
-        <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
-        <a href="planos-cnc.html" class="nav-item active">3. CNC Nesting</a>
+        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
+        <a href="presupuesto-mesa.html" class="nav-item"
+          >2. Presupuesto / Cortes</a
+        >
+        <a href="planos-cnc.html" class="nav-item active"
+          >3. Nesting de Cortes</a
+        >
         <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
@@ -223,7 +222,8 @@
                 font-size: 1rem;
               "
             >
-              Geometría corregida para profundidad 930mm. Kerf de sierra: 3mm.
+              Geometría optimizada. TAB-REFUERZO ajustado a 295mm. Kerf de
+              sierra: 3mm.
             </p>
           </div>
           <div class="button-group">
@@ -249,11 +249,11 @@
       const BOARD_H = 1830;
       const KERF = 3;
 
-      // --- BASE DE DATOS DE PIEZAS (CORREGIDA) ---
+      // --- BASE DE DATOS DE PIEZAS ---
       const materialsData = {
         "MDF 25mm (Tablero)": [
           { id: "TAB-PRINCIPAL", w: 2596, h: 930, qty: 1 },
-          { id: "TAB-REFUERZO", w: 2596, h: 300, qty: 3 },
+          { id: "TAB-REFUERZO", w: 2596, h: 295, qty: 3 }, // Ajustado para entrar en 1 placa
         ],
         "MDF 18mm (Estructura y Frentes)": [
           { id: "A-TAPA/BASE", w: 1296, h: 930, qty: 2 },
@@ -268,6 +268,8 @@
           { id: "B-FRENTE-GDE", w: 596, h: 140, qty: 2 },
           { id: "B-FRENTE-CH", w: 596, h: 60, qty: 3 },
           { id: "TACO-RUEDA", w: 120, h: 120, qty: 16 },
+          { id: "PLANTILLA-A", w: 860, h: 80, qty: 1 },
+          { id: "PLANTILLA-B", w: 500, h: 140, qty: 1 },
         ],
         "MDF 12mm (Cajas Interiores)": [
           { id: "CAJ-A-LAT", w: 879, h: 50, qty: 14 },
@@ -332,7 +334,6 @@
           }
 
           if (!bestNode) return null;
-
           this.usedRects.push(bestNode);
 
           let i = 0;
@@ -343,13 +344,11 @@
               i++;
             }
           }
-
           this.pruneFreeList();
           return bestNode;
         }
 
         splitNode(freeNode, usedNode) {
-          // Verifica si hay intersección
           if (
             usedNode.x >= freeNode.x + freeNode.w ||
             usedNode.x + usedNode.w <= freeNode.x ||
@@ -359,11 +358,9 @@
             return false;
           }
 
-          // Nuevo nodo arriba
           if (usedNode.y > freeNode.y && usedNode.y < freeNode.y + freeNode.h) {
             this.freeRects.push({ ...freeNode, h: usedNode.y - freeNode.y });
           }
-          // Nuevo nodo abajo
           if (usedNode.y + usedNode.h < freeNode.y + freeNode.h) {
             this.freeRects.push({
               ...freeNode,
@@ -371,11 +368,9 @@
               h: freeNode.y + freeNode.h - (usedNode.y + usedNode.h),
             });
           }
-          // Nuevo nodo a la izquierda
           if (usedNode.x > freeNode.x && usedNode.x < freeNode.x + freeNode.w) {
             this.freeRects.push({ ...freeNode, w: usedNode.x - freeNode.x });
           }
-          // Nuevo nodo a la derecha
           if (usedNode.x + usedNode.w < freeNode.x + freeNode.w) {
             this.freeRects.push({
               ...freeNode,
@@ -383,31 +378,29 @@
               w: freeNode.x + freeNode.w - (usedNode.x + usedNode.w),
             });
           }
-
           return true;
         }
 
         pruneFreeList() {
-          // Elimina rectángulos redundantes o contenidos en otros
           for (let i = 0; i < this.freeRects.length; i++) {
             for (let j = i + 1; j < this.freeRects.length; j++) {
-              let rectI = this.freeRects[i];
-              let rectJ = this.freeRects[j];
+              let rI = this.freeRects[i];
+              let rJ = this.freeRects[j];
               if (
-                rectI.x >= rectJ.x &&
-                rectI.y >= rectJ.y &&
-                rectI.x + rectI.w <= rectJ.x + rectJ.w &&
-                rectI.y + rectI.h <= rectJ.y + rectJ.h
+                rI.x >= rJ.x &&
+                rI.y >= rJ.y &&
+                rI.x + rI.w <= rJ.x + rJ.w &&
+                rI.y + rI.h <= rJ.y + rJ.h
               ) {
                 this.freeRects.splice(i, 1);
                 i--;
                 break;
               }
               if (
-                rectJ.x >= rectI.x &&
-                rectJ.y >= rectI.y &&
-                rectJ.x + rectJ.w <= rectI.x + rectI.w &&
-                rectJ.y + rectJ.h <= rectI.y + rectI.h
+                rJ.x >= rI.x &&
+                rJ.y >= rI.y &&
+                rJ.x + rJ.w <= rI.x + rI.w &&
+                rJ.y + rJ.h <= rI.y + rI.h
               ) {
                 this.freeRects.splice(j, 1);
                 j--;
@@ -426,19 +419,18 @@
         for (const [materialName, parts] of Object.entries(materialsData)) {
           let partsToPack = [];
 
-          // Expandir cantidades y sumar el Kerf (espesor de sierra)
           parts.forEach((p) => {
             for (let i = 0; i < p.qty; i++) {
               partsToPack.push({ id: p.id, w: p.w + KERF, h: p.h + KERF });
             }
           });
 
-          // Ordenar por área descendente para un mejor empaquetado heurístico
-          partsToPack.sort((a, b) => b.w * b.h - a.w * a.h);
+          // ORDENAMIENTO OPTIMIZADO: Prioriza primero la dimensión más larga absoluta de la pieza
+          // Esto evita que tiras muy largas queden para el final y fuercen abrir placas nuevas.
+          partsToPack.sort((a, b) => Math.max(b.w, b.h) - Math.max(a.w, a.h));
 
           let bins = [];
 
-          // Proceso de inserción
           partsToPack.forEach((part) => {
             let placed = false;
             for (let i = 0; i < bins.length; i++) {
@@ -447,7 +439,6 @@
                 break;
               }
             }
-            // Si no cabe en las placas existentes, crear una nueva
             if (!placed) {
               let newBin = new MaxRectsBin(BOARD_W, BOARD_H);
               newBin.insert(part.w, part.h, part.id);
@@ -457,7 +448,7 @@
 
           packedResults[materialName] = bins;
 
-          // Paleta de colores por grosor (igual que presupuesto-mesa.html)
+          // Paleta de colores idéntica a tu código
           const MAT_COLORS = {
             25: {
               fill: "#fef3c7",
@@ -484,6 +475,7 @@
               bg: "#f5f3ff",
             },
           };
+
           function getMatKey(name) {
             if (name.includes("25")) return "25";
             if (name.includes("18")) return "18";
@@ -492,7 +484,6 @@
           }
           const pal = MAT_COLORS[getMatKey(materialName)];
 
-          // Renderizar HTML para este material
           let materialHtml = `<div class="material-section">
             <h3 class="material-title" style="border-left:4px solid ${pal.stroke}; padding-left:0.6rem;">
               ${materialName}
@@ -501,14 +492,13 @@
 
           bins.forEach((bin, index) => {
             let svgContent = `<svg viewBox="0 0 ${BOARD_W} ${BOARD_H}" xmlns="http://www.w3.org/2000/svg">`;
-            // Fondo de placa
             svgContent += `<rect x="0" y="0" width="${BOARD_W}" height="${BOARD_H}" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="8" stroke-opacity="0.4"/>`;
 
             bin.usedRects.forEach((rect) => {
               let finalW = rect.w - KERF;
               let finalH = rect.h - KERF;
               svgContent += `
-                <rect x="${rect.x}" y="${rect.y}" width="${finalW}" height="${finalH}" fill="${pal.fill}" stroke="${pal.stroke}" stroke-width="4" rx="6"/>
+                <rect x="${rect.x}" y="${rect.y}" width="${finalW}" height="${finalH}" class="part" fill="${pal.fill}" stroke="${pal.stroke}" stroke-width="4" rx="6"/>
                 <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2}" class="part-text" fill="${pal.text}">${rect.data}</text>
                 <text x="${rect.x + finalW / 2}" y="${rect.y + finalH / 2 + 25}" class="part-sub" fill="${pal.text}" opacity="0.75">${finalW} x ${finalH}</text>
               `;
@@ -526,12 +516,11 @@
         }
       }
 
-      // --- FUNCIONES DE DESCARGA ---
+      // --- FUNCIONES DE DESCARGA RESTAURADAS ---
       function downloadDXF() {
         let dxf = "0\nSECTION\n2\nENTITIES\n";
         const X_OFFSET_PER_BOARD = BOARD_W + 500;
         const Y_OFFSET_PER_MATERIAL = BOARD_H + 1000;
-
         let matIndex = 0;
 
         for (const [materialName, bins] of Object.entries(packedResults)) {
@@ -550,7 +539,7 @@
               `PLACA_${safeLayerName}`,
             );
 
-            // Cortes internos
+            // Cortes de piezas
             bin.usedRects.forEach((rect) => {
               dxf += createDXFRectangle(
                 boardOffsetX + rect.x,
@@ -563,9 +552,7 @@
           });
           matIndex++;
         }
-
         dxf += "0\nENDSEC\n0\nEOF\n";
-
         triggerDownload(
           "data:text/plain;charset=utf-8," + encodeURIComponent(dxf),
           "planos-cnc-completos.dxf",
@@ -593,7 +580,6 @@
         let totalWidth = 0;
         let totalHeight = 0;
 
-        // Calcular dimensiones totales del lienzo
         let matIndex = 0;
         for (const [materialName, bins] of Object.entries(packedResults)) {
           let rowWidth = bins.length * (BOARD_W + SPACING);
@@ -603,20 +589,17 @@
         totalHeight = matIndex * (BOARD_H + SPACING);
 
         let svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${totalHeight}">`;
-
         let currentY = 0;
+
         for (const [materialName, bins] of Object.entries(packedResults)) {
-          // Etiqueta del material
           svg += `<text x="0" y="${currentY + 100}" font-family="sans-serif" font-size="100" font-weight="bold" fill="#0f172a">${materialName}</text>`;
 
           bins.forEach((bin, binIndex) => {
             let currentX = binIndex * (BOARD_W + SPACING);
             let boardY = currentY + 200;
 
-            // Fondo de la placa
             svg += `<rect x="${currentX}" y="${boardY}" width="${BOARD_W}" height="${BOARD_H}" fill="#f8fafc" stroke="#94a3b8" stroke-width="10"/>`;
 
-            // Piezas
             bin.usedRects.forEach((rect) => {
               let finalW = rect.w - KERF;
               let finalH = rect.h - KERF;
@@ -628,7 +611,6 @@
           currentY += BOARD_H + SPACING + 300;
         }
         svg += `</svg>`;
-
         triggerDownload(
           "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
           "planos-cnc-completos.svg",
@@ -644,7 +626,6 @@
         document.body.removeChild(a);
       }
 
-      // Inicializar cálculo al cargar la página
       window.onload = runPacking;
     </script>
   </body>

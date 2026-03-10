@@ -123,15 +123,6 @@
       }
 
       /* Componentes */
-      .badge {
-        background: #1e293b;
-        color: white;
-        padding: 0.2rem 0.4rem;
-        border-radius: 0.25rem;
-        font-family: monospace;
-        font-size: 0.8rem;
-        font-weight: bold;
-      }
       .btn {
         padding: 0.5rem 1rem;
         border-radius: 0.5rem;
@@ -196,6 +187,7 @@
         color: #334155;
         border: 1px solid #94a3b8;
       }
+
       /* Fondo tenue de fila por material */
       .mat-25 {
         background: #fffbeb;
@@ -231,11 +223,11 @@
         EstudioArte
       </a>
       <div class="navbar-menu">
-        <a href="index.html" class="nav-item">1. Planos</a>
+        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
         <a href="presupuesto-mesa.html" class="nav-item active"
           >2. Presupuesto / Cortes</a
         >
-        <a href="planos-cnc.html" class="nav-item">3. CNC Nesting</a>
+        <a href="planos-cnc.html" class="nav-item">3. Nesting de Cortes</a>
         <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
@@ -301,8 +293,8 @@
             margin-bottom: 1.5rem;
           "
         >
-          Piezas corregidas para profundidad 930mm, encastres estructurales
-          cruzados y sistema de tacos para ruedas.
+          Matemática optimizada: Engroses de tablero reducidos a 295mm para usar
+          una sola placa. Plantillas incluidas.
         </p>
         <div class="table-container">
           <table>
@@ -325,9 +317,9 @@
               </tr>
               <tr class="mat-25">
                 <td><span class="badge badge-25">TAB-REFUERZO</span></td>
-                <td>Engrose tablero</td>
+                <td>Engrose tablero (Ajustado p/ 1 placa)</td>
                 <td>MDF 25mm</td>
-                <td>2596 x 300</td>
+                <td>2596 x 295</td>
                 <td>3</td>
               </tr>
 
@@ -395,11 +387,39 @@
                 <td>2</td>
               </tr>
               <tr class="mat-18">
-                <td><span class="badge badge-18">TACOS-RUEDAS</span></td>
+                <td><span class="badge badge-18">B-FRENTE-GDE</span></td>
+                <td>Frentes cajón profundo Isla B</td>
+                <td>MDF 18mm</td>
+                <td>596 x 140</td>
+                <td>2</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">B-FRENTE-CH</span></td>
+                <td>Frentes cajón chato Isla B</td>
+                <td>MDF 18mm</td>
+                <td>596 x 60</td>
+                <td>3</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">TACO-RUEDA</span></td>
                 <td>Anclajes para base</td>
                 <td>MDF 18mm</td>
                 <td>120 x 120</td>
                 <td>16</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">PLANTILLA-A</span></td>
+                <td>Escantillón correderas (Isla A)</td>
+                <td>MDF 18mm</td>
+                <td>860 x 80</td>
+                <td>1</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">PLANTILLA-B</span></td>
+                <td>Escantillón correderas (Isla B)</td>
+                <td>MDF 18mm</td>
+                <td>500 x 140</td>
+                <td>1</td>
               </tr>
 
               <tr class="mat-12">
@@ -488,13 +508,12 @@
     </div>
 
     <script>
-      // Datos Base Completos
       const defaultData = [
         { cat: "Placas", desc: "MDF 25mm (Tablero)", qty: 1, price: 65000 },
         {
           cat: "Placas",
-          desc: "MDF 18mm (Estructura/Frentes/Tacos)",
-          qty: 4,
+          desc: "MDF 18mm (Estr/Frentes/Plantillas)",
+          qty: 3,
           price: 48000,
         },
         {
@@ -551,7 +570,6 @@
 
       let budgetData = [];
 
-      // Inicialización
       function init() {
         const savedData = localStorage.getItem("mesaPresupuestoVFINAL");
         if (savedData) {
@@ -562,7 +580,6 @@
         renderTable();
       }
 
-      // Renderizar Tabla
       function renderTable() {
         const tbody = document.getElementById("tableBody");
         tbody.innerHTML = "";
@@ -576,30 +593,19 @@
           tr.innerHTML = `
                 <td>${item.cat}</td>
                 <td>${item.desc}</td>
-                <td>
-                    <input type="number" step="1" value="${item.qty}" 
-                           onchange="updateValue(${index}, 'qty', this.value)">
-                </td>
-                <td>
-                    <input type="number" step="100" value="${item.price}" 
-                           onchange="updateValue(${index}, 'price', this.value)">
-                </td>
-                <td style="text-align:right; font-weight:600;">
-                    $${subtotal.toLocaleString("es-AR")}
-                </td>
+                <td><input type="number" step="1" value="${item.qty}" onchange="updateValue(${index}, 'qty', this.value)"></td>
+                <td><input type="number" step="100" value="${item.price}" onchange="updateValue(${index}, 'price', this.value)"></td>
+                <td style="text-align:right; font-weight:600;">$${subtotal.toLocaleString("es-AR")}</td>
             `;
           tbody.appendChild(tr);
         });
 
-        // Fila de Total
         const totalRow = document.createElement("tr");
         totalRow.style.backgroundColor = "#f1f5f9";
         totalRow.style.fontWeight = "700";
         totalRow.innerHTML = `
-            <td colspan="4" style="text-align:right;">TOTAL:</td>
-            <td style="text-align:right; color:var(--primary); font-size:1.125rem;">
-                $${grandTotal.toLocaleString("es-AR")}
-            </td>
+            <td colspan="4" style="text-align:right;">TOTAL ESTIMADO:</td>
+            <td style="text-align:right; color:var(--primary); font-size:1.125rem;">$${grandTotal.toLocaleString("es-AR")}</td>
         `;
         tbody.appendChild(totalRow);
 
@@ -609,25 +615,22 @@
         );
       }
 
-      // Actualizar Valor
       function updateValue(index, field, value) {
         budgetData[index][field] = parseFloat(value) || 0;
         renderTable();
       }
 
-      // Exportar a JSON
       function exportJSON() {
         const dataStr = JSON.stringify(budgetData, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "presupuesto-mesa-arte.json";
+        a.download = "presupuesto-mesa.json";
         a.click();
         URL.revokeObjectURL(url);
       }
 
-      // Importar desde JSON
       function importJSON(event) {
         const file = event.target.files[0];
         if (file) {
@@ -636,7 +639,6 @@
             try {
               budgetData = JSON.parse(e.target.result);
               renderTable();
-              alert("Presupuesto importado con éxito.");
             } catch (error) {
               alert("Error al leer el archivo JSON.");
             }
@@ -645,7 +647,6 @@
         }
       }
 
-      // Arrancar la app
       window.onload = init;
     </script>
   </body>
