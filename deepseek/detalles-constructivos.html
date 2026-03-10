@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalles Constructivos · Herrajes · Artista</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --slate-50: #f8fafc;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-500: #64748b;
+        --slate-600: #475569;
+        --slate-700: #334155;
+        --slate-800: #1e293b;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --border-radius: 0.75rem;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: var(--slate-100);
+        color: var(--slate-800);
+      }
+      .navbar {
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.7);
+        border-bottom: 1px solid rgba(203, 213, 225, 0.4);
+        padding: 0.75rem 2rem;
+        display: flex;
+        gap: 2rem;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+      }
+      .card {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--slate-200);
+        box-shadow: var(--shadow-sm);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        border-left: 4px solid var(--slate-400);
+        padding-left: 1rem;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+      .detalle-svg {
+        background: var(--slate-50);
+        border-radius: 0.75rem;
+        padding: 1rem;
+      }
+      .btn {
+        background: var(--white);
+        border: 1px solid var(--slate-300);
+        border-radius: 9999px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <span style="font-weight: 600">🔍 Detalles constructivos</span>
+      <a href="index.html">Planos</a
+      ><a href="presupuesto-mesa.html">Presupuesto</a
+      ><a href="planos-cnc.html">CNC</a
+      ><a href="detalles-constructivos.html">Detalles</a
+      ><a href="plan-armado.html">Armado</a>
+    </nav>
+    <main class="container">
+      <div class="card">
+        <div class="card-title">Ensamble de rueda con tuerca araña (T‑Nut)</div>
+        <div class="grid-2">
+          <div class="detalle-svg">
+            <svg viewBox="0 0 200 150" width="100%">
+              <rect
+                x="30"
+                y="20"
+                width="120"
+                height="18"
+                fill="#cbd5e1"
+                stroke="#334155"
+                stroke-width="2"
+              />
+              <!-- suplemento MDF 18 -->
+              <rect
+                x="40"
+                y="38"
+                width="100"
+                height="12"
+                fill="#94a3b8"
+                stroke="#334155"
+                stroke-width="1.5"
+              />
+              <!-- piso gabinete -->
+              <circle
+                cx="80"
+                cy="60"
+                r="10"
+                fill="none"
+                stroke="#334155"
+                stroke-width="2"
+              />
+              <!-- rueda -->
+              <line
+                x1="80"
+                y1="50"
+                x2="80"
+                y2="70"
+                stroke="#334155"
+                stroke-width="2"
+              />
+              <line
+                x1="70"
+                y1="60"
+                x2="90"
+                y2="60"
+                stroke="#334155"
+                stroke-width="2"
+              />
+              <!-- perno y tuerca araña -->
+              <rect x="75" y="25" width="10" height="18" fill="#475569" />
+              <circle cx="80" cy="30" r="6" fill="#1e293b" stroke="none" />
+              <!-- tuerca araña embutida -->
+              <text x="110" y="30" font-size="8">T‑Nut</text>
+              <text x="30" y="90" font-size="7">Suplemento 18mm</text>
+            </svg>
+          </div>
+          <div>
+            <p>
+              Las tuercas araña se introducen desde el interior del gabinete,
+              atravesando el suplemento de MDF 18 mm. El perno fija la rueda.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Tolerancia correderas pesadas (13 mm luz lateral)
+        </div>
+        <svg
+          viewBox="0 0 300 120"
+          style="
+            background: var(--slate-50);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            width: 100%;
+          "
+        >
+          <rect
+            x="40"
+            y="20"
+            width="200"
+            height="60"
+            fill="none"
+            stroke="#334155"
+            stroke-width="2"
+          />
+          <!-- lateral gabinete -->
+          <rect
+            x="60"
+            y="25"
+            width="160"
+            height="50"
+            fill="#e2e8f0"
+            stroke="#334155"
+            stroke-width="1.5"
+          />
+          <!-- marco cajón 12mm -->
+          <line
+            x1="40"
+            y1="55"
+            x2="60"
+            y2="55"
+            stroke="#f97316"
+            stroke-width="3"
+          />
+          <text x="45" y="45" fill="#f97316" font-size="8">13mm luz</text>
+          <text x="100" y="100" font-size="8">
+            Marco MDF 12mm + corredera telescópica 800 mm
+          </text>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Perfil tirador FOX MF18 (sobresaliente, luz 3 mm)
+        </div>
+        <svg
+          viewBox="0 0 300 100"
+          style="background: var(--slate-50); border-radius: 0.75rem"
+        >
+          <rect
+            x="30"
+            y="20"
+            width="200"
+            height="50"
+            fill="#f1f5f9"
+            stroke="#334155"
+            stroke-width="2"
+          />
+          <!-- frente cajón -->
+          <rect
+            x="220"
+            y="30"
+            width="20"
+            height="30"
+            fill="#94a3b8"
+            stroke="#334155"
+            stroke-width="1.5"
+          />
+          <!-- perfil FOX -->
+          <line
+            x1="215"
+            y1="45"
+            x2="220"
+            y2="45"
+            stroke="#f97316"
+            stroke-width="3"
+          />
+          <text x="190" y="40" font-size="8">luz 3mm</text>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Tablero drop‑in con tarugos y listones de pino
+        </div>
+        <svg viewBox="0 0 300 150" style="background: var(--slate-50)">
+          <rect x="10" y="40" width="260" height="15" fill="#b45309" />
+          <!-- listón pino sobresale -->
+          <rect x="10" y="20" width="260" height="12" fill="#94a3b8" />
+          <!-- tablero MDF -->
+          <circle cx="70" cy="32" r="4" fill="#334155" />
+          <!-- tarugo -->
+          <circle cx="180" cy="32" r="4" fill="#334155" />
+          <rect x="10" y="55" width="260" height="10" fill="#cbd5e1" />
+          <!-- techo isla -->
+          <text x="100" y="80" font-size="8">
+            Listón 38x89 sobresale 13.1 mm · tarugo ⌀8 mm
+          </text>
+        </svg>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Intersección full‑overlay estante divisor (Isla B)
+        </div>
+        <svg viewBox="0 0 300 150">
+          <rect x="30" y="20" width="200" height="20" fill="#94a3b8" />
+          <!-- estante fijo 18mm -->
+          <rect
+            x="30"
+            y="40"
+            width="200"
+            height="30"
+            fill="#f1f5f9"
+            stroke="#334155"
+          />
+          <!-- frente cajón 140mm (parte) -->
+          <line
+            x1="30"
+            y1="40"
+            x2="230"
+            y2="40"
+            stroke="#f97316"
+            stroke-width="3"
+            stroke-dasharray="5 3"
+          />
+          <text x="80" y="30" font-size="8">El frente tapa el estante</text>
+          <text x="80" y="70" font-size="8">
+            caja 20mm más baja para no rozar
+          </text>
+        </svg>
+      </div>
+    </main>
+  </body>
+</html>
