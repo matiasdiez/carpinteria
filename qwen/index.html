@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planos Técnicos - Mesa Artista</title>
+    <style>
+      :root {
+        --primary: #0f172a;
+        --slate-50: #f8fafc;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-800: #1e293b;
+        --slate-900: #0f172a;
+        --glass: rgba(255, 255, 255, 0.7);
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background-color: var(--slate-50);
+        color: var(--slate-800);
+        margin: 0;
+        padding-bottom: 40px;
+      }
+
+      /* UI Components */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(12px);
+        background: var(--glass);
+        border-bottom: 1px solid var(--slate-200);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .nav-logo {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--slate-900);
+      }
+      .card {
+        background: white;
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin: 2rem auto;
+        max-width: 1400px;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--slate-900);
+      }
+      p {
+        color: #64748b;
+        margin-bottom: 2rem;
+      }
+
+      /* Blueprint Styles */
+      .blueprint-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        position: relative;
+      }
+      svg {
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--slate-200);
+        border-radius: 8px;
+        background: white;
+      }
+      .dimension-line {
+        stroke: #64748b;
+        stroke-width: 1;
+      }
+      .dimension-text {
+        font-size: 12px;
+        fill: #64748b;
+        font-family: monospace;
+      }
+      .object-line {
+        stroke: #0f172a;
+        stroke-width: 2;
+        fill: none;
+      }
+      .hidden-line {
+        stroke: #0f172a;
+        stroke-width: 1;
+        stroke-dasharray: 4 4;
+        fill: none;
+      }
+      .section-fill {
+        fill: #e2e8f0;
+      }
+
+      @media (max-width: 1024px) {
+        .blueprint-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-logo">Mesa Artista v1.0</div>
+      <div style="font-size: 0.875rem; font-weight: 500">Planos Técnicos</div>
+    </nav>
+
+    <div class="card">
+      <h1>Vistas Ortogonales</h1>
+      <p>
+        Proyección Diédrica. Medidas en milímetros. Escala no uniforme para
+        visualización.
+      </p>
+
+      <div class="blueprint-container">
+        <!-- VISTA FRONTAL -->
+        <div>
+          <h3 style="margin-top: 0">Vista Frontal</h3>
+          <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet">
+            <!-- Grid Base -->
+            <line x1="0" y1="700" x2="1200" y2="700" class="dimension-line" />
+            <!-- Suelo -->
+
+            <!-- ISLA A (Izquierda) -->
+            <g transform="translate(50, 50)">
+              <!-- Contorno -->
+              <rect x="0" y="0" width="500" height="625" class="object-line" />
+              <!-- Cajones (7 x 80mm + gaps) -->
+              <!-- Frente total aprox 625mm. 7 cajones * 80 = 560. Sobra 65mm para gaps/top/bottom -->
+              <line x1="0" y1="80" x2="500" y2="80" class="object-line" />
+              <line x1="0" y1="160" x2="500" y2="160" class="object-line" />
+              <line x1="0" y1="240" x2="500" y2="240" class="object-line" />
+              <line x1="0" y1="320" x2="500" y2="320" class="object-line" />
+              <line x1="0" y1="400" x2="500" y2="400" class="object-line" />
+              <line x1="0" y1="480" x2="500" y2="480" class="object-line" />
+              <line x1="0" y1="560" x2="500" y2="560" class="object-line" />
+              <!-- Ruedas -->
+              <circle cx="50" cy="640" r="15" class="object-line" />
+              <circle cx="450" cy="640" r="15" class="object-line" />
+            </g>
+
+            <!-- ISLA B (Derecha) -->
+            <g transform="translate(750, 50)">
+              <!-- Contorno -->
+              <rect x="0" y="0" width="400" height="625" class="object-line" />
+              <!-- Estante Superior (Abierto) -->
+              <line x1="0" y1="140" x2="400" y2="140" class="object-line" />
+              <!-- Cajones Inferiores -->
+              <line x1="0" y1="280" x2="400" y2="280" class="object-line" />
+              <!-- Cajon 140 -->
+              <line x1="0" y1="420" x2="400" y2="420" class="object-line" />
+              <!-- Cajon 140 -->
+              <line x1="0" y1="480" x2="400" y2="480" class="object-line" />
+              <!-- Cajon 60 -->
+              <line x1="0" y1="540" x2="400" y2="540" class="object-line" />
+              <!-- Cajon 60 -->
+              <line x1="0" y1="600" x2="400" y2="600" class="object-line" />
+              <!-- Cajon 60 -->
+              <!-- Ruedas -->
+              <circle cx="50" cy="640" r="15" class="object-line" />
+              <circle cx="350" cy="640" r="15" class="object-line" />
+            </g>
+
+            <!-- TABLERO SUPERIOR -->
+            <g transform="translate(50, -25)">
+              <rect x="0" y="0" width="1100" height="50" class="section-fill" />
+              <!-- Detalles de tiras inferiores -->
+              <line x1="0" y1="25" x2="1100" y2="25" class="hidden-line" />
+            </g>
+
+            <!-- Cotas -->
+            <text x="600" y="750" class="dimension-text" text-anchor="middle">
+              700 mm (Luz Piernas)
+            </text>
+            <line x1="550" y1="675" x2="750" y2="675" class="dimension-line" />
+
+            <text x="300" y="-10" class="dimension-text" text-anchor="middle">
+              Isla A (A0 Paper)
+            </text>
+            <text x="950" y="-10" class="dimension-text" text-anchor="middle">
+              Isla B (Herramientas)
+            </text>
+          </svg>
+        </div>
+
+        <!-- VISTA LATERAL (CORTE) -->
+        <div>
+          <h3 style="margin-top: 0">Vista Lateral (Corte A-A)</h3>
+          <svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid meet">
+            <!-- Suelo -->
+            <line x1="0" y1="750" x2="400" y2="750" class="dimension-line" />
+
+            <!-- Rueda -->
+            <circle cx="200" cy="712" r="38" class="object-line" />
+            <!-- 75mm diametro -->
+
+            <!-- Base Zocalo -->
+            <rect x="50" y="675" width="300" height="18" class="section-fill" />
+
+            <!-- Cuerpo Isla -->
+            <rect x="50" y="50" width="300" height="625" class="object-line" />
+
+            <!-- Tablero Superior (Detalle Espesor) -->
+            <g transform="translate(0, 25)">
+              <rect x="25" y="0" width="350" height="50" class="section-fill" />
+              <!-- Tiras inferiores -->
+              <rect x="50" y="25" width="40" height="25" class="section-fill" />
+              <rect
+                x="250"
+                y="25"
+                width="40"
+                height="25"
+                class="section-fill"
+              />
+              <!-- Liston Pino -->
+              <rect
+                x="55"
+                y="36.9"
+                width="30"
+                height="13.1"
+                fill="#8B4513"
+                opacity="0.5"
+              />
+              <!-- Tarugo -->
+              <circle cx="70" cy="60" r="5" fill="#8B4513" />
+            </g>
+
+            <!-- Cotas Verticales -->
+            <line x1="420" y1="50" x2="420" y2="750" class="dimension-line" />
+            <text
+              x="430"
+              y="400"
+              class="dimension-text"
+              transform="rotate(90 430 400)"
+            >
+              750 mm Total
+            </text>
+
+            <line x1="-20" y1="50" x2="-20" y2="75" class="dimension-line" />
+            <text x="-30" y="65" class="dimension-text" text-anchor="end">
+              50 mm Tablero
+            </text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
