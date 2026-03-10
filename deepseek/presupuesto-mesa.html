@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presupuesto · Cut List · Artista</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --slate-50: #f8fafc;
+        --slate-100: #f1f5f9;
+        --slate-200: #e2e8f0;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-500: #64748b;
+        --slate-600: #475569;
+        --slate-700: #334155;
+        --slate-800: #1e293b;
+        --slate-900: #0f172a;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --border-radius: 0.75rem;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: var(--slate-100);
+        color: var(--slate-800);
+      }
+      .navbar {
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.7);
+        border-bottom: 1px solid rgba(203, 213, 225, 0.4);
+        padding: 0.75rem 2rem;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        box-shadow: var(--shadow-sm);
+      }
+      .navbar a {
+        text-decoration: none;
+        color: var(--slate-700);
+        font-weight: 500;
+        padding: 0.5rem 0;
+        border-bottom: 2px solid transparent;
+      }
+      .navbar a:hover {
+        border-bottom-color: var(--slate-500);
+        color: var(--slate-900);
+      }
+      .container {
+        max-width: 1400px;
+        margin: 2rem auto;
+        padding: 0 1.5rem;
+      }
+      .card {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--slate-200);
+        box-shadow: var(--shadow-sm);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--slate-800);
+        border-left: 4px solid var(--slate-400);
+        padding-left: 1rem;
+      }
+      .btn {
+        background: var(--white);
+        border: 1px solid var(--slate-300);
+        color: var(--slate-700);
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.15s;
+        box-shadow: var(--shadow-sm);
+      }
+      .btn:hover {
+        background: var(--slate-100);
+        border-color: var(--slate-400);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      th {
+        text-align: left;
+        background: var(--slate-100);
+        padding: 0.75rem 0.5rem;
+        color: var(--slate-700);
+        font-weight: 600;
+      }
+      td {
+        padding: 0.5rem;
+        border-bottom: 1px solid var(--slate-200);
+      }
+      .color-badge {
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+        vertical-align: middle;
+      }
+      .input-group {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <span style="font-weight: 600; color: var(--slate-800)"
+        >💰 Presupuesto</span
+      >
+      <a href="#">Planos</a>
+      <a href="#">Presupuesto</a>
+      <a href="#">CNC</a>
+      <a href="#">Detalles</a>
+      <a href="#">Armado</a>
+    </nav>
+    <main class="container">
+      <div class="card">
+        <div class="card-title">Control de presupuesto (localStorage)</div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="item-name"
+            placeholder="Concepto"
+            class="btn"
+            style="border-radius: 30px; flex: 1"
+          />
+          <input
+            type="number"
+            id="item-cost"
+            placeholder="Coste €"
+            class="btn"
+            style="border-radius: 30px; width: 120px"
+          />
+          <button class="btn" id="add-item">➕ Añadir</button>
+          <button class="btn" id="save-budget">💾 Guardar</button>
+          <button class="btn" id="export-json">📤 Exportar JSON</button>
+          <input
+            type="file"
+            id="import-json"
+            accept="application/json"
+            style="display: none"
+          />
+          <button
+            class="btn"
+            onclick="document.getElementById('import-json').click()"
+          >
+            📥 Importar JSON
+          </button>
+        </div>
+        <table id="budget-table">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Coste (€)</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="budget-body"></tbody>
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              <th id="total-cost">0.00</th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Inventario de cortes (Cut List) · códigos de color por espesor
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Pieza</th>
+              <th>Material</th>
+              <th>Medidas (mm)</th>
+              <th>Cant.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- MDF 25mm (naranja) -->
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #f97316"></span
+                >TOP-01
+              </td>
+              <td>Tablero principal</td>
+              <td>MDF 25</td>
+              <td>2200 x 1189</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #f97316"></span
+                >SUB-01
+              </td>
+              <td>Tiras subcapa (varias)</td>
+              <td>MDF 25</td>
+              <td>variable</td>
+              <td>-</td>
+            </tr>
+            <!-- MDF 18mm (verde) -->
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #10b981"></span
+                >FR-A-01..07
+              </td>
+              <td>Frentes cajones A</td>
+              <td>MDF 18</td>
+              <td>880 x 80 (x7)</td>
+              <td>7</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #10b981"></span
+                >FR-B-PROF
+              </td>
+              <td>Frentes cajones B (140/60)</td>
+              <td>MDF 18</td>
+              <td>580x140 / 580x60</td>
+              <td>2+3</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #10b981"></span
+                >EST-B
+              </td>
+              <td>Estante divisor fijo</td>
+              <td>MDF 18</td>
+              <td>580 x 1189</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #10b981"></span
+                >ZOCALO
+              </td>
+              <td>Suplemento base ruedas</td>
+              <td>MDF 18</td>
+              <td>c/u 900x150 (aprox)</td>
+              <td>4</td>
+            </tr>
+            <!-- MDF 12mm (azul) -->
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #3b82f6"></span
+                >CAJ-A-MARCO
+              </td>
+              <td>Marcos laterales cajones A</td>
+              <td>MDF 12</td>
+              <td>800 x 120 (varios)</td>
+              <td>14</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #3b82f6"></span
+                >CAJ-B-LATERAL
+              </td>
+              <td>Laterales cajones B</td>
+              <td>MDF 12</td>
+              <td>550 x 140/60</td>
+              <td>10</td>
+            </tr>
+            <!-- MDF 5.5mm (ámbar) -->
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #f59e0b"></span
+                >FONDO-A
+              </td>
+              <td>Fondos cajones A</td>
+              <td>MDF 5,5</td>
+              <td>870 x 1170</td>
+              <td>7</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #f59e0b"></span
+                >FONDO-B
+              </td>
+              <td>Fondos cajones B</td>
+              <td>MDF 5,5</td>
+              <td>570 x 580</td>
+              <td>5</td>
+            </tr>
+            <!-- Pino macizo -->
+            <tr>
+              <td>
+                <span class="color-badge" style="background: #b45309"></span
+                >LISTON
+              </td>
+              <td>Listón pino 1.5"x3.5"</td>
+              <td>Pino</td>
+              <td>38x89 x 2200</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--slate-500)">
+          * Las medidas netas incluyen holguras de mecanizado. Los colores
+          ayudan a identificar espesores en planos CNC.
+        </p>
+      </div>
+    </main>
+    <script>
+      (function () {
+        // Budget local storage
+        let items = JSON.parse(localStorage.getItem("budgetItems")) || [];
+
+        function renderBudget() {
+          const tbody = document.getElementById("budget-body");
+          const totalEl = document.getElementById("total-cost");
+          tbody.innerHTML = "";
+          let total = 0;
+          items.forEach((item, idx) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item.name}</td><td>${item.cost.toFixed(2)}</td>
+                        <td><button class="btn" data-index="${idx}">🗑️</button></td>`;
+            tbody.appendChild(row);
+            total += item.cost;
+          });
+          totalEl.textContent = total.toFixed(2);
+          document.querySelectorAll("#budget-body button").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const idx = e.target.dataset.index;
+              items.splice(idx, 1);
+              localStorage.setItem("budgetItems", JSON.stringify(items));
+              renderBudget();
+            });
+          });
+        }
+
+        document.getElementById("add-item").addEventListener("click", () => {
+          const name = document.getElementById("item-name").value.trim();
+          const cost = parseFloat(document.getElementById("item-cost").value);
+          if (!name || isNaN(cost)) return;
+          items.push({ name, cost });
+          localStorage.setItem("budgetItems", JSON.stringify(items));
+          renderBudget();
+          document.getElementById("item-name").value = "";
+          document.getElementById("item-cost").value = "";
+        });
+
+        document.getElementById("save-budget").addEventListener("click", () => {
+          localStorage.setItem("budgetItems", JSON.stringify(items));
+          alert("Guardado en localStorage");
+        });
+
+        document.getElementById("export-json").addEventListener("click", () => {
+          const dataStr = JSON.stringify(items, null, 2);
+          const blob = new Blob([dataStr], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "presupuesto_mesa.json";
+          a.click();
+        });
+
+        document
+          .getElementById("import-json")
+          .addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              try {
+                items = JSON.parse(ev.target.result);
+                localStorage.setItem("budgetItems", JSON.stringify(items));
+                renderBudget();
+              } catch (ex) {
+                alert("JSON inválido");
+              }
+            };
+            reader.readAsText(file);
+          });
+
+        renderBudget();
+      })();
+    </script>
+  </body>
+</html>
