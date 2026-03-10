@@ -200,10 +200,10 @@
         EstudioArte
       </a>
       <div class="navbar-menu">
-        <a href="planos-mesa.html" class="nav-item">1. Planos</a>
+        <a href="index.html" class="nav-item">1. Planos</a>
         <a href="presupuesto-mesa.html" class="nav-item">2. Presupuesto</a>
         <a href="planos-cnc.html" class="nav-item active">3. CNC Nesting</a>
-        <a href="detalles-rigurosos.html" class="nav-item">4. Detalles</a>
+        <a href="detalles-constructivos.html" class="nav-item">4. Detalles</a>
         <a href="plan-armado.html" class="nav-item">5. Armado</a>
       </div>
     </nav>
@@ -459,10 +459,30 @@
 
           // Paleta de colores por grosor (igual que presupuesto-mesa.html)
           const MAT_COLORS = {
-            "25": { fill: "#fef3c7", stroke: "#d97706", text: "#92400e", bg: "#fffbeb" },
-            "18": { fill: "#dbeafe", stroke: "#3b82f6", text: "#1e3a8a", bg: "#eff6ff" },
-            "12": { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d", bg: "#f0fdf4" },
-            "5":  { fill: "#ede9fe", stroke: "#8b5cf6", text: "#4c1d95", bg: "#f5f3ff" },
+            25: {
+              fill: "#fef3c7",
+              stroke: "#d97706",
+              text: "#92400e",
+              bg: "#fffbeb",
+            },
+            18: {
+              fill: "#dbeafe",
+              stroke: "#3b82f6",
+              text: "#1e3a8a",
+              bg: "#eff6ff",
+            },
+            12: {
+              fill: "#dcfce7",
+              stroke: "#22c55e",
+              text: "#14532d",
+              bg: "#f0fdf4",
+            },
+            5: {
+              fill: "#ede9fe",
+              stroke: "#8b5cf6",
+              text: "#4c1d95",
+              bg: "#f5f3ff",
+            },
           };
           function getMatKey(name) {
             if (name.includes("25")) return "25";
