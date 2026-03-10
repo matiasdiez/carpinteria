@@ -204,11 +204,74 @@
           </div>
         </div>
         <!-- Leyenda de colores por grosor -->
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 0.5rem;">
-          <span style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.15rem 0.6rem;border-radius:999px;font-size:0.8rem;font-weight:600;background:#fef3c7;color:#92400e;border:1px solid #fcd34d;">▪ MDF 25mm</span>
-          <span style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.15rem 0.6rem;border-radius:999px;font-size:0.8rem;font-weight:600;background:#dbeafe;color:#1e3a8a;border:1px solid #93c5fd;">▪ MDF 18mm</span>
-          <span style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.15rem 0.6rem;border-radius:999px;font-size:0.8rem;font-weight:600;background:#dcfce7;color:#14532d;border:1px solid #86efac;">▪ MDF 12mm</span>
-          <span style="display:inline-flex;align-items:center;gap:0.3rem;padding:0.15rem 0.6rem;border-radius:999px;font-size:0.8rem;font-weight:600;background:#ede9fe;color:#4c1d95;border:1px solid #c4b5fd;">▪ MDF 5.5mm</span>
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0 0.5rem;
+          "
+        >
+          <span
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 0.3rem;
+              padding: 0.15rem 0.6rem;
+              border-radius: 999px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              background: #fef3c7;
+              color: #92400e;
+              border: 1px solid #fcd34d;
+            "
+            >▪ MDF 25mm</span
+          >
+          <span
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 0.3rem;
+              padding: 0.15rem 0.6rem;
+              border-radius: 999px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              background: #dbeafe;
+              color: #1e3a8a;
+              border: 1px solid #93c5fd;
+            "
+            >▪ MDF 18mm</span
+          >
+          <span
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 0.3rem;
+              padding: 0.15rem 0.6rem;
+              border-radius: 999px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              background: #dcfce7;
+              color: #14532d;
+              border: 1px solid #86efac;
+            "
+            >▪ MDF 12mm</span
+          >
+          <span
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 0.3rem;
+              padding: 0.15rem 0.6rem;
+              border-radius: 999px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              background: #ede9fe;
+              color: #4c1d95;
+              border: 1px solid #c4b5fd;
+            "
+            >▪ MDF 5.5mm</span
+          >
         </div>
         <div id="output"></div>
       </div>
@@ -233,6 +296,7 @@
           { id: "B-LATERAL", w: 888, h: 546, qty: 2 },
           { id: "B-DIVISOR", w: 888, h: 546, qty: 1 },
           { id: "B-ESTANTE", w: 290, h: 564, qty: 2 },
+          { id: "B-EST-FRENTE", w: 564, h: 580, qty: 1 }, // <--- NUEVA PIEZA AGREGADA AQUÍ
           { id: "B-FRENTE-GDE", w: 596, h: 140, qty: 2 },
           { id: "B-FRENTE-CH", w: 596, h: 60, qty: 3 },
         ],
@@ -401,10 +465,10 @@
 
       /* Paleta por grosor de MDF */
       const MAT_COLORS = {
-        "25": { fill: "#fef3c7", stroke: "#d97706", text: "#92400e" },
-        "18": { fill: "#dbeafe", stroke: "#3b82f6", text: "#1e3a8a" },
-        "12": { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d" },
-        "5":  { fill: "#ede9fe", stroke: "#8b5cf6", text: "#4c1d95" },
+        25: { fill: "#fef3c7", stroke: "#d97706", text: "#92400e" },
+        18: { fill: "#dbeafe", stroke: "#3b82f6", text: "#1e3a8a" },
+        12: { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d" },
+        5: { fill: "#ede9fe", stroke: "#8b5cf6", text: "#4c1d95" },
       };
       function getMatKey(materialName) {
         if (materialName.includes("25")) return "25";

@@ -215,15 +215,39 @@
         font-size: 0.75rem;
         font-weight: 600;
       }
-      .chip-25 { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
-      .chip-18 { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
-      .chip-12 { background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
-      .chip-5  { background: #ede9fe; color: #4c1d95; border: 1px solid #c4b5fd; }
+      .chip-25 {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fcd34d;
+      }
+      .chip-18 {
+        background: #dbeafe;
+        color: #1e3a8a;
+        border: 1px solid #93c5fd;
+      }
+      .chip-12 {
+        background: #dcfce7;
+        color: #14532d;
+        border: 1px solid #86efac;
+      }
+      .chip-5 {
+        background: #ede9fe;
+        color: #4c1d95;
+        border: 1px solid #c4b5fd;
+      }
       /* Fila tenue del color correspondiente */
-      .mat-25 { background: #fffbeb; }
-      .mat-18 { background: #eff6ff; }
-      .mat-12 { background: #f0fdf4; }
-      .mat-5  { background: #f5f3ff; }
+      .mat-25 {
+        background: #fffbeb;
+      }
+      .mat-18 {
+        background: #eff6ff;
+      }
+      .mat-12 {
+        background: #f0fdf4;
+      }
+      .mat-5 {
+        background: #f5f3ff;
+      }
     </style>
   </head>
   <body>
@@ -319,7 +343,14 @@
           cruzarlas con el Manual de Armado.
         </p>
         <!-- Leyenda de colores -->
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+          "
+        >
           <span class="chip chip-25">▪ MDF 25mm</span>
           <span class="chip chip-18">▪ MDF 18mm</span>
           <span class="chip chip-12">▪ MDF 12mm</span>
@@ -392,6 +423,13 @@
                 <td><span class="chip chip-18">MDF 18mm</span></td>
                 <td>888 x 546</td>
                 <td>2</td>
+              </tr>
+              <tr class="mat-18">
+                <td><span class="badge badge-18">B-EST-FRENTE</span></td>
+                <td>Estante superior (piso del hueco) Isla B</td>
+                <td><span class="chip chip-18">MDF 18mm</span></td>
+                <td>564 x 580</td>
+                <td>1</td>
               </tr>
               <tr class="mat-18">
                 <td><span class="badge badge-18">B-DIVISOR</span></td>
